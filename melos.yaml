@@ -30,3 +30,13 @@ scripts:
 
   check:analyze:
     run: melos exec -c 5 --fail-fast -- flutter analyze
+
+  flavor:build:
+    exec: flutter pub run flutter_flavorizr
+    select-package:
+      scope: app
+
+  flavor:icons:
+    exec: dart run tools/icons.dart
+    select-package:
+      scope: app

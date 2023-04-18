@@ -1,0 +1,6 @@
+#include "Generated.xcconfig"
+
+FLUTTER_TARGET=lib/main_production.dart
+ASSET_SUFFIX=production
+BUNDLE_NAME=Todo Factory
+BUNDLE_DISPLAY_NAME=Todo Factory

@@ -1,0 +1,6 @@
+#include "Generated.xcconfig"
+
+FLUTTER_TARGET=lib/main_staging.dart
+ASSET_SUFFIX=staging
+BUNDLE_NAME=Todo Factory [STG]
+BUNDLE_DISPLAY_NAME=Todo Factory [STG]
