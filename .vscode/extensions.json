@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "aaron-bond.better-comments",
+    "streetsidesoftware.code-spell-checker",
+    "dart-code.flutter",
+    "stxr.iconfont-preview",
+    "cardinal90.multi-cursor-case-preserve",
+    "esbenp.prettier-vscode",
+    "usernamehw.errorlens"
+  ]
+}

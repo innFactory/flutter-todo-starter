@@ -1,0 +1,32 @@
+name: fluter-todo-starter
+
+sdkPath: .fvm/flutter_sdk
+
+command:
+  bootstrap:
+    usePubspecOverrides: true
+
+packages:
+  - packages/*
+
+scripts:
+  init:
+    run: |
+      melos bootstrap
+      melos run codegen --no-select
+
+  build:
+    exec: flutter pub run build_runner build --delete-conflicting-outputs
+    select-package:
+      depends-on: build_runner
+
+  build:watch:
+    exec: flutter pub run build_runner watch --delete-conflicting-outputs
+    select-package:
+      depends-on: build_runner
+
+  check:format:
+    run: melos exec -c 5 --fail-fast -- dart format --set-exit-if-changed .
+
+  check:analyze:
+    run: melos exec -c 5 --fail-fast -- flutter analyze
