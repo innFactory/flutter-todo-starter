@@ -42,6 +42,6 @@ melos run <script_name>
 
 The most important scripts are:
 
-* `melos run init` - Combination of `melos bootstrap` and the `melos run build` script
+* `melos run init` - Combination of the [bootstrap](https://melos.invertase.dev/~melos-latest/commands/bootstrap) command and the `melos run build` script
 * `melos run build` - Run `build_runner` in all relevant packages
 * `melos run build:watch` - Run `build_runner` in all relevant packages in watch mode
