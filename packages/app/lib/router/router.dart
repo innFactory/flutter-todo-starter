@@ -8,6 +8,8 @@ import 'package:auto_route/auto_route.dart';
 
 part 'router.gr.dart';
 
+/// The `auto_route` router for the app. All relevant routes for the app are
+/// defined here.
 @AutoRouterConfig()
 class AppRouter extends _$AppRouter {
   @override

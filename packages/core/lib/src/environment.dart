@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 /// for the app.
 /// {@endtemplate}
 enum Environment {
+  /// The development environment.
   development(
     appTitle: 'Todo Factory [DEV]',
     apiBaseUrl: '',
@@ -13,6 +14,8 @@ enum Environment {
       color: Colors.green,
     ),
   ),
+
+  /// The staging environment.
   staging(
     appTitle: 'Todo Factory [STG]',
     apiBaseUrl: '',
@@ -21,6 +24,8 @@ enum Environment {
       color: Colors.blue,
     ),
   ),
+
+  /// The production environment.
   production(
     appTitle: 'Todo Factory',
     apiBaseUrl: '',
@@ -40,23 +45,36 @@ enum Environment {
   /// changing it later will not re-build the app.
   static Environment current = defaultEnvironment;
 
+  /// The app title, usually shown in the operating systems app switcher or the
+  /// browser tab title.
   final String appTitle;
+
+  /// Optional banner to show on the top left corner of the app.
   final EnvironmentBanner? banner;
 
+  /// The base URL of the API.
   final String apiBaseUrl;
 }
 
+/// Extension methods for the [Environment] class.
 extension EnvironmentX on Environment? {
   /// The Environment or [defaultEnvironment] if the current environment is null.
   Environment get getOrDefault => this ?? Environment.defaultEnvironment;
 }
 
+/// {@template environment_banner}
+/// Configuration object for showing a banner on the top left corner of the app.
+/// {@endtemplate}
 class EnvironmentBanner {
+  /// {@macro environment_banner}
   const EnvironmentBanner({
     required this.text,
     required this.color,
   });
 
+  /// The text to show on the banner.
   final String text;
+
+  /// The background color of the banner.
   final Color color;
 }

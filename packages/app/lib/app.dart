@@ -1,3 +1,4 @@
+import 'package:app/environment_provider.dart';
 import 'package:app/router/router.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:core/core.dart' hide TextDirection;
@@ -5,22 +6,13 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-final environmentProvider = StateProvider<Environment?>((ref) {
-  SharedPreferences.getInstance().then((prefs) {
-    final env = Environment.values.firstWhere(
-      (e) => e.name == prefs.getString('environment'),
-      orElse: () => Environment.current,
-    );
-    Environment.current = env;
-    ref.controller.state = env;
-  });
-
-  return null;
-});
-
+/// {@template app}
+/// The root widget of the application. This widget is responsible for
+/// handling the [Environment] loading state.
+/// {@endtemplate}
 class App extends ConsumerWidget {
+  /// {@macro app}
   const App({super.key});
 
   @override

@@ -3,6 +3,7 @@ include: package:lint_factory/analysis_options.yaml
 linter:
   rules:
     - use_key_in_widget_constructors
+    - public_member_api_docs
 
 analyzer:
   language:
