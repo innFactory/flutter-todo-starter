@@ -2,10 +2,6 @@ name: fluter-todo-starter
 
 sdkPath: .fvm/flutter_sdk
 
-command:
-  bootstrap:
-    usePubspecOverrides: true
-
 packages:
   - packages/*
 

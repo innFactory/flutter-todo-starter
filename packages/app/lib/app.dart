@@ -7,12 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-/// {@template app}
 /// The root widget of the application. This widget is responsible for
 /// handling the [Environment] loading state.
-/// {@endtemplate}
 class App extends ConsumerWidget {
-  /// {@macro app}
   const App({super.key});
 
   @override

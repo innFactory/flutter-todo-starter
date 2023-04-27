@@ -1,19 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
-class _ConsoleOutput extends LogOutput {
-  @override
-  void output(OutputEvent event) {
-    event.lines.forEach(debugPrint);
-  }
-}
-
-final _logger = Logger(
-  level: Level.debug,
-  output: _ConsoleOutput(),
-  printer: _CustomPrettyPrinter(),
-);
-
 /// Log a message at level [Level.verbose].
 void logV(dynamic message, [dynamic error, StackTrace? stackTrace]) {
   _logger.v(message, error, stackTrace);
@@ -42,6 +29,19 @@ void logE(dynamic message, [dynamic error, StackTrace? stackTrace]) {
 /// Log a message at level [Level.wtf].
 void logWtf(dynamic message, [dynamic error, StackTrace? stackTrace]) {
   _logger.wtf(message, error, stackTrace);
+}
+
+final _logger = Logger(
+  level: Level.debug,
+  output: _ConsoleOutput(),
+  printer: _CustomPrettyPrinter(),
+);
+
+class _ConsoleOutput extends LogOutput {
+  @override
+  void output(OutputEvent event) {
+    event.lines.forEach(debugPrint);
+  }
 }
 
 class _CustomPrettyPrinter extends PrettyPrinter {

@@ -13,3 +13,4 @@ export 'package:uuid/uuid.dart';
 export 'src/environment.dart';
 export 'src/fpdart.dart';
 export 'src/logger.dart';
+export 'src/value_id.dart';

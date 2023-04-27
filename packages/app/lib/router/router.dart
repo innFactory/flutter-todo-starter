@@ -1,10 +1,11 @@
-import 'package:app/router/auth/auth_router.dart';
+import 'package:app/router/auth/auth_router_page.dart';
 import 'package:app/router/auth/sign_in_page.dart';
 import 'package:app/router/authenticated/authenticated_router.dart';
 import 'package:app/router/error_page.dart';
-import 'package:app/router/root_router.dart';
+import 'package:app/router/root_router_page.dart';
 import 'package:app/router/splash_page.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 
 part 'router.gr.dart';
 

@@ -30,15 +30,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   flutter_localizations:
     sdk: flutter
+  intl: ^0.17.0
 
   core:
     path: ../core
+  auth:
+    path: ../auth
+  todo:
+    path: ../todo
 
   flutter_hooks: ^0.18.6
-
-  intl: ^0.17.0
   device_preview: ^1.1.0
   shared_preferences: ^2.1.0
   auto_route: ^6.2.0

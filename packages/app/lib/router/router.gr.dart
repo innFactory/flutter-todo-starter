@@ -21,10 +21,21 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const RootRouterPage(),
       );
     },
-    AuthenticatedRouter.name: (routeData) {
+    ErrorRoute.name: (routeData) {
+      final args = routeData.argsAs<ErrorRouteArgs>(
+          orElse: () => const ErrorRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const AuthenticatedRouterPage(),
+        child: ErrorPage(
+          key: args.key,
+          error: args.error,
+        ),
+      );
+    },
+    SignInRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SignInPage(),
       );
     },
     AuthRouter.name: (routeData) {
@@ -33,16 +44,10 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AuthRouterPage(),
       );
     },
-    ErrorRoute.name: (routeData) {
+    AuthenticatedRouter.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const ErrorPage(),
-      );
-    },
-    SignInRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const SignInPage(),
+        child: const AuthenticatedRouterPage(),
       );
     },
     SplashRoute.name: (routeData) {
@@ -69,15 +74,52 @@ class RootRouterRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [AuthenticatedRouterPage]
-class AuthenticatedRouter extends PageRouteInfo<void> {
-  const AuthenticatedRouter({List<PageRouteInfo>? children})
-      : super(
-          AuthenticatedRouter.name,
+/// [ErrorPage]
+class ErrorRoute extends PageRouteInfo<ErrorRouteArgs> {
+  ErrorRoute({
+    Key? key,
+    Object? error,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ErrorRoute.name,
+          args: ErrorRouteArgs(
+            key: key,
+            error: error,
+          ),
           initialChildren: children,
         );
 
-  static const String name = 'AuthenticatedRouter';
+  static const String name = 'ErrorRoute';
+
+  static const PageInfo<ErrorRouteArgs> page = PageInfo<ErrorRouteArgs>(name);
+}
+
+class ErrorRouteArgs {
+  const ErrorRouteArgs({
+    this.key,
+    this.error,
+  });
+
+  final Key? key;
+
+  final Object? error;
+
+  @override
+  String toString() {
+    return 'ErrorRouteArgs{key: $key, error: $error}';
+  }
+}
+
+/// generated route for
+/// [SignInPage]
+class SignInRoute extends PageRouteInfo<void> {
+  const SignInRoute({List<PageRouteInfo>? children})
+      : super(
+          SignInRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SignInRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -97,29 +139,15 @@ class AuthRouter extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [ErrorPage]
-class ErrorRoute extends PageRouteInfo<void> {
-  const ErrorRoute({List<PageRouteInfo>? children})
+/// [AuthenticatedRouterPage]
+class AuthenticatedRouter extends PageRouteInfo<void> {
+  const AuthenticatedRouter({List<PageRouteInfo>? children})
       : super(
-          ErrorRoute.name,
+          AuthenticatedRouter.name,
           initialChildren: children,
         );
 
-  static const String name = 'ErrorRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [SignInPage]
-class SignInRoute extends PageRouteInfo<void> {
-  const SignInRoute({List<PageRouteInfo>? children})
-      : super(
-          SignInRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'SignInRoute';
+  static const String name = 'AuthenticatedRouter';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
