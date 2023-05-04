@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+  backend:
+    container_name: todoBackendDev
+    build:
+        context: backend
+        dockerfile: ./dockerfile
+    ports:
+      - "9000:9000"
+    expose:
+      - "9000"
+    volumes:
+      - .:/app
+

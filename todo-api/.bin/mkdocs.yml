@@ -1,0 +1,17 @@
+site_name: "todo API Doc"
+theme:
+  logo: "/doc/innFactoryIcon.svg"
+  favicon: "/doc/innFactoryIcon.svg"
+  name: material
+  features:
+    - tabs
+  language: en
+  palette:
+    scheme: default
+    primary: red
+    accent: red
+repo_name: todo-api
+repo_url: https://github.com/innFactory/todo-api
+plugins:
+  - search
+  - awesome-pages

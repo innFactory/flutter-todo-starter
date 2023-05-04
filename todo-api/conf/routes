@@ -1,0 +1,10 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# - - - - - - - - WEBSOCKET - - - - - - - -
+
+#GET        /v1/users/events        io.todo.metadata.websockets.application.WebsocketController.userUpdateSocket(auth: Option[String], debug: Option[Boolean])
+
+
+->        /        de.innfactory.smithy4play.AutoRouter

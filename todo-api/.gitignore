@@ -1,0 +1,54 @@
+/.idea
+
+modules/play/logs/
+
+# sbt specific
+.cache
+.history
+.lib/
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+
+# Scala-IDE specific
+.scala_dependencies
+.worksheet
+
+### PlayFramework template
+# Ignore Play! working directory #
+bin/
+/db
+.eclipse
+/lib/
+/logs/
+/project/project
+/project/target
+/target
+tmp/
+test-result
+server.pid
+*.iml
+*.eml
+/dist/
+
+test.mv.db
+
+.metals/*
+.bsp/*
+
+#puml
+out/doc
+
+.DS_Store
+
+.bin/postgis-volume
+.bloop/!/conf/gcp-backend-sa.json
+conf/gcp-backend-sa.json
+
+app/io/todo/metadata/definition/*
+app/io/todo/metadata/definition
+
+.smithy.lsp.log

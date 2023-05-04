@@ -1,0 +1,9 @@
+{
+	"imports": [
+		"$PWD",
+		"$PWD/src/main/resources/META-INF/smithy"
+	],
+	"mavenDependencies": [
+		"com.disneystreaming.smithy4s:smithy4s-protocol_2.13:latest.stable"
+	]
+}

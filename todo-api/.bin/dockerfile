@@ -1,0 +1,24 @@
+FROM openjdk:11
+
+ENV SBT_VERSION 1.6.1
+
+ENV GITHUB_TOKEN=""
+
+RUN curl -L -o sbt-$SBT_VERSION.zip https://github.com/sbt/sbt/releases/download/v1.6.1/sbt-$SBT_VERSION.zip
+RUN unzip sbt-$SBT_VERSION.zip -d ops
+
+#RUN \
+#  curl -L -o sbt-$SBT_VERSION.deb https://repo.scala-sbt.org/scalasbt/debian/sbt-$SBT_VERSION.deb && \
+#  dpkg -i sbt-$SBT_VERSION.deb && \
+#  rm sbt-$SBT_VERSION.deb && \
+#  apt-get update && \
+#  apt-get -y install sbt
+
+WORKDIR /todo-api
+
+COPY . /todo-api
+
+RUN sbt flyway/flywayMigrate
+RUN sbt slickGen
+
+CMD /ops/sbt/bin/sbt run
