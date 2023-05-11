@@ -1,4 +1,3 @@
-import 'package:auth/src/model/auth_failure.dart';
 import 'package:auth/src/model/auth_user.dart';
 import 'package:core/core.dart';
 

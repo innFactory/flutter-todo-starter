@@ -4,5 +4,6 @@
     "source.fixAll": true,
     "source.organizeImports": true
   },
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "i18n-ally.localesPaths": ["assets/i18n"]
 }

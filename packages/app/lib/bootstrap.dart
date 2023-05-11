@@ -28,19 +28,14 @@ Future<void> bootstrap({
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
-  runZonedGuarded(
-    () async {
-      Environment.current = environment;
+  Environment.current = environment;
 
-      runApp(
-        DevicePreview(
-          enabled: kDevicePreviewEnabled,
-          builder: (context) => const ProviderScope(
-            child: App(),
-          ),
-        ),
-      );
-    },
-    (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
+  runApp(
+    DevicePreview(
+      enabled: kDevicePreviewEnabled,
+      builder: (context) => const ProviderScope(
+        child: App(),
+      ),
+    ),
   );
 }

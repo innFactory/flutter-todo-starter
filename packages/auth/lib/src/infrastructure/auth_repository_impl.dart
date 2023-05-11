@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:auth/src/model/auth_failure.dart';
 import 'package:auth/src/model/auth_user.dart';
 import 'package:auth/src/repository/auth_repository.dart';
 import 'package:core/core.dart';
@@ -41,19 +40,38 @@ class AuthRepositoryImpl implements AuthRepository {
         final prefs = await _sharedPreferences();
         await prefs.setBool(prefKeySignedIn, true);
 
-        return Right(Some(AuthUser(
-          id: const AuthUserId('id'),
-          email: email,
-        )));
+        final user = Some(
+          AuthUser(
+            id: const AuthUserId('id'),
+            email: email,
+          ),
+        );
+
+        return Right(user);
       } else {
-        return const Left(InvalidCredentialsFailure());
+        return const Left(AuthFailure.invalidCredentials);
       }
     }).flatMap((user) => TaskEither.fromTask(_emitAuthUser(user)));
   }
 
   @override
-  Stream<Option<AuthUser>> watchAuthUser() {
-    return _authUserStreamController.stream;
+  Stream<Option<AuthUser>> watchAuthUser() async* {
+    final prefs = await _sharedPreferences();
+
+    final isAuthenticated = prefs.getBool(prefKeySignedIn);
+
+    if (isAuthenticated == true) {
+      yield const Some(
+        AuthUser(
+          id: AuthUserId('id'),
+          email: 'email',
+        ),
+      );
+    } else {
+      yield none();
+    }
+
+    yield* _authUserStreamController.stream;
   }
 
   Task<Unit> _emitAuthUser(Option<AuthUser> authUser) {

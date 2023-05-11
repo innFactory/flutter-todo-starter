@@ -1,4 +1,5 @@
 import 'package:app/router/router.dart';
+import 'package:app/router/splash_page.dart';
 import 'package:auth/auth.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:core/core.dart';
@@ -18,6 +19,7 @@ class RootRouterPage extends ConsumerWidget {
     final authUser = ref.watch(authUserStreamProvider);
 
     return AutoRouter.declarative(
+      placeholder: (context) => const SplashPage(),
       routes: (pending) => authUser.when(
         data: (authUser) => authUser.fold(
           () => [const AuthRouter()],

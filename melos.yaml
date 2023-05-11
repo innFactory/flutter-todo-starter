@@ -36,3 +36,14 @@ scripts:
     exec: dart run tools/icons.dart
     select-package:
       scope: app
+
+  clean:
+    run: melos exec -c 6 -- flutter clean
+    description: Clean Flutter packages
+
+  codegen:
+    run: |
+      melos exec -c 6 --depends-on="build_runner" -- flutter pub run build_runner build --delete-conflicting-outputs
+    description: Run code generation using build_runner
+    select-package:
+      depends-on: "build_runner"

@@ -44,10 +44,28 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AuthRouterPage(),
       );
     },
+    OverviewRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const OverviewPage(),
+      );
+    },
+    TodoRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const TodoPage(),
+      );
+    },
     AuthenticatedRouter.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const AuthenticatedRouterPage(),
+      );
+    },
+    HomeRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const HomePage(),
       );
     },
     SplashRoute.name: (routeData) {
@@ -139,6 +157,34 @@ class AuthRouter extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [OverviewPage]
+class OverviewRoute extends PageRouteInfo<void> {
+  const OverviewRoute({List<PageRouteInfo>? children})
+      : super(
+          OverviewRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'OverviewRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [TodoPage]
+class TodoRoute extends PageRouteInfo<void> {
+  const TodoRoute({List<PageRouteInfo>? children})
+      : super(
+          TodoRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'TodoRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [AuthenticatedRouterPage]
 class AuthenticatedRouter extends PageRouteInfo<void> {
   const AuthenticatedRouter({List<PageRouteInfo>? children})
@@ -148,6 +194,20 @@ class AuthenticatedRouter extends PageRouteInfo<void> {
         );
 
   static const String name = 'AuthenticatedRouter';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [HomePage]
+class HomeRoute extends PageRouteInfo<void> {
+  const HomeRoute({List<PageRouteInfo>? children})
+      : super(
+          HomeRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HomeRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

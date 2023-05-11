@@ -1,4 +1,6 @@
+import 'package:app/auth/view/sign_in_form_view.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 /// {@template sign_in_page}
@@ -13,6 +15,13 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          context.translate('sign_in'),
+        ),
+      ),
+      body: const SignInFormView(),
+    );
   }
 }

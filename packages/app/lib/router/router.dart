@@ -1,6 +1,9 @@
 import 'package:app/router/auth/auth_router_page.dart';
 import 'package:app/router/auth/sign_in_page.dart';
 import 'package:app/router/authenticated/authenticated_router.dart';
+import 'package:app/router/authenticated/home_page.dart';
+import 'package:app/router/authenticated/overview_page.dart';
+import 'package:app/router/authenticated/todo_page.dart';
 import 'package:app/router/error_page.dart';
 import 'package:app/router/root_router_page.dart';
 import 'package:app/router/splash_page.dart';
@@ -21,6 +24,7 @@ class AppRouter extends _$AppRouter {
     return [
       AutoRoute(
         page: RootRouterRoute.page,
+        path: '/',
         children: [
           CustomRoute(
             page: SplashRoute.page,
@@ -34,21 +38,25 @@ class AppRouter extends _$AppRouter {
             transitionsBuilder: TransitionsBuilders.fadeIn,
             page: AuthRouter.page,
             children: [
-              AutoRoute(page: SignInRoute.page),
+              AutoRoute(
+                page: SignInRoute.page,
+                initial: true,
+              ),
             ],
           ),
           CustomRoute(
             transitionsBuilder: TransitionsBuilders.fadeIn,
             page: AuthenticatedRouter.page,
-            children: const [
-              // CustomRoute(
-              //   page: SplashPage,
-              //   transitionsBuilder: TransitionsBuilders.fadeIn,
-              // ),
-              // CustomRoute(
-              //   page: ErrorPage,
-              //   transitionsBuilder: TransitionsBuilders.fadeIn,
-              // ),
+            children: [
+              AutoRoute(page: HomeRoute.page, initial: true, children: [
+                AutoRoute(
+                  page: TodoRoute.page,
+                  initial: true,
+                ),
+                AutoRoute(
+                  page: OverviewRoute.page,
+                ),
+              ]),
             ],
           ),
         ],
