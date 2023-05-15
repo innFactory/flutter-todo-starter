@@ -6,10 +6,6 @@
   },
   "servers": [
     {
-      "url": "https://api.dev.todo.io",
-      "description": "DEV todo"
-    },
-    {
       "url": "http://localhost:9000",
       "description": "LOCAL todo"
     }

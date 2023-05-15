@@ -5,5 +5,8 @@
     "source.organizeImports": true
   },
   "editor.formatOnSave": true,
-  "i18n-ally.localesPaths": ["assets/i18n"]
+  "i18n-ally.localesPaths": ["assets/i18n"],
+  "files.watcherExclude": {
+    "**/target": true
+  }
 }
