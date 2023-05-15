@@ -21,6 +21,7 @@ mixin _$Todo {
   String get description => throw _privateConstructorUsedError;
   Set<String> get tags => throw _privateConstructorUsedError;
   bool get isCompleted => throw _privateConstructorUsedError;
+  TodoId? get parentId => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
@@ -39,6 +40,7 @@ abstract class $TodoCopyWith<$Res> {
       String description,
       Set<String> tags,
       bool isCompleted,
+      TodoId? parentId,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -61,6 +63,7 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
     Object? description = null,
     Object? tags = null,
     Object? isCompleted = null,
+    Object? parentId = freezed,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -85,6 +88,10 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
           ? _value.isCompleted
           : isCompleted // ignore: cast_nullable_to_non_nullable
               as bool,
+      parentId: freezed == parentId
+          ? _value.parentId
+          : parentId // ignore: cast_nullable_to_non_nullable
+              as TodoId?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -109,6 +116,7 @@ abstract class _$$_TodoCopyWith<$Res> implements $TodoCopyWith<$Res> {
       String description,
       Set<String> tags,
       bool isCompleted,
+      TodoId? parentId,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -127,6 +135,7 @@ class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res, _$_Todo>
     Object? description = null,
     Object? tags = null,
     Object? isCompleted = null,
+    Object? parentId = freezed,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -151,6 +160,10 @@ class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res, _$_Todo>
           ? _value.isCompleted
           : isCompleted // ignore: cast_nullable_to_non_nullable
               as bool,
+      parentId: freezed == parentId
+          ? _value.parentId
+          : parentId // ignore: cast_nullable_to_non_nullable
+              as TodoId?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -172,6 +185,7 @@ class _$_Todo implements _Todo {
       required this.description,
       required final Set<String> tags,
       required this.isCompleted,
+      required this.parentId,
       required this.createdAt,
       required this.updatedAt})
       : _tags = tags;
@@ -193,13 +207,15 @@ class _$_Todo implements _Todo {
   @override
   final bool isCompleted;
   @override
+  final TodoId? parentId;
+  @override
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'Todo(id: $id, title: $title, description: $description, tags: $tags, isCompleted: $isCompleted, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Todo(id: $id, title: $title, description: $description, tags: $tags, isCompleted: $isCompleted, parentId: $parentId, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -214,6 +230,8 @@ class _$_Todo implements _Todo {
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             (identical(other.isCompleted, isCompleted) ||
                 other.isCompleted == isCompleted) &&
+            (identical(other.parentId, parentId) ||
+                other.parentId == parentId) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -228,6 +246,7 @@ class _$_Todo implements _Todo {
       description,
       const DeepCollectionEquality().hash(_tags),
       isCompleted,
+      parentId,
       createdAt,
       updatedAt);
 
@@ -245,6 +264,7 @@ abstract class _Todo implements Todo {
       required final String description,
       required final Set<String> tags,
       required final bool isCompleted,
+      required final TodoId? parentId,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$_Todo;
 
@@ -258,6 +278,8 @@ abstract class _Todo implements Todo {
   Set<String> get tags;
   @override
   bool get isCompleted;
+  @override
+  TodoId? get parentId;
   @override
   DateTime get createdAt;
   @override

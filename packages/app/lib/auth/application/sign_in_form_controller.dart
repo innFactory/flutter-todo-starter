@@ -3,7 +3,7 @@ import 'package:auth/auth.dart';
 import 'package:core/core.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
-part 'sign_in_form_state.dart';
+part 'sign_in_form.dart';
 
 final signInFormControllerProvider = StateNotifierProvider.autoDispose<
     SignInController, ReactiveFormState<SignInFormModel, SignInForm>>(
@@ -17,9 +17,9 @@ final signInFormControllerProvider = StateNotifierProvider.autoDispose<
 
 class SignInController
     extends ReactiveFormController<SignInFormModel, SignInForm> {
-  SignInController(this._authenticationRepository);
+  SignInController(this._authRepository);
 
-  final AuthRepository _authenticationRepository;
+  final AuthRepository _authRepository;
 
   @override
   TaskEither<Failure, SignInFormModel> get initialValue =>
@@ -30,10 +30,10 @@ class SignInController
 
   @override
   TaskEither<Failure, SignInFormModel> onSubmit(SignInFormModel value) {
-    return _authenticationRepository
+    return _authRepository
         .signWithCredentials(
-          value.email!,
-          value.password!,
+          value.email,
+          value.password,
         )
         .map((r) => value);
   }

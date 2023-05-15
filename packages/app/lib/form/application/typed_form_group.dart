@@ -135,9 +135,9 @@ abstract class TypedFormGroup<T> extends AbstractControl<T>
   void _addAll(Map<String, _ControlWrapper<dynamic, dynamic>> controls) {
     _controlWrapperByKey.addAll(controls);
 
-    // for (final wrappers in controls.values) {
-    //   wrappers.control.parent = this;
-    // }
+    for (final wrappers in controls.values) {
+      wrappers.control.parent = this;
+    }
 
     updateTouched();
     updatePristine();

@@ -15,6 +15,7 @@ class Todo with _$Todo {
     required String description,
     required Set<String> tags,
     required bool isCompleted,
+    required TodoId? parentId,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _Todo;
@@ -27,6 +28,7 @@ class Todo with _$Todo {
       description: '',
       tags: {},
       isCompleted: false,
+      parentId: null,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );

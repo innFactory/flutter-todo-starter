@@ -6,8 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class IsarDatabase {
   static const String _schemaVersionKey = 'isar_schema_version';
-  static const int _currentSchemaVersion = 9;
-
+  static const int _currentSchemaVersion = 1;
   static const int autoIncrement = Isar.autoIncrement;
 
   Future<void> initialize() async {
@@ -16,7 +15,7 @@ class IsarDatabase {
     await Isar.open(
       [
         LocalSyncLogSchema,
-
+        LocalTodoSchema,
         // Add all schemas here
       ],
       directory: dir.path,
@@ -38,19 +37,9 @@ class IsarDatabase {
   }
 
   Future<void> clear() async {
-    try {
-      final dir = await getApplicationDocumentsDirectory();
+    final isar = Isar.getInstance()!;
+    await isar.writeTxn(() => isar.clear());
 
-      await Future.wait([
-        dir.list().map((e) => e.delete(recursive: true)).toList(),
-      ]);
-
-      final isar = Isar.getInstance()!;
-      await isar.writeTxn(() => isar.clear());
-
-      logI('Local database cleared');
-    } catch (e) {
-      logE('Failed to clear local database', e);
-    }
+    logI('Local database cleared');
   }
 }

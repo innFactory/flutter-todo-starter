@@ -47,7 +47,10 @@ dependencies:
   shared_preferences: ^2.1.0
   auto_route: ^7.1.0
   flutter_keyboard_visibility: ^5.4.1
-  reactive_forms: ^14.1.0
+  reactive_forms:
+    git:
+      url: git@github.com:innFactory/reactive_forms.git
+      ref: 3fe9b4d1ada3169498f0244c9d4c251f01dcb325
   freezed_annotation: ^2.2.0
   freezed: ^2.3.3
   equatable: ^2.0.5

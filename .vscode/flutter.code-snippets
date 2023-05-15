@@ -1,0 +1,27 @@
+{
+  "part generated": {
+    "scope": "dart",
+    "prefix": "ptg",
+    "description": "Add a .g.dart part statement",
+    "body": ["part '${TM_FILENAME_BASE}.g.dart';"]
+  },
+  "part freezed": {
+    "scope": "dart",
+    "prefix": "ptf",
+    "description": "Add a .freezed.dart part statement",
+    "body": ["part '${TM_FILENAME_BASE}.freezed.dart';"]
+  },
+  "Freezed class": {
+    "scope": "dart",
+    "prefix": "freezed",
+    "body": [
+      "@freezed",
+      "class ${2:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}} with _\\$${2} {",
+      "\tfactory ${2}({",
+      "\t\tString test,",
+      "\t}) = _${2};",
+      "}"
+    ],
+    "description": "Create a freezed model class"
+  }
+}

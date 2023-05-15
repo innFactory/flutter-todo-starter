@@ -17,65 +17,50 @@ const LocalSyncLogSchema = CollectionSchema(
   name: r'LocalSyncLog',
   id: 506610662870163816,
   properties: {
-    r'apiErrorExceptionType': PropertySchema(
-      id: 0,
-      name: r'apiErrorExceptionType',
-      type: IsarType.string,
-    ),
-    r'apiErrorMessage': PropertySchema(
-      id: 1,
-      name: r'apiErrorMessage',
-      type: IsarType.string,
-    ),
-    r'apiErrorTimestamp': PropertySchema(
-      id: 2,
-      name: r'apiErrorTimestamp',
-      type: IsarType.dateTime,
-    ),
     r'entityId': PropertySchema(
-      id: 3,
+      id: 0,
       name: r'entityId',
       type: IsarType.long,
     ),
     r'entityModifiedAt': PropertySchema(
-      id: 4,
+      id: 1,
       name: r'entityModifiedAt',
       type: IsarType.dateTime,
     ),
     r'entityType': PropertySchema(
-      id: 5,
+      id: 2,
       name: r'entityType',
       type: IsarType.string,
       enumMap: _LocalSyncLogentityTypeEnumValueMap,
     ),
     r'executedAt': PropertySchema(
-      id: 6,
+      id: 3,
       name: r'executedAt',
       type: IsarType.dateTime,
     ),
     r'localCreatedAt': PropertySchema(
-      id: 7,
+      id: 4,
       name: r'localCreatedAt',
       type: IsarType.dateTime,
     ),
     r'localSyncStatus': PropertySchema(
-      id: 8,
+      id: 5,
       name: r'localSyncStatus',
       type: IsarType.string,
       enumMap: _LocalSyncLoglocalSyncStatusEnumValueMap,
     ),
     r'localUpdatedAt': PropertySchema(
-      id: 9,
+      id: 6,
       name: r'localUpdatedAt',
       type: IsarType.dateTime,
     ),
     r'remoteId': PropertySchema(
-      id: 10,
+      id: 7,
       name: r'remoteId',
       type: IsarType.string,
     ),
     r'status': PropertySchema(
-      id: 11,
+      id: 8,
       name: r'status',
       type: IsarType.string,
       enumMap: _LocalSyncLogstatusEnumValueMap,
@@ -128,18 +113,6 @@ int _localSyncLogEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  {
-    final value = object.apiErrorExceptionType;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.apiErrorMessage;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
   bytesCount += 3 + object.entityType.name.length * 3;
   bytesCount += 3 + object.localSyncStatus.name.length * 3;
   {
@@ -158,18 +131,15 @@ void _localSyncLogSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.apiErrorExceptionType);
-  writer.writeString(offsets[1], object.apiErrorMessage);
-  writer.writeDateTime(offsets[2], object.apiErrorTimestamp);
-  writer.writeLong(offsets[3], object.entityId);
-  writer.writeDateTime(offsets[4], object.entityModifiedAt);
-  writer.writeString(offsets[5], object.entityType.name);
-  writer.writeDateTime(offsets[6], object.executedAt);
-  writer.writeDateTime(offsets[7], object.localCreatedAt);
-  writer.writeString(offsets[8], object.localSyncStatus.name);
-  writer.writeDateTime(offsets[9], object.localUpdatedAt);
-  writer.writeString(offsets[10], object.remoteId);
-  writer.writeString(offsets[11], object.status.name);
+  writer.writeLong(offsets[0], object.entityId);
+  writer.writeDateTime(offsets[1], object.entityModifiedAt);
+  writer.writeString(offsets[2], object.entityType.name);
+  writer.writeDateTime(offsets[3], object.executedAt);
+  writer.writeDateTime(offsets[4], object.localCreatedAt);
+  writer.writeString(offsets[5], object.localSyncStatus.name);
+  writer.writeDateTime(offsets[6], object.localUpdatedAt);
+  writer.writeString(offsets[7], object.remoteId);
+  writer.writeString(offsets[8], object.status.name);
 }
 
 LocalSyncLog _localSyncLogDeserialize(
@@ -179,24 +149,21 @@ LocalSyncLog _localSyncLogDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = LocalSyncLog();
-  object.apiErrorExceptionType = reader.readStringOrNull(offsets[0]);
-  object.apiErrorMessage = reader.readStringOrNull(offsets[1]);
-  object.apiErrorTimestamp = reader.readDateTimeOrNull(offsets[2]);
-  object.entityId = reader.readLong(offsets[3]);
-  object.entityModifiedAt = reader.readDateTime(offsets[4]);
+  object.entityId = reader.readLong(offsets[0]);
+  object.entityModifiedAt = reader.readDateTime(offsets[1]);
   object.entityType = _LocalSyncLogentityTypeValueEnumMap[
-          reader.readStringOrNull(offsets[5])] ??
-      SyncEntityType.room;
-  object.executedAt = reader.readDateTimeOrNull(offsets[6]);
-  object.localCreatedAt = reader.readDateTime(offsets[7]);
+          reader.readStringOrNull(offsets[2])] ??
+      SyncEntityType.todos;
+  object.executedAt = reader.readDateTimeOrNull(offsets[3]);
+  object.localCreatedAt = reader.readDateTime(offsets[4]);
   object.localId = id;
   object.localSyncStatus = _LocalSyncLoglocalSyncStatusValueEnumMap[
-          reader.readStringOrNull(offsets[8])] ??
+          reader.readStringOrNull(offsets[5])] ??
       SyncStatus.synced;
-  object.localUpdatedAt = reader.readDateTime(offsets[9]);
-  object.remoteId = reader.readStringOrNull(offsets[10]);
+  object.localUpdatedAt = reader.readDateTime(offsets[6]);
+  object.remoteId = reader.readStringOrNull(offsets[7]);
   object.status =
-      _LocalSyncLogstatusValueEnumMap[reader.readStringOrNull(offsets[11])] ??
+      _LocalSyncLogstatusValueEnumMap[reader.readStringOrNull(offsets[8])] ??
           SyncStatus.synced;
   return object;
 }
@@ -209,32 +176,26 @@ P _localSyncLogDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset)) as P;
-    case 1:
-      return (reader.readStringOrNull(offset)) as P;
-    case 2:
-      return (reader.readDateTimeOrNull(offset)) as P;
-    case 3:
       return (reader.readLong(offset)) as P;
+    case 1:
+      return (reader.readDateTime(offset)) as P;
+    case 2:
+      return (_LocalSyncLogentityTypeValueEnumMap[
+              reader.readStringOrNull(offset)] ??
+          SyncEntityType.todos) as P;
+    case 3:
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 4:
       return (reader.readDateTime(offset)) as P;
     case 5:
-      return (_LocalSyncLogentityTypeValueEnumMap[
-              reader.readStringOrNull(offset)] ??
-          SyncEntityType.room) as P;
-    case 6:
-      return (reader.readDateTimeOrNull(offset)) as P;
-    case 7:
-      return (reader.readDateTime(offset)) as P;
-    case 8:
       return (_LocalSyncLoglocalSyncStatusValueEnumMap[
               reader.readStringOrNull(offset)] ??
           SyncStatus.synced) as P;
-    case 9:
+    case 6:
       return (reader.readDateTime(offset)) as P;
-    case 10:
+    case 7:
       return (reader.readStringOrNull(offset)) as P;
-    case 11:
+    case 8:
       return (_LocalSyncLogstatusValueEnumMap[
               reader.readStringOrNull(offset)] ??
           SyncStatus.synced) as P;
@@ -244,52 +205,10 @@ P _localSyncLogDeserializeProp<P>(
 }
 
 const _LocalSyncLogentityTypeEnumValueMap = {
-  r'room': r'room',
-  r'contact': r'contact',
-  r'project': r'project',
-  r'participant': r'participant',
-  r'participantGroup': r'participantGroup',
-  r'note': r'note',
-  r'topic': r'topic',
-  r'participantList': r'participantList',
-  r'recordings': r'recordings',
-  r'recordingWeatherInfo': r'recordingWeatherInfo',
-  r'planContainer': r'planContainer',
-  r'siteInfo': r'siteInfo',
-  r'planState': r'planState',
-  r'currentUser': r'currentUser',
-  r'settings': r'settings',
-  r'report': r'report',
-  r'tenantUser': r'tenantUser',
-  r'tenantAccount': r'tenantAccount',
-  r'attachment': r'attachment',
-  r'reportTemplate': r'reportTemplate',
-  r'favorite': r'favorite',
-  r'calendarEvent': r'calendarEvent',
+  r'todos': r'todos',
 };
 const _LocalSyncLogentityTypeValueEnumMap = {
-  r'room': SyncEntityType.room,
-  r'contact': SyncEntityType.contact,
-  r'project': SyncEntityType.project,
-  r'participant': SyncEntityType.participant,
-  r'participantGroup': SyncEntityType.participantGroup,
-  r'note': SyncEntityType.note,
-  r'topic': SyncEntityType.topic,
-  r'participantList': SyncEntityType.participantList,
-  r'recordings': SyncEntityType.recordings,
-  r'recordingWeatherInfo': SyncEntityType.recordingWeatherInfo,
-  r'planContainer': SyncEntityType.planContainer,
-  r'siteInfo': SyncEntityType.siteInfo,
-  r'planState': SyncEntityType.planState,
-  r'currentUser': SyncEntityType.currentUser,
-  r'settings': SyncEntityType.settings,
-  r'report': SyncEntityType.report,
-  r'tenantUser': SyncEntityType.tenantUser,
-  r'tenantAccount': SyncEntityType.tenantAccount,
-  r'attachment': SyncEntityType.attachment,
-  r'reportTemplate': SyncEntityType.reportTemplate,
-  r'favorite': SyncEntityType.favorite,
-  r'calendarEvent': SyncEntityType.calendarEvent,
+  r'todos': SyncEntityType.todos,
 };
 const _LocalSyncLoglocalSyncStatusEnumValueMap = {
   r'synced': r'synced',
@@ -522,389 +441,6 @@ extension LocalSyncLogQueryWhere
 
 extension LocalSyncLogQueryFilter
     on QueryBuilder<LocalSyncLog, LocalSyncLog, QFilterCondition> {
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorExceptionTypeIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'apiErrorExceptionType',
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorExceptionTypeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'apiErrorExceptionType',
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorExceptionTypeEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'apiErrorExceptionType',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorExceptionTypeGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'apiErrorExceptionType',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorExceptionTypeLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'apiErrorExceptionType',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorExceptionTypeBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'apiErrorExceptionType',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorExceptionTypeStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'apiErrorExceptionType',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorExceptionTypeEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'apiErrorExceptionType',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorExceptionTypeContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'apiErrorExceptionType',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorExceptionTypeMatches(String pattern,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'apiErrorExceptionType',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorExceptionTypeIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'apiErrorExceptionType',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorExceptionTypeIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'apiErrorExceptionType',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorMessageIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'apiErrorMessage',
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorMessageIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'apiErrorMessage',
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorMessageEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'apiErrorMessage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorMessageGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'apiErrorMessage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorMessageLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'apiErrorMessage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorMessageBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'apiErrorMessage',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorMessageStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'apiErrorMessage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorMessageEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'apiErrorMessage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorMessageContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'apiErrorMessage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorMessageMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'apiErrorMessage',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorMessageIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'apiErrorMessage',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorMessageIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'apiErrorMessage',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorTimestampIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'apiErrorTimestamp',
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorTimestampIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'apiErrorTimestamp',
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorTimestampEqualTo(DateTime? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'apiErrorTimestamp',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorTimestampGreaterThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'apiErrorTimestamp',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorTimestampLessThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'apiErrorTimestamp',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
-      apiErrorTimestampBetween(
-    DateTime? lower,
-    DateTime? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'apiErrorTimestamp',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
   QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterFilterCondition>
       entityIdEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
@@ -1847,48 +1383,6 @@ extension LocalSyncLogQueryLinks
 
 extension LocalSyncLogQuerySortBy
     on QueryBuilder<LocalSyncLog, LocalSyncLog, QSortBy> {
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterSortBy>
-      sortByApiErrorExceptionType() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'apiErrorExceptionType', Sort.asc);
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterSortBy>
-      sortByApiErrorExceptionTypeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'apiErrorExceptionType', Sort.desc);
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterSortBy>
-      sortByApiErrorMessage() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'apiErrorMessage', Sort.asc);
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterSortBy>
-      sortByApiErrorMessageDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'apiErrorMessage', Sort.desc);
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterSortBy>
-      sortByApiErrorTimestamp() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'apiErrorTimestamp', Sort.asc);
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterSortBy>
-      sortByApiErrorTimestampDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'apiErrorTimestamp', Sort.desc);
-    });
-  }
-
   QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterSortBy> sortByEntityId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'entityId', Sort.asc);
@@ -2010,48 +1504,6 @@ extension LocalSyncLogQuerySortBy
 
 extension LocalSyncLogQuerySortThenBy
     on QueryBuilder<LocalSyncLog, LocalSyncLog, QSortThenBy> {
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterSortBy>
-      thenByApiErrorExceptionType() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'apiErrorExceptionType', Sort.asc);
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterSortBy>
-      thenByApiErrorExceptionTypeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'apiErrorExceptionType', Sort.desc);
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterSortBy>
-      thenByApiErrorMessage() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'apiErrorMessage', Sort.asc);
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterSortBy>
-      thenByApiErrorMessageDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'apiErrorMessage', Sort.desc);
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterSortBy>
-      thenByApiErrorTimestamp() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'apiErrorTimestamp', Sort.asc);
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterSortBy>
-      thenByApiErrorTimestampDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'apiErrorTimestamp', Sort.desc);
-    });
-  }
-
   QueryBuilder<LocalSyncLog, LocalSyncLog, QAfterSortBy> thenByEntityId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'entityId', Sort.asc);
@@ -2185,29 +1637,6 @@ extension LocalSyncLogQuerySortThenBy
 
 extension LocalSyncLogQueryWhereDistinct
     on QueryBuilder<LocalSyncLog, LocalSyncLog, QDistinct> {
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QDistinct>
-      distinctByApiErrorExceptionType({bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'apiErrorExceptionType',
-          caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QDistinct> distinctByApiErrorMessage(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'apiErrorMessage',
-          caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, LocalSyncLog, QDistinct>
-      distinctByApiErrorTimestamp() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'apiErrorTimestamp');
-    });
-  }
-
   QueryBuilder<LocalSyncLog, LocalSyncLog, QDistinct> distinctByEntityId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'entityId');
@@ -2276,27 +1705,6 @@ extension LocalSyncLogQueryProperty
   QueryBuilder<LocalSyncLog, int, QQueryOperations> localIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'localId');
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, String?, QQueryOperations>
-      apiErrorExceptionTypeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'apiErrorExceptionType');
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, String?, QQueryOperations>
-      apiErrorMessageProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'apiErrorMessage');
-    });
-  }
-
-  QueryBuilder<LocalSyncLog, DateTime?, QQueryOperations>
-      apiErrorTimestampProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'apiErrorTimestamp');
     });
   }
 
