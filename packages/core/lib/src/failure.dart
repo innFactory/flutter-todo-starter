@@ -35,6 +35,7 @@ enum Failures with EnumFailure {
   database,
   unknown,
   formIsEmpty,
+  api,
   notFound;
 
   @override
@@ -52,6 +53,8 @@ enum Failures with EnumFailure {
         return i18n.translate('failures.notFound');
       case Failures.formIsEmpty:
         return i18n.translate('failures.formIsEmpty');
+      case Failures.api:
+        return i18n.translate('failures.api');
     }
   }
 }

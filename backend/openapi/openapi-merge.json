@@ -1,4 +1,0 @@
-{
-  "inputs": [{ "inputFile": "../openapi/base.openapi.json" }],
-  "output": "../openapi.json"
-}
