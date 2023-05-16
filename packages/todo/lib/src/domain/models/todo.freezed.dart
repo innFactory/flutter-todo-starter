@@ -16,12 +16,14 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Todo {
-  TodoId? get id => throw _privateConstructorUsedError;
+  TodoId? get localId => throw _privateConstructorUsedError;
+  String? get remoteId => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   Set<String> get tags => throw _privateConstructorUsedError;
   bool get isCompleted => throw _privateConstructorUsedError;
-  TodoId? get parentId => throw _privateConstructorUsedError;
+  TodoId? get localParentId => throw _privateConstructorUsedError;
+  String? get remoteParentId => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
@@ -35,12 +37,14 @@ abstract class $TodoCopyWith<$Res> {
       _$TodoCopyWithImpl<$Res, Todo>;
   @useResult
   $Res call(
-      {TodoId? id,
+      {TodoId? localId,
+      String? remoteId,
       String title,
       String description,
       Set<String> tags,
       bool isCompleted,
-      TodoId? parentId,
+      TodoId? localParentId,
+      String? remoteParentId,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -58,20 +62,26 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? localId = freezed,
+    Object? remoteId = freezed,
     Object? title = null,
     Object? description = null,
     Object? tags = null,
     Object? isCompleted = null,
-    Object? parentId = freezed,
+    Object? localParentId = freezed,
+    Object? remoteParentId = freezed,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      localId: freezed == localId
+          ? _value.localId
+          : localId // ignore: cast_nullable_to_non_nullable
               as TodoId?,
+      remoteId: freezed == remoteId
+          ? _value.remoteId
+          : remoteId // ignore: cast_nullable_to_non_nullable
+              as String?,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -88,10 +98,14 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
           ? _value.isCompleted
           : isCompleted // ignore: cast_nullable_to_non_nullable
               as bool,
-      parentId: freezed == parentId
-          ? _value.parentId
-          : parentId // ignore: cast_nullable_to_non_nullable
+      localParentId: freezed == localParentId
+          ? _value.localParentId
+          : localParentId // ignore: cast_nullable_to_non_nullable
               as TodoId?,
+      remoteParentId: freezed == remoteParentId
+          ? _value.remoteParentId
+          : remoteParentId // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -111,12 +125,14 @@ abstract class _$$_TodoCopyWith<$Res> implements $TodoCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {TodoId? id,
+      {TodoId? localId,
+      String? remoteId,
       String title,
       String description,
       Set<String> tags,
       bool isCompleted,
-      TodoId? parentId,
+      TodoId? localParentId,
+      String? remoteParentId,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -130,20 +146,26 @@ class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res, _$_Todo>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? localId = freezed,
+    Object? remoteId = freezed,
     Object? title = null,
     Object? description = null,
     Object? tags = null,
     Object? isCompleted = null,
-    Object? parentId = freezed,
+    Object? localParentId = freezed,
+    Object? remoteParentId = freezed,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
     return _then(_$_Todo(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      localId: freezed == localId
+          ? _value.localId
+          : localId // ignore: cast_nullable_to_non_nullable
               as TodoId?,
+      remoteId: freezed == remoteId
+          ? _value.remoteId
+          : remoteId // ignore: cast_nullable_to_non_nullable
+              as String?,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -160,10 +182,14 @@ class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res, _$_Todo>
           ? _value.isCompleted
           : isCompleted // ignore: cast_nullable_to_non_nullable
               as bool,
-      parentId: freezed == parentId
-          ? _value.parentId
-          : parentId // ignore: cast_nullable_to_non_nullable
+      localParentId: freezed == localParentId
+          ? _value.localParentId
+          : localParentId // ignore: cast_nullable_to_non_nullable
               as TodoId?,
+      remoteParentId: freezed == remoteParentId
+          ? _value.remoteParentId
+          : remoteParentId // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -180,18 +206,22 @@ class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res, _$_Todo>
 
 class _$_Todo implements _Todo {
   const _$_Todo(
-      {required this.id,
+      {required this.localId,
+      required this.remoteId,
       required this.title,
       required this.description,
       required final Set<String> tags,
       required this.isCompleted,
-      required this.parentId,
+      required this.localParentId,
+      required this.remoteParentId,
       required this.createdAt,
       required this.updatedAt})
       : _tags = tags;
 
   @override
-  final TodoId? id;
+  final TodoId? localId;
+  @override
+  final String? remoteId;
   @override
   final String title;
   @override
@@ -207,7 +237,9 @@ class _$_Todo implements _Todo {
   @override
   final bool isCompleted;
   @override
-  final TodoId? parentId;
+  final TodoId? localParentId;
+  @override
+  final String? remoteParentId;
   @override
   final DateTime createdAt;
   @override
@@ -215,7 +247,7 @@ class _$_Todo implements _Todo {
 
   @override
   String toString() {
-    return 'Todo(id: $id, title: $title, description: $description, tags: $tags, isCompleted: $isCompleted, parentId: $parentId, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Todo(localId: $localId, remoteId: $remoteId, title: $title, description: $description, tags: $tags, isCompleted: $isCompleted, localParentId: $localParentId, remoteParentId: $remoteParentId, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -223,15 +255,19 @@ class _$_Todo implements _Todo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Todo &&
-            (identical(other.id, id) || other.id == id) &&
+            (identical(other.localId, localId) || other.localId == localId) &&
+            (identical(other.remoteId, remoteId) ||
+                other.remoteId == remoteId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             (identical(other.isCompleted, isCompleted) ||
                 other.isCompleted == isCompleted) &&
-            (identical(other.parentId, parentId) ||
-                other.parentId == parentId) &&
+            (identical(other.localParentId, localParentId) ||
+                other.localParentId == localParentId) &&
+            (identical(other.remoteParentId, remoteParentId) ||
+                other.remoteParentId == remoteParentId) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -241,12 +277,14 @@ class _$_Todo implements _Todo {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      id,
+      localId,
+      remoteId,
       title,
       description,
       const DeepCollectionEquality().hash(_tags),
       isCompleted,
-      parentId,
+      localParentId,
+      remoteParentId,
       createdAt,
       updatedAt);
 
@@ -259,17 +297,21 @@ class _$_Todo implements _Todo {
 
 abstract class _Todo implements Todo {
   const factory _Todo(
-      {required final TodoId? id,
+      {required final TodoId? localId,
+      required final String? remoteId,
       required final String title,
       required final String description,
       required final Set<String> tags,
       required final bool isCompleted,
-      required final TodoId? parentId,
+      required final TodoId? localParentId,
+      required final String? remoteParentId,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$_Todo;
 
   @override
-  TodoId? get id;
+  TodoId? get localId;
+  @override
+  String? get remoteId;
   @override
   String get title;
   @override
@@ -279,7 +321,9 @@ abstract class _Todo implements Todo {
   @override
   bool get isCompleted;
   @override
-  TodoId? get parentId;
+  TodoId? get localParentId;
+  @override
+  String? get remoteParentId;
   @override
   DateTime get createdAt;
   @override

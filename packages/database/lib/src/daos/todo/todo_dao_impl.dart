@@ -13,20 +13,51 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   TodoDaoImpl(super.attachedDatabase);
 
   @override
-  TaskEither<Failure, int> createOrUpdate({
-    required LocalTodo todo,
-  }) {
+  TaskEither<Failure, LocalTodo> createOrUpdate(TodoTableCompanion todo) {
     return runTransaction(
       () => transaction(
         () async {
           final todoLocalId = await into(tableInfo).insertOnConflictUpdate(
-            todo.copyWith(localUpdatedAt: DateTime.now()),
+            todo.copyWith(localUpdatedAt: Value(DateTime.now())),
           );
 
-          return todoLocalId;
+          final createdOrUpdatedTodo = (select(tableInfo)
+                ..where((tbl) => tbl.localId.equals(todoLocalId)))
+              .getSingle();
+
+          return createdOrUpdatedTodo;
         },
       ),
     );
+  }
+
+  @override
+  TaskEither<Failure, List<LocalTodo>> getTodos() {
+    return runTransaction(
+      () => transaction(
+        () async {
+          return tableInfo.select().get();
+        },
+      ),
+    );
+  }
+
+  @override
+  TaskEither<Failure, LocalTodo> getTodoById(TodoId todoId) {
+    return runTransaction(
+      () => transaction(
+        () async {
+          return (select(tableInfo)
+                ..where((tbl) => tbl.localId.equals(todoId.value)))
+              .getSingle();
+        },
+      ),
+    );
+  }
+
+  @override
+  Stream<List<LocalTodo>> watchTodos() {
+    return tableInfo.select().watch();
   }
 
   @override
@@ -44,6 +75,7 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     );
   }
 
+  @override
   TaskEither<Failure, int> deleteByLocalId(int localId) {
     return runTransaction(
       () =>
@@ -51,6 +83,7 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     );
   }
 
+  @override
   TaskEither<Failure, int> deleteByLocalIdSoft(int localId) {
     return runTransaction(
       () => transaction(
@@ -64,6 +97,7 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     );
   }
 
+  @override
   TaskEither<Failure, int> deleteByLocalIdsSoft(Set<int> localIds) {
     return runTransaction(
       () => transaction(
@@ -77,6 +111,7 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     );
   }
 
+  @override
   TaskEither<Failure, int> deleteByRemoteId(String remoteId) {
     return runTransaction(
       () => transaction(
@@ -86,6 +121,7 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     );
   }
 
+  @override
   TaskEither<Failure, int> deleteByRemoteIds(Set<String> remoteIds) {
     return runTransaction(
       () => transaction(
@@ -98,6 +134,7 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     );
   }
 
+  @override
   TaskEither<Failure, int> deleteByRemoteIdSoft(String remoteId) {
     return runTransaction(
       () => transaction(
@@ -111,6 +148,7 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     );
   }
 
+  @override
   TaskEither<Failure, int> deleteByRemoteIdsSoft(Set<String> remoteIds) {
     return runTransaction(
       () => transaction(

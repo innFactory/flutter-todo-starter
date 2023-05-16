@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:todo/todo.dart';
 
 @RoutePage()
 class TodoPage extends StatelessWidget {
@@ -7,8 +8,8 @@ class TodoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(),
+    return const Scaffold(
+      body: TodoListView(),
     );
   }
 }

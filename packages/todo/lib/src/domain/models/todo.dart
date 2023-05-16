@@ -10,12 +10,14 @@ class TodoId extends ValueId<int> {
 @freezed
 class Todo with _$Todo {
   const factory Todo({
-    required TodoId? id,
+    required TodoId? localId,
+    required String? remoteId,
     required String title,
     required String description,
     required Set<String> tags,
     required bool isCompleted,
-    required TodoId? parentId,
+    required TodoId? localParentId,
+    required String? remoteParentId,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _Todo;
@@ -23,12 +25,14 @@ class Todo with _$Todo {
   /// Create a new Todo with default values.
   factory Todo.empty() {
     return Todo(
-      id: null,
+      localId: null,
+      remoteId: null,
       title: '',
       description: '',
       tags: {},
       isCompleted: false,
-      parentId: null,
+      localParentId: null,
+      remoteParentId: null,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
