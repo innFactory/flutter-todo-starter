@@ -1,8 +1,9 @@
 library database;
 
-export 'src/base/local_base.dart';
+export 'package:drift/drift.dart';
+
+export 'src/daos/todo/todo_dao.dart';
 export 'src/data/dao.dart';
-export 'src/data/sync_log/sync_log_dao.dart';
-export 'src/isar_database.dart';
-export 'src/models/local_sync_log.dart';
-export 'src/models/local_todo.dart';
+export 'src/database_provider.dart';
+export 'src/drift_database.dart';
+export 'src/tables/todo_table.dart';

@@ -3,12 +3,10 @@
 //
 
 import 'dart:async';
-
 // ignore: unused_import
 import 'dart:convert';
-import 'package:api_client/src/deserialize.dart';
-import 'package:dio/dio.dart';
 
+import 'package:api_client/src/deserialize.dart';
 import 'package:api_client/src/model/create_todo_response_content.dart';
 import 'package:api_client/src/model/get_todo_by_id_response_content.dart';
 import 'package:api_client/src/model/get_todos_sync_response_content.dart';
@@ -16,11 +14,11 @@ import 'package:api_client/src/model/todo_creation.dart';
 import 'package:api_client/src/model/todo_response.dart';
 import 'package:api_client/src/model/todo_update.dart';
 import 'package:api_client/src/model/update_todo_response_content.dart';
+import 'package:dio/dio.dart';
 
 class TodoApiControllerApi {
-  final Dio _dio;
-
   const TodoApiControllerApi(this._dio);
+  final Dio _dio;
 
   /// createTodo
   ///
@@ -45,9 +43,9 @@ class TodoApiControllerApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/v1/todos';
-    final _options = Options(
-      method: r'POST',
+    const path = '/v1/todos';
+    final options = Options(
+      method: 'POST',
       headers: <String, dynamic>{
         ...?headers,
       },
@@ -59,57 +57,54 @@ class TodoApiControllerApi {
       validateStatus: validateStatus,
     );
 
-    dynamic _bodyData;
+    dynamic bodyData;
 
     try {
-      _bodyData = jsonEncode(todoCreation);
+      bodyData = jsonEncode(todoCreation);
     } catch (error, stackTrace) {
       throw DioError(
-        requestOptions: _options.compose(
+        requestOptions: options.compose(
           _dio.options,
-          _path,
+          path,
         ),
-        type: DioErrorType.unknown,
         error: error,
         stackTrace: stackTrace,
       );
     }
 
-    final _response = await _dio.request<Object>(
-      _path,
-      data: _bodyData,
-      options: _options,
+    final response = await _dio.request<Object>(
+      path,
+      data: bodyData,
+      options: options,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
 
-    CreateTodoResponseContent _responseData;
+    CreateTodoResponseContent responseData;
 
     try {
-      _responseData =
+      responseData =
           deserialize<CreateTodoResponseContent, CreateTodoResponseContent>(
-              _response.data!, 'CreateTodoResponseContent',
-              growable: true);
+              response.data!, 'CreateTodoResponseContent');
     } catch (error, stackTrace) {
       throw DioError(
-        requestOptions: _response.requestOptions,
-        response: _response,
-        type: DioErrorType.unknown,
+        requestOptions: response.requestOptions,
+        response: response,
         error: error,
         stackTrace: stackTrace,
       );
     }
 
     return Response<CreateTodoResponseContent>(
-      data: _responseData,
-      headers: _response.headers,
-      isRedirect: _response.isRedirect,
-      requestOptions: _response.requestOptions,
-      redirects: _response.redirects,
-      statusCode: _response.statusCode,
-      statusMessage: _response.statusMessage,
-      extra: _response.extra,
+      data: responseData,
+      headers: response.headers,
+      isRedirect: response.isRedirect,
+      requestOptions: response.requestOptions,
+      redirects: response.redirects,
+      statusCode: response.statusCode,
+      statusMessage: response.statusMessage,
+      extra: response.extra,
     );
   }
 
@@ -136,10 +131,9 @@ class TodoApiControllerApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path =
-        r'/v1/todos/{todoId}'.replaceAll('{' r'todoId' '}', todoId.toString());
-    final _options = Options(
-      method: r'DELETE',
+    final path = '/v1/todos/{todoId}'.replaceAll('{' 'todoId' '}', todoId);
+    final options = Options(
+      method: 'DELETE',
       headers: <String, dynamic>{
         ...?headers,
       },
@@ -150,15 +144,15 @@ class TodoApiControllerApi {
       validateStatus: validateStatus,
     );
 
-    final _response = await _dio.request<Object>(
-      _path,
-      options: _options,
+    final response = await _dio.request<Object>(
+      path,
+      options: options,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _response;
+    return response;
   }
 
   /// getTodoById
@@ -184,10 +178,9 @@ class TodoApiControllerApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path =
-        r'/v1/todos/{todoId}'.replaceAll('{' r'todoId' '}', todoId.toString());
-    final _options = Options(
-      method: r'GET',
+    final path = '/v1/todos/{todoId}'.replaceAll('{' 'todoId' '}', todoId);
+    final options = Options(
+      method: 'GET',
       headers: <String, dynamic>{
         ...?headers,
       },
@@ -198,40 +191,38 @@ class TodoApiControllerApi {
       validateStatus: validateStatus,
     );
 
-    final _response = await _dio.request<Object>(
-      _path,
-      options: _options,
+    final response = await _dio.request<Object>(
+      path,
+      options: options,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
 
-    GetTodoByIdResponseContent _responseData;
+    GetTodoByIdResponseContent responseData;
 
     try {
-      _responseData =
+      responseData =
           deserialize<GetTodoByIdResponseContent, GetTodoByIdResponseContent>(
-              _response.data!, 'GetTodoByIdResponseContent',
-              growable: true);
+              response.data!, 'GetTodoByIdResponseContent');
     } catch (error, stackTrace) {
       throw DioError(
-        requestOptions: _response.requestOptions,
-        response: _response,
-        type: DioErrorType.unknown,
+        requestOptions: response.requestOptions,
+        response: response,
         error: error,
         stackTrace: stackTrace,
       );
     }
 
     return Response<GetTodoByIdResponseContent>(
-      data: _responseData,
-      headers: _response.headers,
-      isRedirect: _response.isRedirect,
-      requestOptions: _response.requestOptions,
-      redirects: _response.redirects,
-      statusCode: _response.statusCode,
-      statusMessage: _response.statusMessage,
-      extra: _response.extra,
+      data: responseData,
+      headers: response.headers,
+      isRedirect: response.isRedirect,
+      requestOptions: response.requestOptions,
+      redirects: response.redirects,
+      statusCode: response.statusCode,
+      statusMessage: response.statusMessage,
+      extra: response.extra,
     );
   }
 
@@ -256,9 +247,9 @@ class TodoApiControllerApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/v1/todos';
-    final _options = Options(
-      method: r'GET',
+    const path = '/v1/todos';
+    final options = Options(
+      method: 'GET',
       headers: <String, dynamic>{
         ...?headers,
       },
@@ -269,39 +260,37 @@ class TodoApiControllerApi {
       validateStatus: validateStatus,
     );
 
-    final _response = await _dio.request<Object>(
-      _path,
-      options: _options,
+    final response = await _dio.request<Object>(
+      path,
+      options: options,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
 
-    List<TodoResponse> _responseData;
+    List<TodoResponse> responseData;
 
     try {
-      _responseData = deserialize<List<TodoResponse>, TodoResponse>(
-          _response.data!, 'List<TodoResponse>',
-          growable: true);
+      responseData = deserialize<List<TodoResponse>, TodoResponse>(
+          response.data!, 'List<TodoResponse>');
     } catch (error, stackTrace) {
       throw DioError(
-        requestOptions: _response.requestOptions,
-        response: _response,
-        type: DioErrorType.unknown,
+        requestOptions: response.requestOptions,
+        response: response,
         error: error,
         stackTrace: stackTrace,
       );
     }
 
     return Response<List<TodoResponse>>(
-      data: _responseData,
-      headers: _response.headers,
-      isRedirect: _response.isRedirect,
-      requestOptions: _response.requestOptions,
-      redirects: _response.redirects,
-      statusCode: _response.statusCode,
-      statusMessage: _response.statusMessage,
-      extra: _response.extra,
+      data: responseData,
+      headers: response.headers,
+      isRedirect: response.isRedirect,
+      requestOptions: response.requestOptions,
+      redirects: response.redirects,
+      statusCode: response.statusCode,
+      statusMessage: response.statusMessage,
+      extra: response.extra,
     );
   }
 
@@ -328,9 +317,9 @@ class TodoApiControllerApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/v1/sync/todos';
-    final _options = Options(
-      method: r'GET',
+    const path = '/v1/sync/todos';
+    final options = Options(
+      method: 'GET',
       headers: <String, dynamic>{
         ...?headers,
       },
@@ -341,45 +330,43 @@ class TodoApiControllerApi {
       validateStatus: validateStatus,
     );
 
-    final _queryParameters = <String, dynamic>{
-      if (timestamp != null) r'timestamp': timestamp,
+    final queryParameters = <String, dynamic>{
+      if (timestamp != null) 'timestamp': timestamp,
     };
 
-    final _response = await _dio.request<Object>(
-      _path,
-      options: _options,
-      queryParameters: _queryParameters,
+    final response = await _dio.request<Object>(
+      path,
+      options: options,
+      queryParameters: queryParameters,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
 
-    GetTodosSyncResponseContent _responseData;
+    GetTodosSyncResponseContent responseData;
 
     try {
-      _responseData =
+      responseData =
           deserialize<GetTodosSyncResponseContent, GetTodosSyncResponseContent>(
-              _response.data!, 'GetTodosSyncResponseContent',
-              growable: true);
+              response.data!, 'GetTodosSyncResponseContent');
     } catch (error, stackTrace) {
       throw DioError(
-        requestOptions: _response.requestOptions,
-        response: _response,
-        type: DioErrorType.unknown,
+        requestOptions: response.requestOptions,
+        response: response,
         error: error,
         stackTrace: stackTrace,
       );
     }
 
     return Response<GetTodosSyncResponseContent>(
-      data: _responseData,
-      headers: _response.headers,
-      isRedirect: _response.isRedirect,
-      requestOptions: _response.requestOptions,
-      redirects: _response.redirects,
-      statusCode: _response.statusCode,
-      statusMessage: _response.statusMessage,
-      extra: _response.extra,
+      data: responseData,
+      headers: response.headers,
+      isRedirect: response.isRedirect,
+      requestOptions: response.requestOptions,
+      redirects: response.redirects,
+      statusCode: response.statusCode,
+      statusMessage: response.statusMessage,
+      extra: response.extra,
     );
   }
 
@@ -408,10 +395,9 @@ class TodoApiControllerApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path =
-        r'/v1/todos/{todoId}'.replaceAll('{' r'todoId' '}', todoId.toString());
-    final _options = Options(
-      method: r'PATCH',
+    final path = '/v1/todos/{todoId}'.replaceAll('{' 'todoId' '}', todoId);
+    final options = Options(
+      method: 'PATCH',
       headers: <String, dynamic>{
         ...?headers,
       },
@@ -423,57 +409,54 @@ class TodoApiControllerApi {
       validateStatus: validateStatus,
     );
 
-    dynamic _bodyData;
+    dynamic bodyData;
 
     try {
-      _bodyData = jsonEncode(todoUpdate);
+      bodyData = jsonEncode(todoUpdate);
     } catch (error, stackTrace) {
       throw DioError(
-        requestOptions: _options.compose(
+        requestOptions: options.compose(
           _dio.options,
-          _path,
+          path,
         ),
-        type: DioErrorType.unknown,
         error: error,
         stackTrace: stackTrace,
       );
     }
 
-    final _response = await _dio.request<Object>(
-      _path,
-      data: _bodyData,
-      options: _options,
+    final response = await _dio.request<Object>(
+      path,
+      data: bodyData,
+      options: options,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
 
-    UpdateTodoResponseContent _responseData;
+    UpdateTodoResponseContent responseData;
 
     try {
-      _responseData =
+      responseData =
           deserialize<UpdateTodoResponseContent, UpdateTodoResponseContent>(
-              _response.data!, 'UpdateTodoResponseContent',
-              growable: true);
+              response.data!, 'UpdateTodoResponseContent');
     } catch (error, stackTrace) {
       throw DioError(
-        requestOptions: _response.requestOptions,
-        response: _response,
-        type: DioErrorType.unknown,
+        requestOptions: response.requestOptions,
+        response: response,
         error: error,
         stackTrace: stackTrace,
       );
     }
 
     return Response<UpdateTodoResponseContent>(
-      data: _responseData,
-      headers: _response.headers,
-      isRedirect: _response.isRedirect,
-      requestOptions: _response.requestOptions,
-      redirects: _response.redirects,
-      statusCode: _response.statusCode,
-      statusMessage: _response.statusMessage,
-      extra: _response.extra,
+      data: responseData,
+      headers: response.headers,
+      isRedirect: response.isRedirect,
+      requestOptions: response.requestOptions,
+      redirects: response.redirects,
+      statusCode: response.statusCode,
+      statusMessage: response.statusMessage,
+      extra: response.extra,
     );
   }
 }

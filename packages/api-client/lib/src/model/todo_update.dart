@@ -22,20 +22,22 @@ class TodoUpdate {
     required this.completed,
     this.parentId,
   });
+  factory TodoUpdate.fromJson(Map<String, dynamic> json) =>
+      _$TodoUpdateFromJson(json);
 
-  @JsonKey(name: r'title', required: true, includeIfNull: false)
+  @JsonKey(name: 'title', required: true, includeIfNull: false)
   final String title;
 
-  @JsonKey(name: r'description', required: true, includeIfNull: false)
+  @JsonKey(name: 'description', required: true, includeIfNull: false)
   final String description;
 
-  @JsonKey(name: r'tags', required: true, includeIfNull: false)
+  @JsonKey(name: 'tags', required: true, includeIfNull: false)
   final List<String> tags;
 
-  @JsonKey(name: r'completed', required: true, includeIfNull: false)
+  @JsonKey(name: 'completed', required: true, includeIfNull: false)
   final bool completed;
 
-  @JsonKey(name: r'parentId', required: false, includeIfNull: false)
+  @JsonKey(name: 'parentId', required: false, includeIfNull: false)
   final String? parentId;
 
   @override
@@ -55,9 +57,6 @@ class TodoUpdate {
       tags.hashCode +
       completed.hashCode +
       parentId.hashCode;
-
-  factory TodoUpdate.fromJson(Map<String, dynamic> json) =>
-      _$TodoUpdateFromJson(json);
 
   Map<String, dynamic> toJson() => _$TodoUpdateToJson(this);
 

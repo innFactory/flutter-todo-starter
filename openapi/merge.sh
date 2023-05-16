@@ -18,3 +18,5 @@ done
 # jsons=$(find "$scala_folder" -type f -name "*.json" -exec echo '{ "inputFile": "{}" }' \; | paste -d , -s -)
 # jq ".inputs += [$jsons]" ../openapi/openapi-merge.json >> ../openapi-merge.json
 npx openapi-merge-cli --config ../openapi-merge.json
+
+

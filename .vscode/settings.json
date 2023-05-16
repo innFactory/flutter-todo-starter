@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["flavorizr", "isar", "melos"],
+  "cSpell.words": ["daos", "flavorizr", "isar", "melos"],
   "editor.codeActionsOnSave": {
     "source.fixAll": true,
     "source.organizeImports": true

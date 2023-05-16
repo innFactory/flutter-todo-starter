@@ -24,5 +24,9 @@ rm $openapi_jar_path
 # Clean up the generated files
 dart pub get
 dart format --fix lib
-dart pub run build_runner build --delete-conflicting-outputs
 rm -rf test
+sleep 1
+printf "."
+sleep 1
+printf ".\n"
+dart run build_runner build --delete-conflicting-outputs

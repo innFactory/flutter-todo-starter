@@ -15,6 +15,7 @@ part 'update_todo_response_content.g.dart';
 )
 class UpdateTodoResponseContent {
   /// Returns a new [UpdateTodoResponseContent] instance.
+
   UpdateTodoResponseContent({
     required this.todoId,
     required this.title,
@@ -25,31 +26,33 @@ class UpdateTodoResponseContent {
     required this.updatedAt,
     this.parentId,
   });
+  factory UpdateTodoResponseContent.fromJson(Map<String, dynamic> json) =>
+      _$UpdateTodoResponseContentFromJson(json);
 
-  @JsonKey(name: r'todoId', required: true, includeIfNull: false)
+  @JsonKey(name: 'todoId', required: true, includeIfNull: false)
   final String todoId;
 
-  @JsonKey(name: r'title', required: true, includeIfNull: false)
+  @JsonKey(name: 'title', required: true, includeIfNull: false)
   final String title;
 
-  @JsonKey(name: r'description', required: true, includeIfNull: false)
+  @JsonKey(name: 'description', required: true, includeIfNull: false)
   final String description;
 
-  @JsonKey(name: r'tags', required: true, includeIfNull: false)
+  @JsonKey(name: 'tags', required: true, includeIfNull: false)
   final List<String> tags;
 
-  @JsonKey(name: r'completed', required: true, includeIfNull: false)
+  @JsonKey(name: 'completed', required: true, includeIfNull: false)
   final bool completed;
 
   /// ISO Date With Time
-  @JsonKey(name: r'createdAt', required: true, includeIfNull: false)
+  @JsonKey(name: 'createdAt', required: true, includeIfNull: false)
   final String createdAt;
 
   /// ISO Date With Time
-  @JsonKey(name: r'updatedAt', required: true, includeIfNull: false)
+  @JsonKey(name: 'updatedAt', required: true, includeIfNull: false)
   final String updatedAt;
 
-  @JsonKey(name: r'parentId', required: false, includeIfNull: false)
+  @JsonKey(name: 'parentId', required: false, includeIfNull: false)
   final String? parentId;
 
   @override
@@ -75,9 +78,6 @@ class UpdateTodoResponseContent {
       createdAt.hashCode +
       updatedAt.hashCode +
       parentId.hashCode;
-
-  factory UpdateTodoResponseContent.fromJson(Map<String, dynamic> json) =>
-      _$UpdateTodoResponseContentFromJson(json);
 
   Map<String, dynamic> toJson() => _$UpdateTodoResponseContentToJson(this);
 

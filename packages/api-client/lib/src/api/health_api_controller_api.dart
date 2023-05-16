@@ -9,9 +9,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 
 class HealthAPIControllerApi {
-  final Dio _dio;
-
   const HealthAPIControllerApi(this._dio);
+  final Dio _dio;
 
   /// liveness
   ///
@@ -34,9 +33,9 @@ class HealthAPIControllerApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/liveness';
-    final _options = Options(
-      method: r'GET',
+    const path = '/liveness';
+    final options = Options(
+      method: 'GET',
       headers: <String, dynamic>{
         ...?headers,
       },
@@ -47,15 +46,15 @@ class HealthAPIControllerApi {
       validateStatus: validateStatus,
     );
 
-    final _response = await _dio.request<Object>(
-      _path,
-      options: _options,
+    final response = await _dio.request<Object>(
+      path,
+      options: options,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _response;
+    return response;
   }
 
   /// ping
@@ -79,9 +78,9 @@ class HealthAPIControllerApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/';
-    final _options = Options(
-      method: r'GET',
+    const path = '/';
+    final options = Options(
+      method: 'GET',
       headers: <String, dynamic>{
         ...?headers,
       },
@@ -92,15 +91,15 @@ class HealthAPIControllerApi {
       validateStatus: validateStatus,
     );
 
-    final _response = await _dio.request<Object>(
-      _path,
-      options: _options,
+    final response = await _dio.request<Object>(
+      path,
+      options: options,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _response;
+    return response;
   }
 
   /// readiness
@@ -124,9 +123,9 @@ class HealthAPIControllerApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/readiness';
-    final _options = Options(
-      method: r'GET',
+    const path = '/readiness';
+    final options = Options(
+      method: 'GET',
       headers: <String, dynamic>{
         ...?headers,
       },
@@ -137,14 +136,14 @@ class HealthAPIControllerApi {
       validateStatus: validateStatus,
     );
 
-    final _response = await _dio.request<Object>(
-      _path,
-      options: _options,
+    final response = await _dio.request<Object>(
+      path,
+      options: options,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _response;
+    return response;
   }
 }

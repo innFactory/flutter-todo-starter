@@ -14,6 +14,9 @@ part 'todo_response.g.dart';
   explicitToJson: true,
 )
 class TodoResponse {
+  factory TodoResponse.fromJson(Map<String, dynamic> json) =>
+      _$TodoResponseFromJson(json);
+
   /// Returns a new [TodoResponse] instance.
   TodoResponse({
     required this.todoId,
@@ -26,30 +29,30 @@ class TodoResponse {
     this.parentId,
   });
 
-  @JsonKey(name: r'todoId', required: true, includeIfNull: false)
+  @JsonKey(name: 'todoId', required: true, includeIfNull: false)
   final String todoId;
 
-  @JsonKey(name: r'title', required: true, includeIfNull: false)
+  @JsonKey(name: 'title', required: true, includeIfNull: false)
   final String title;
 
-  @JsonKey(name: r'description', required: true, includeIfNull: false)
+  @JsonKey(name: 'description', required: true, includeIfNull: false)
   final String description;
 
-  @JsonKey(name: r'tags', required: true, includeIfNull: false)
+  @JsonKey(name: 'tags', required: true, includeIfNull: false)
   final List<String> tags;
 
-  @JsonKey(name: r'completed', required: true, includeIfNull: false)
+  @JsonKey(name: 'completed', required: true, includeIfNull: false)
   final bool completed;
 
   /// ISO Date With Time
-  @JsonKey(name: r'createdAt', required: true, includeIfNull: false)
+  @JsonKey(name: 'createdAt', required: true, includeIfNull: false)
   final String createdAt;
 
   /// ISO Date With Time
-  @JsonKey(name: r'updatedAt', required: true, includeIfNull: false)
+  @JsonKey(name: 'updatedAt', required: true, includeIfNull: false)
   final String updatedAt;
 
-  @JsonKey(name: r'parentId', required: false, includeIfNull: false)
+  @JsonKey(name: 'parentId', required: false, includeIfNull: false)
   final String? parentId;
 
   @override
@@ -75,9 +78,6 @@ class TodoResponse {
       createdAt.hashCode +
       updatedAt.hashCode +
       parentId.hashCode;
-
-  factory TodoResponse.fromJson(Map<String, dynamic> json) =>
-      _$TodoResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$TodoResponseToJson(this);
 
