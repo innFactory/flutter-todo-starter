@@ -1,5 +1,7 @@
+import 'package:api/api.dart';
 import 'package:core/core.dart';
 import 'package:database/database.dart';
+import 'package:sync/sync.dart';
 import 'package:todo/todo.dart';
 
 extension TodoMapper on Never {
@@ -19,6 +21,21 @@ extension TodoMapper on Never {
       ),
       createdAt: Value(todo.createdAt),
       updatedAt: Value(todo.updatedAt),
+      localSyncStatus: Value(todo.syncStatus),
+    );
+  }
+
+  static TodoTableCompanion fromRemote(TodoResponse todo) {
+    return TodoTableCompanion(
+      remoteId: Value(todo.todoId),
+      title: Value(todo.title),
+      description: Value(todo.description),
+      isCompleted: Value(todo.completed),
+      remoteParentId: todo.parentId?.let(Value.new) ?? const Value.absent(),
+      tags: Value(todo.tags),
+      createdAt: Value(DateTime.parse(todo.createdAt)),
+      updatedAt: Value(DateTime.parse(todo.updatedAt)),
+      localSyncStatus: const Value(SyncStatus.synced),
     );
   }
 
@@ -34,6 +51,7 @@ extension TodoMapper on Never {
       remoteParentId: todo.remoteParentId,
       createdAt: todo.createdAt ?? todo.localCreatedAt,
       updatedAt: todo.updatedAt ?? todo.localUpdatedAt,
+      syncStatus: todo.localSyncStatus,
     );
   }
 }

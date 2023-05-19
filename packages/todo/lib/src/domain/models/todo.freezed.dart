@@ -26,6 +26,7 @@ mixin _$Todo {
   String? get remoteParentId => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
+  SyncStatus get syncStatus => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TodoCopyWith<Todo> get copyWith => throw _privateConstructorUsedError;
@@ -46,7 +47,8 @@ abstract class $TodoCopyWith<$Res> {
       TodoId? localParentId,
       String? remoteParentId,
       DateTime createdAt,
-      DateTime updatedAt});
+      DateTime updatedAt,
+      SyncStatus syncStatus});
 }
 
 /// @nodoc
@@ -72,6 +74,7 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
     Object? remoteParentId = freezed,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? syncStatus = null,
   }) {
     return _then(_value.copyWith(
       localId: freezed == localId
@@ -114,6 +117,10 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      syncStatus: null == syncStatus
+          ? _value.syncStatus
+          : syncStatus // ignore: cast_nullable_to_non_nullable
+              as SyncStatus,
     ) as $Val);
   }
 }
@@ -134,7 +141,8 @@ abstract class _$$_TodoCopyWith<$Res> implements $TodoCopyWith<$Res> {
       TodoId? localParentId,
       String? remoteParentId,
       DateTime createdAt,
-      DateTime updatedAt});
+      DateTime updatedAt,
+      SyncStatus syncStatus});
 }
 
 /// @nodoc
@@ -156,6 +164,7 @@ class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res, _$_Todo>
     Object? remoteParentId = freezed,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? syncStatus = null,
   }) {
     return _then(_$_Todo(
       localId: freezed == localId
@@ -198,6 +207,10 @@ class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res, _$_Todo>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      syncStatus: null == syncStatus
+          ? _value.syncStatus
+          : syncStatus // ignore: cast_nullable_to_non_nullable
+              as SyncStatus,
     ));
   }
 }
@@ -215,7 +228,8 @@ class _$_Todo implements _Todo {
       required this.localParentId,
       required this.remoteParentId,
       required this.createdAt,
-      required this.updatedAt})
+      required this.updatedAt,
+      required this.syncStatus})
       : _tags = tags;
 
   @override
@@ -244,10 +258,12 @@ class _$_Todo implements _Todo {
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
+  @override
+  final SyncStatus syncStatus;
 
   @override
   String toString() {
-    return 'Todo(localId: $localId, remoteId: $remoteId, title: $title, description: $description, tags: $tags, isCompleted: $isCompleted, localParentId: $localParentId, remoteParentId: $remoteParentId, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Todo(localId: $localId, remoteId: $remoteId, title: $title, description: $description, tags: $tags, isCompleted: $isCompleted, localParentId: $localParentId, remoteParentId: $remoteParentId, createdAt: $createdAt, updatedAt: $updatedAt, syncStatus: $syncStatus)';
   }
 
   @override
@@ -271,7 +287,9 @@ class _$_Todo implements _Todo {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            (identical(other.syncStatus, syncStatus) ||
+                other.syncStatus == syncStatus));
   }
 
   @override
@@ -286,7 +304,8 @@ class _$_Todo implements _Todo {
       localParentId,
       remoteParentId,
       createdAt,
-      updatedAt);
+      updatedAt,
+      syncStatus);
 
   @JsonKey(ignore: true)
   @override
@@ -306,7 +325,8 @@ abstract class _Todo implements Todo {
       required final TodoId? localParentId,
       required final String? remoteParentId,
       required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_Todo;
+      required final DateTime updatedAt,
+      required final SyncStatus syncStatus}) = _$_Todo;
 
   @override
   TodoId? get localId;
@@ -328,6 +348,8 @@ abstract class _Todo implements Todo {
   DateTime get createdAt;
   @override
   DateTime get updatedAt;
+  @override
+  SyncStatus get syncStatus;
   @override
   @JsonKey(ignore: true)
   _$$_TodoCopyWith<_$_Todo> get copyWith => throw _privateConstructorUsedError;

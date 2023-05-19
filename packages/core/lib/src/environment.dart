@@ -8,7 +8,7 @@ enum Environment {
   /// The development environment.
   development(
     appTitle: 'Todo Factory [DEV]',
-    apiBaseUrl: '',
+    apiBaseUrl: 'http://localhost:9000',
     banner: EnvironmentBanner(
       text: 'DEV',
       color: Colors.green,

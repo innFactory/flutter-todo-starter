@@ -21,9 +21,8 @@ class TodoTable extends Table {
       dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get createdAt => dateTime().nullable()();
   DateTimeColumn get updatedAt => dateTime().nullable()();
-  TextColumn get localSyncStatus => text()
-      .map(const EnumNameConverter(SyncStatus.values))
-      .withDefault(Constant(SyncStatus.created.name))();
+  TextColumn get localSyncStatus =>
+      textEnum<SyncStatus>().withDefault(Constant(SyncStatus.created.name))();
 }
 
 class TagsConverter extends TypeConverter<List<String>, String> {

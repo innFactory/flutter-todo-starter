@@ -242,7 +242,8 @@ class $TodoTableTable extends TodoTable
   static TypeConverter<List<String>, String> $convertertags =
       const TagsConverter();
   static JsonTypeConverter2<SyncStatus, String, String>
-      $converterlocalSyncStatus = const EnumNameConverter(SyncStatus.values);
+      $converterlocalSyncStatus =
+      const EnumNameConverter<SyncStatus>(SyncStatus.values);
 }
 
 class LocalTodo extends DataClass implements Insertable<LocalTodo> {
@@ -642,13 +643,598 @@ class TodoTableCompanion extends UpdateCompanion<LocalTodo> {
   }
 }
 
+class $SyncTableTable extends SyncTable
+    with TableInfo<$SyncTableTable, LocalSync> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SyncTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _localIdMeta =
+      const VerificationMeta('localId');
+  @override
+  late final GeneratedColumn<int> localId = GeneratedColumn<int>(
+      'local_id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _entityIdMeta =
+      const VerificationMeta('entityId');
+  @override
+  late final GeneratedColumn<int> entityId = GeneratedColumn<int>(
+      'entity_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _entityModifiedAtMeta =
+      const VerificationMeta('entityModifiedAt');
+  @override
+  late final GeneratedColumn<DateTime> entityModifiedAt =
+      GeneratedColumn<DateTime>('entity_modified_at', aliasedName, false,
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: false,
+          defaultValue: currentDateAndTime);
+  static const VerificationMeta _localSyncStatusMeta =
+      const VerificationMeta('localSyncStatus');
+  @override
+  late final GeneratedColumnWithTypeConverter<SyncStatus, String>
+      localSyncStatus = GeneratedColumn<String>(
+              'local_sync_status', aliasedName, false,
+              type: DriftSqlType.string,
+              requiredDuringInsert: false,
+              defaultValue: Constant(SyncStatus.created.name))
+          .withConverter<SyncStatus>($SyncTableTable.$converterlocalSyncStatus);
+  static const VerificationMeta _entityTypeMeta =
+      const VerificationMeta('entityType');
+  @override
+  late final GeneratedColumnWithTypeConverter<SyncEntityType, String>
+      entityType = GeneratedColumn<String>('entity_type', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<SyncEntityType>($SyncTableTable.$converterentityType);
+  static const VerificationMeta _executedAtMeta =
+      const VerificationMeta('executedAt');
+  @override
+  late final GeneratedColumn<DateTime> executedAt = GeneratedColumn<DateTime>(
+      'executed_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        localId,
+        entityId,
+        entityModifiedAt,
+        localSyncStatus,
+        entityType,
+        executedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? 'sync';
+  @override
+  String get actualTableName => 'sync';
+  @override
+  VerificationContext validateIntegrity(Insertable<LocalSync> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('local_id')) {
+      context.handle(_localIdMeta,
+          localId.isAcceptableOrUnknown(data['local_id']!, _localIdMeta));
+    }
+    if (data.containsKey('entity_id')) {
+      context.handle(_entityIdMeta,
+          entityId.isAcceptableOrUnknown(data['entity_id']!, _entityIdMeta));
+    } else if (isInserting) {
+      context.missing(_entityIdMeta);
+    }
+    if (data.containsKey('entity_modified_at')) {
+      context.handle(
+          _entityModifiedAtMeta,
+          entityModifiedAt.isAcceptableOrUnknown(
+              data['entity_modified_at']!, _entityModifiedAtMeta));
+    }
+    context.handle(_localSyncStatusMeta, const VerificationResult.success());
+    context.handle(_entityTypeMeta, const VerificationResult.success());
+    if (data.containsKey('executed_at')) {
+      context.handle(
+          _executedAtMeta,
+          executedAt.isAcceptableOrUnknown(
+              data['executed_at']!, _executedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {localId};
+  @override
+  LocalSync map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LocalSync(
+      localId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}local_id'])!,
+      entityId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}entity_id'])!,
+      entityModifiedAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}entity_modified_at'])!,
+      localSyncStatus: $SyncTableTable.$converterlocalSyncStatus.fromSql(
+          attachedDatabase.typeMapping.read(DriftSqlType.string,
+              data['${effectivePrefix}local_sync_status'])!),
+      entityType: $SyncTableTable.$converterentityType.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}entity_type'])!),
+      executedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}executed_at']),
+    );
+  }
+
+  @override
+  $SyncTableTable createAlias(String alias) {
+    return $SyncTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<SyncStatus, String, String>
+      $converterlocalSyncStatus = const EnumNameConverter(SyncStatus.values);
+  static JsonTypeConverter2<SyncEntityType, String, String>
+      $converterentityType = const EnumNameConverter(SyncEntityType.values);
+}
+
+class LocalSync extends DataClass implements Insertable<LocalSync> {
+  final int localId;
+  final int entityId;
+  final DateTime entityModifiedAt;
+  final SyncStatus localSyncStatus;
+  final SyncEntityType entityType;
+  final DateTime? executedAt;
+  const LocalSync(
+      {required this.localId,
+      required this.entityId,
+      required this.entityModifiedAt,
+      required this.localSyncStatus,
+      required this.entityType,
+      this.executedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['local_id'] = Variable<int>(localId);
+    map['entity_id'] = Variable<int>(entityId);
+    map['entity_modified_at'] = Variable<DateTime>(entityModifiedAt);
+    {
+      final converter = $SyncTableTable.$converterlocalSyncStatus;
+      map['local_sync_status'] =
+          Variable<String>(converter.toSql(localSyncStatus));
+    }
+    {
+      final converter = $SyncTableTable.$converterentityType;
+      map['entity_type'] = Variable<String>(converter.toSql(entityType));
+    }
+    if (!nullToAbsent || executedAt != null) {
+      map['executed_at'] = Variable<DateTime>(executedAt);
+    }
+    return map;
+  }
+
+  SyncTableCompanion toCompanion(bool nullToAbsent) {
+    return SyncTableCompanion(
+      localId: Value(localId),
+      entityId: Value(entityId),
+      entityModifiedAt: Value(entityModifiedAt),
+      localSyncStatus: Value(localSyncStatus),
+      entityType: Value(entityType),
+      executedAt: executedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(executedAt),
+    );
+  }
+
+  factory LocalSync.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LocalSync(
+      localId: serializer.fromJson<int>(json['localId']),
+      entityId: serializer.fromJson<int>(json['entityId']),
+      entityModifiedAt: serializer.fromJson<DateTime>(json['entityModifiedAt']),
+      localSyncStatus: $SyncTableTable.$converterlocalSyncStatus
+          .fromJson(serializer.fromJson<String>(json['localSyncStatus'])),
+      entityType: $SyncTableTable.$converterentityType
+          .fromJson(serializer.fromJson<String>(json['entityType'])),
+      executedAt: serializer.fromJson<DateTime?>(json['executedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'localId': serializer.toJson<int>(localId),
+      'entityId': serializer.toJson<int>(entityId),
+      'entityModifiedAt': serializer.toJson<DateTime>(entityModifiedAt),
+      'localSyncStatus': serializer.toJson<String>(
+          $SyncTableTable.$converterlocalSyncStatus.toJson(localSyncStatus)),
+      'entityType': serializer.toJson<String>(
+          $SyncTableTable.$converterentityType.toJson(entityType)),
+      'executedAt': serializer.toJson<DateTime?>(executedAt),
+    };
+  }
+
+  LocalSync copyWith(
+          {int? localId,
+          int? entityId,
+          DateTime? entityModifiedAt,
+          SyncStatus? localSyncStatus,
+          SyncEntityType? entityType,
+          Value<DateTime?> executedAt = const Value.absent()}) =>
+      LocalSync(
+        localId: localId ?? this.localId,
+        entityId: entityId ?? this.entityId,
+        entityModifiedAt: entityModifiedAt ?? this.entityModifiedAt,
+        localSyncStatus: localSyncStatus ?? this.localSyncStatus,
+        entityType: entityType ?? this.entityType,
+        executedAt: executedAt.present ? executedAt.value : this.executedAt,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('LocalSync(')
+          ..write('localId: $localId, ')
+          ..write('entityId: $entityId, ')
+          ..write('entityModifiedAt: $entityModifiedAt, ')
+          ..write('localSyncStatus: $localSyncStatus, ')
+          ..write('entityType: $entityType, ')
+          ..write('executedAt: $executedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(localId, entityId, entityModifiedAt,
+      localSyncStatus, entityType, executedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LocalSync &&
+          other.localId == this.localId &&
+          other.entityId == this.entityId &&
+          other.entityModifiedAt == this.entityModifiedAt &&
+          other.localSyncStatus == this.localSyncStatus &&
+          other.entityType == this.entityType &&
+          other.executedAt == this.executedAt);
+}
+
+class SyncTableCompanion extends UpdateCompanion<LocalSync> {
+  final Value<int> localId;
+  final Value<int> entityId;
+  final Value<DateTime> entityModifiedAt;
+  final Value<SyncStatus> localSyncStatus;
+  final Value<SyncEntityType> entityType;
+  final Value<DateTime?> executedAt;
+  const SyncTableCompanion({
+    this.localId = const Value.absent(),
+    this.entityId = const Value.absent(),
+    this.entityModifiedAt = const Value.absent(),
+    this.localSyncStatus = const Value.absent(),
+    this.entityType = const Value.absent(),
+    this.executedAt = const Value.absent(),
+  });
+  SyncTableCompanion.insert({
+    this.localId = const Value.absent(),
+    required int entityId,
+    this.entityModifiedAt = const Value.absent(),
+    this.localSyncStatus = const Value.absent(),
+    required SyncEntityType entityType,
+    this.executedAt = const Value.absent(),
+  })  : entityId = Value(entityId),
+        entityType = Value(entityType);
+  static Insertable<LocalSync> custom({
+    Expression<int>? localId,
+    Expression<int>? entityId,
+    Expression<DateTime>? entityModifiedAt,
+    Expression<String>? localSyncStatus,
+    Expression<String>? entityType,
+    Expression<DateTime>? executedAt,
+  }) {
+    return RawValuesInsertable({
+      if (localId != null) 'local_id': localId,
+      if (entityId != null) 'entity_id': entityId,
+      if (entityModifiedAt != null) 'entity_modified_at': entityModifiedAt,
+      if (localSyncStatus != null) 'local_sync_status': localSyncStatus,
+      if (entityType != null) 'entity_type': entityType,
+      if (executedAt != null) 'executed_at': executedAt,
+    });
+  }
+
+  SyncTableCompanion copyWith(
+      {Value<int>? localId,
+      Value<int>? entityId,
+      Value<DateTime>? entityModifiedAt,
+      Value<SyncStatus>? localSyncStatus,
+      Value<SyncEntityType>? entityType,
+      Value<DateTime?>? executedAt}) {
+    return SyncTableCompanion(
+      localId: localId ?? this.localId,
+      entityId: entityId ?? this.entityId,
+      entityModifiedAt: entityModifiedAt ?? this.entityModifiedAt,
+      localSyncStatus: localSyncStatus ?? this.localSyncStatus,
+      entityType: entityType ?? this.entityType,
+      executedAt: executedAt ?? this.executedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (localId.present) {
+      map['local_id'] = Variable<int>(localId.value);
+    }
+    if (entityId.present) {
+      map['entity_id'] = Variable<int>(entityId.value);
+    }
+    if (entityModifiedAt.present) {
+      map['entity_modified_at'] = Variable<DateTime>(entityModifiedAt.value);
+    }
+    if (localSyncStatus.present) {
+      final converter = $SyncTableTable.$converterlocalSyncStatus;
+      map['local_sync_status'] =
+          Variable<String>(converter.toSql(localSyncStatus.value));
+    }
+    if (entityType.present) {
+      final converter = $SyncTableTable.$converterentityType;
+      map['entity_type'] = Variable<String>(converter.toSql(entityType.value));
+    }
+    if (executedAt.present) {
+      map['executed_at'] = Variable<DateTime>(executedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncTableCompanion(')
+          ..write('localId: $localId, ')
+          ..write('entityId: $entityId, ')
+          ..write('entityModifiedAt: $entityModifiedAt, ')
+          ..write('localSyncStatus: $localSyncStatus, ')
+          ..write('entityType: $entityType, ')
+          ..write('executedAt: $executedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $LastSyncedTableTable extends LastSyncedTable
+    with TableInfo<$LastSyncedTableTable, LocalLastSynced> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LastSyncedTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _localIdMeta =
+      const VerificationMeta('localId');
+  @override
+  late final GeneratedColumn<int> localId = GeneratedColumn<int>(
+      'local_id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _lastSyncedAtMeta =
+      const VerificationMeta('lastSyncedAt');
+  @override
+  late final GeneratedColumn<DateTime> lastSyncedAt = GeneratedColumn<DateTime>(
+      'last_synced_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _entityTypeMeta =
+      const VerificationMeta('entityType');
+  @override
+  late final GeneratedColumnWithTypeConverter<SyncEntityType, String>
+      entityType = GeneratedColumn<String>('entity_type', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<SyncEntityType>(
+              $LastSyncedTableTable.$converterentityType);
+  @override
+  List<GeneratedColumn> get $columns => [localId, lastSyncedAt, entityType];
+  @override
+  String get aliasedName => _alias ?? 'last_synced';
+  @override
+  String get actualTableName => 'last_synced';
+  @override
+  VerificationContext validateIntegrity(Insertable<LocalLastSynced> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('local_id')) {
+      context.handle(_localIdMeta,
+          localId.isAcceptableOrUnknown(data['local_id']!, _localIdMeta));
+    }
+    if (data.containsKey('last_synced_at')) {
+      context.handle(
+          _lastSyncedAtMeta,
+          lastSyncedAt.isAcceptableOrUnknown(
+              data['last_synced_at']!, _lastSyncedAtMeta));
+    }
+    context.handle(_entityTypeMeta, const VerificationResult.success());
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {localId};
+  @override
+  LocalLastSynced map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LocalLastSynced(
+      localId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}local_id'])!,
+      lastSyncedAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}last_synced_at']),
+      entityType: $LastSyncedTableTable.$converterentityType.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.string, data['${effectivePrefix}entity_type'])!),
+    );
+  }
+
+  @override
+  $LastSyncedTableTable createAlias(String alias) {
+    return $LastSyncedTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<SyncEntityType, String, String>
+      $converterentityType = const EnumNameConverter(SyncEntityType.values);
+}
+
+class LocalLastSynced extends DataClass implements Insertable<LocalLastSynced> {
+  final int localId;
+  final DateTime? lastSyncedAt;
+  final SyncEntityType entityType;
+  const LocalLastSynced(
+      {required this.localId, this.lastSyncedAt, required this.entityType});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['local_id'] = Variable<int>(localId);
+    if (!nullToAbsent || lastSyncedAt != null) {
+      map['last_synced_at'] = Variable<DateTime>(lastSyncedAt);
+    }
+    {
+      final converter = $LastSyncedTableTable.$converterentityType;
+      map['entity_type'] = Variable<String>(converter.toSql(entityType));
+    }
+    return map;
+  }
+
+  LastSyncedTableCompanion toCompanion(bool nullToAbsent) {
+    return LastSyncedTableCompanion(
+      localId: Value(localId),
+      lastSyncedAt: lastSyncedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastSyncedAt),
+      entityType: Value(entityType),
+    );
+  }
+
+  factory LocalLastSynced.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LocalLastSynced(
+      localId: serializer.fromJson<int>(json['localId']),
+      lastSyncedAt: serializer.fromJson<DateTime?>(json['lastSyncedAt']),
+      entityType: $LastSyncedTableTable.$converterentityType
+          .fromJson(serializer.fromJson<String>(json['entityType'])),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'localId': serializer.toJson<int>(localId),
+      'lastSyncedAt': serializer.toJson<DateTime?>(lastSyncedAt),
+      'entityType': serializer.toJson<String>(
+          $LastSyncedTableTable.$converterentityType.toJson(entityType)),
+    };
+  }
+
+  LocalLastSynced copyWith(
+          {int? localId,
+          Value<DateTime?> lastSyncedAt = const Value.absent(),
+          SyncEntityType? entityType}) =>
+      LocalLastSynced(
+        localId: localId ?? this.localId,
+        lastSyncedAt:
+            lastSyncedAt.present ? lastSyncedAt.value : this.lastSyncedAt,
+        entityType: entityType ?? this.entityType,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('LocalLastSynced(')
+          ..write('localId: $localId, ')
+          ..write('lastSyncedAt: $lastSyncedAt, ')
+          ..write('entityType: $entityType')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(localId, lastSyncedAt, entityType);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LocalLastSynced &&
+          other.localId == this.localId &&
+          other.lastSyncedAt == this.lastSyncedAt &&
+          other.entityType == this.entityType);
+}
+
+class LastSyncedTableCompanion extends UpdateCompanion<LocalLastSynced> {
+  final Value<int> localId;
+  final Value<DateTime?> lastSyncedAt;
+  final Value<SyncEntityType> entityType;
+  const LastSyncedTableCompanion({
+    this.localId = const Value.absent(),
+    this.lastSyncedAt = const Value.absent(),
+    this.entityType = const Value.absent(),
+  });
+  LastSyncedTableCompanion.insert({
+    this.localId = const Value.absent(),
+    this.lastSyncedAt = const Value.absent(),
+    required SyncEntityType entityType,
+  }) : entityType = Value(entityType);
+  static Insertable<LocalLastSynced> custom({
+    Expression<int>? localId,
+    Expression<DateTime>? lastSyncedAt,
+    Expression<String>? entityType,
+  }) {
+    return RawValuesInsertable({
+      if (localId != null) 'local_id': localId,
+      if (lastSyncedAt != null) 'last_synced_at': lastSyncedAt,
+      if (entityType != null) 'entity_type': entityType,
+    });
+  }
+
+  LastSyncedTableCompanion copyWith(
+      {Value<int>? localId,
+      Value<DateTime?>? lastSyncedAt,
+      Value<SyncEntityType>? entityType}) {
+    return LastSyncedTableCompanion(
+      localId: localId ?? this.localId,
+      lastSyncedAt: lastSyncedAt ?? this.lastSyncedAt,
+      entityType: entityType ?? this.entityType,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (localId.present) {
+      map['local_id'] = Variable<int>(localId.value);
+    }
+    if (lastSyncedAt.present) {
+      map['last_synced_at'] = Variable<DateTime>(lastSyncedAt.value);
+    }
+    if (entityType.present) {
+      final converter = $LastSyncedTableTable.$converterentityType;
+      map['entity_type'] = Variable<String>(converter.toSql(entityType.value));
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LastSyncedTableCompanion(')
+          ..write('localId: $localId, ')
+          ..write('lastSyncedAt: $lastSyncedAt, ')
+          ..write('entityType: $entityType')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$DriftLocalDatabase extends GeneratedDatabase {
   _$DriftLocalDatabase(QueryExecutor e) : super(e);
   late final $TodoTableTable todoTable = $TodoTableTable(this);
+  late final $SyncTableTable syncTable = $SyncTableTable(this);
+  late final $LastSyncedTableTable lastSyncedTable =
+      $LastSyncedTableTable(this);
   late final TodoDaoImpl todoDaoImpl = TodoDaoImpl(this as DriftLocalDatabase);
+  late final SyncDaoImpl syncDaoImpl = SyncDaoImpl(this as DriftLocalDatabase);
+  late final LastSyncedDaoImpl lastSyncedDaoImpl =
+      LastSyncedDaoImpl(this as DriftLocalDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [todoTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [todoTable, syncTable, lastSyncedTable];
 }

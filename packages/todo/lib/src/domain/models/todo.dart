@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:sync/sync.dart';
 
 part 'todo.freezed.dart';
 
@@ -20,6 +21,7 @@ class Todo with _$Todo {
     required String? remoteParentId,
     required DateTime createdAt,
     required DateTime updatedAt,
+    required SyncStatus syncStatus,
   }) = _Todo;
 
   /// Create a new Todo with default values.
@@ -35,6 +37,7 @@ class Todo with _$Todo {
       remoteParentId: null,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
+      syncStatus: SyncStatus.created,
     );
   }
 }

@@ -22,24 +22,31 @@ class TodoListView extends ConsumerWidget {
               .run(),
           icon: const Icon(Icons.add),
         ),
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: todos.length,
-          itemBuilder: (context, index) {
-            final todo = todos[index];
+        Expanded(
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: todos.length,
+            itemBuilder: (context, index) {
+              final todo = todos[index];
 
-            return Container(
-              height: 100,
-              color: index.isEven ? Colors.white : Colors.red[200],
-              child: IconButton(
-                onPressed: () => ref
-                    .read(todoRepositoryProvider)
-                    .deleteTodoById(todo.localId!)
-                    .run(),
-                icon: const Icon(Icons.delete),
-              ),
-            );
-          },
+              return ListTile(
+                title: Text(todo.title),
+                tileColor: todo.isCompleted ? Colors.green : Colors.red,
+                subtitle: Text(
+                    '${todo.description}  ${todo.localId?.value.toString() ?? ''}'),
+                leading: todo.isCompleted
+                    ? const Icon(Icons.check)
+                    : const Icon(Icons.check_box_outline_blank),
+                trailing: IconButton(
+                  onPressed: () => ref
+                      .read(todoRepositoryProvider)
+                      .deleteTodoById(todo.localId!)
+                      .run(),
+                  icon: const Icon(Icons.delete),
+                ),
+              );
+            },
+          ),
         ),
       ],
     );

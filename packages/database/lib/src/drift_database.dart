@@ -1,6 +1,10 @@
 import 'dart:io';
 
+import 'package:database/src/daos/sync/last_synced_dao_impl.dart';
+import 'package:database/src/daos/sync/sync_dao_impl.dart';
 import 'package:database/src/daos/todo/todo_dao_impl.dart';
+import 'package:database/src/tables/last_synced_table.dart';
+import 'package:database/src/tables/sync_table.dart';
 import 'package:database/src/tables/todo_table.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
@@ -12,7 +16,15 @@ import 'package:sync/sync.dart';
 part 'drift_database.g.dart';
 
 // insert tables and daos here
-@DriftDatabase(tables: [TodoTable], daos: [TodoDaoImpl])
+@DriftDatabase(tables: [
+  TodoTable,
+  SyncTable,
+  LastSyncedTable,
+], daos: [
+  TodoDaoImpl,
+  SyncDaoImpl,
+  LastSyncedDaoImpl,
+])
 class DriftLocalDatabase extends _$DriftLocalDatabase {
   DriftLocalDatabase([QueryExecutor? executor])
       : super(executor ?? _openConnection());
