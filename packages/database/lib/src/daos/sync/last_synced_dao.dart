@@ -6,12 +6,21 @@ import 'package:sync/sync.dart';
 abstract class LastSyncedDao {
   factory LastSyncedDao(DriftLocalDatabase db) = LastSyncedDaoImpl;
 
-  TaskEither<Failure, LocalLastSynced> createOrUpdate(
-      LastSyncedTableCompanion entity);
+  TaskEither<Failure, LastSyncedEntity> createOrUpdate(LastSyncedEntity entity);
 
-  TaskEither<Failure, List<LocalLastSynced>> getLastSyncedTimestamps();
+  TaskEither<Failure, Unit> setLastSyncedTimestampForSyncEntityType(
+    SyncEntityType entityType,
+  );
 
-  TaskEither<Failure, LocalLastSynced> getBySyncStatus(SyncStatus status);
+  TaskEither<Failure, List<LastSyncedEntity>> getLastSyncedTimestamps();
+
+  TaskEither<Failure, LastSyncedEntity> getBySyncEntityType(
+    SyncEntityType syncEntityType,
+  );
+
+  TaskEither<Failure, LastSyncedEntity> getLastSyncEntityById(
+    int localId,
+  );
 
   TaskEither<Failure, Unit> deleteById(int localId);
 }

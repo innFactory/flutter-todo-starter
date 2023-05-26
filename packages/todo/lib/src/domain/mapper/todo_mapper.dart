@@ -25,17 +25,88 @@ extension TodoMapper on Never {
     );
   }
 
-  static TodoTableCompanion fromRemote(TodoResponse todo) {
-    return TodoTableCompanion(
-      remoteId: Value(todo.todoId),
-      title: Value(todo.title),
-      description: Value(todo.description),
-      isCompleted: Value(todo.completed),
-      remoteParentId: todo.parentId?.let(Value.new) ?? const Value.absent(),
-      tags: Value(todo.tags),
-      createdAt: Value(DateTime.parse(todo.createdAt)),
-      updatedAt: Value(DateTime.parse(todo.updatedAt)),
-      localSyncStatus: const Value(SyncStatus.synced),
+  static Todo fromRemote(TodoResponse todo) {
+    return Todo(
+      localId: null,
+      remoteId: todo.todoId,
+      title: todo.title,
+      description: todo.description,
+      tags: todo.tags.toSet(),
+      isCompleted: todo.completed,
+      localParentId: null,
+      remoteParentId: todo.parentId,
+      createdAt: DateTime.parse(todo.createdAt),
+      updatedAt: DateTime.parse(todo.updatedAt),
+      syncStatus: SyncStatus.synced,
+    );
+  }
+
+  static Todo fromCreateTodoResponseContent(
+      CreateTodoResponseContent todo, Todo? localTodo) {
+    return Todo(
+      localId: localTodo?.localId,
+      remoteId: todo.todoId,
+      title: todo.title,
+      description: todo.description,
+      tags: todo.tags.toSet(),
+      isCompleted: todo.completed,
+      localParentId: localTodo?.localParentId,
+      remoteParentId: todo.parentId,
+      createdAt: DateTime.parse(todo.createdAt),
+      updatedAt: DateTime.parse(todo.updatedAt),
+      syncStatus: SyncStatus.synced,
+    );
+  }
+
+  static Todo fromUpdateTodoResponseContent(UpdateTodoResponseContent todo) {
+    return Todo(
+      localId: null,
+      remoteId: todo.todoId,
+      title: todo.title,
+      description: todo.description,
+      tags: todo.tags.toSet(),
+      isCompleted: todo.completed,
+      localParentId: null,
+      remoteParentId: todo.parentId,
+      createdAt: DateTime.parse(todo.createdAt),
+      updatedAt: DateTime.parse(todo.updatedAt),
+      syncStatus: SyncStatus.synced,
+    );
+  }
+
+  static Todo fromRemoteById(GetTodoByIdResponseContent todo) {
+    return Todo(
+      localId: null,
+      remoteId: todo.todoId,
+      title: todo.title,
+      description: todo.description,
+      tags: todo.tags.toSet(),
+      isCompleted: todo.completed,
+      localParentId: null,
+      remoteParentId: todo.parentId,
+      createdAt: DateTime.parse(todo.createdAt),
+      updatedAt: DateTime.parse(todo.updatedAt),
+      syncStatus: SyncStatus.synced,
+    );
+  }
+
+  static TodoCreation toDtoCreate(Todo todo) {
+    return TodoCreation(
+      title: todo.title,
+      description: todo.description,
+      completed: todo.isCompleted,
+      parentId: todo.remoteParentId,
+      tags: todo.tags.toList(),
+    );
+  }
+
+  static TodoUpdate toDtoUpdate(Todo todo) {
+    return TodoUpdate(
+      title: todo.title,
+      description: todo.description,
+      completed: todo.isCompleted,
+      parentId: todo.remoteParentId,
+      tags: todo.tags.toList(),
     );
   }
 

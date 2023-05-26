@@ -29,8 +29,8 @@ class Todo with _$Todo {
     return Todo(
       localId: null,
       remoteId: null,
-      title: '',
-      description: '',
+      title: 'title',
+      description: 'description',
       tags: {},
       isCompleted: false,
       localParentId: null,

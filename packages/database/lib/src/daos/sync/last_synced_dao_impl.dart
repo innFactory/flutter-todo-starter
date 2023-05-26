@@ -1,7 +1,6 @@
 import 'package:core/core.dart';
 import 'package:database/database.dart';
 import 'package:database/src/common/utils.dart';
-import 'package:database/src/daos/sync/last_synced_dao.dart';
 import 'package:database/src/tables/last_synced_table.dart';
 import 'package:sync/sync.dart';
 
@@ -14,34 +13,78 @@ class LastSyncedDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   LastSyncedDaoImpl(super.attachedDatabase);
 
   @override
-  TaskEither<Failure, LocalLastSynced> createOrUpdate(
-      LastSyncedTableCompanion lastSynced) {
+  TaskEither<Failure, LastSyncedEntity> createOrUpdate(
+    LastSyncedEntity lastSynced,
+  ) {
     return runTransaction(
       () => transaction(
         () async {
-          final lastSyncedLocalId =
-              await into(tableInfo).insertOnConflictUpdate(
-            lastSynced.copyWith(lastSyncedAt: Value(DateTime.now())),
+          return into(tableInfo).insertReturning(
+            LastSyncedMapper.toLocal(lastSynced),
+            mode: InsertMode.insertOrReplace,
           );
-
-          final createdOrUpdatedLastSynced = (select(tableInfo)
-                ..where((tbl) => tbl.localId.equals(lastSyncedLocalId)))
-              .getSingle();
-
-          return createdOrUpdatedLastSynced;
         },
       ),
-    );
+    ).map(LastSyncedMapper.fromLocal);
   }
 
   @override
-  TaskEither<Failure, List<LocalLastSynced>> getLastSyncedTimestamps() {
+  TaskEither<Failure, LastSyncedEntity> getLastSyncEntityById(
+    int localId,
+  ) {
+    return runTransaction(
+      () => transaction(
+        () async {
+          final entity = await (select(tableInfo)
+                ..where((tbl) => tbl.localId.equals(localId)))
+              .getSingle();
+
+          return entity;
+        },
+      ),
+    ).map(LastSyncedMapper.fromLocal);
+  }
+
+  @override
+  TaskEither<Failure, Unit> setLastSyncedTimestampForSyncEntityType(
+    SyncEntityType entityType,
+  ) {
+    return runTransaction(
+      () => transaction(
+        () async {
+          final entity = await (select(tableInfo)
+                ..where((tbl) => tbl.entityType.equals(entityType.name)))
+              .getSingleOrNull();
+
+          final updatedEntity = entity?.let(
+                (p0) => p0.copyWith(
+                  lastSyncedAt: Value(DateTime.now()),
+                ),
+              ) ??
+              LastSyncedMapper.toLocal(LastSyncedEntity.empty(
+                entityType,
+                DateTime.now(),
+              ));
+
+          final lastSyncedLocalId =
+              await into(tableInfo).insertOnConflictUpdate(updatedEntity);
+
+          return lastSyncedLocalId;
+        },
+      ),
+    ).map((_) => unit);
+  }
+
+  @override
+  TaskEither<Failure, List<LastSyncedEntity>> getLastSyncedTimestamps() {
     return runTransaction(
       () => transaction(
         () async {
           return tableInfo.select().get();
         },
       ),
+    ).map(
+      (r) => r.map(LastSyncedMapper.fromLocal).toList(),
     );
   }
 
@@ -64,15 +107,17 @@ class LastSyncedDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
       attachedDatabase.lastSyncedTable;
 
   @override
-  TaskEither<Failure, LocalLastSynced> getBySyncStatus(SyncStatus status) {
+  TaskEither<Failure, LastSyncedEntity> getBySyncEntityType(
+    SyncEntityType entityType,
+  ) {
     return runTransaction(
       () => transaction(
         () async {
           return (select(tableInfo)
-                ..where((tbl) => tbl.entityType.equals(status.name)))
+                ..where((tbl) => tbl.entityType.equals(entityType.name)))
               .getSingle();
         },
       ),
-    );
+    ).map(LastSyncedMapper.fromLocal);
   }
 }

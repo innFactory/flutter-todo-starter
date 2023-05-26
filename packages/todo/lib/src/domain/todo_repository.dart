@@ -1,4 +1,5 @@
 import 'package:core/core.dart';
+import 'package:sync/sync.dart';
 import 'package:todo/todo.dart';
 
 abstract class TodoRepository {
@@ -15,4 +16,10 @@ abstract class TodoRepository {
 
   @useResult
   TaskEither<Failure, Unit> deleteTodoById(TodoId todoId);
+
+  @useResult
+  TaskEither<Failure, Unit> pushToRemote(int localId, SyncStatus syncStatus);
+
+  @useResult
+  TaskEither<Failure, Unit> fetchFromRemote(DateTime? lastSyncedAt);
 }

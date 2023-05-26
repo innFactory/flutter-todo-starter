@@ -27,11 +27,24 @@ part 'drift_database.g.dart';
 ])
 class DriftLocalDatabase extends _$DriftLocalDatabase {
   DriftLocalDatabase([QueryExecutor? executor])
-      : super(executor ?? _openConnection());
+      : super(executor ?? _openConnection()) {
+    // clear();
+  }
 
   // you should bump this number whenever you change or add a table definition.
   @override
   int get schemaVersion => 1;
+
+  // Future<void> clear() {
+  //   return transaction(() async {
+  //     // you only need this if you've manually enabled foreign keys
+  //     await customStatement('PRAGMA foreign_keys = OFF');
+
+  //     for (final table in allTables) {
+  //       await delete(table).go();
+  //     }
+  //   });
+  // }
 
   @override
   MigrationStrategy get migration {

@@ -18,8 +18,7 @@ dependencies:
     path: ../api
   network_info:
     path: ../network_info
-  app:
-    path: ../app
+
   freezed_annotation: ^2.2.0
 
 dev_dependencies:

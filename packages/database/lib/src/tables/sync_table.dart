@@ -14,6 +14,5 @@ class SyncTable extends Table {
   TextColumn get localSyncStatus => text()
       .map(const EnumNameConverter(SyncStatus.values))
       .withDefault(Constant(SyncStatus.created.name))();
-  TextColumn get entityType => textEnum<SyncStatus>()();
-  DateTimeColumn get executedAt => dateTime().nullable()();
+  TextColumn get entityType => textEnum<SyncEntityType>()();
 }

@@ -25,19 +25,12 @@ packages:
     source: path
     version: "0.0.0"
   api_client:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       path: "../api-client"
       relative: true
     source: path
     version: "1.0.0"
-  app:
-    dependency: "direct main"
-    description:
-      path: "../app"
-      relative: true
-    source: path
-    version: "0.1.0"
   args:
     dependency: transitive
     description:
@@ -54,21 +47,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
-  auth:
-    dependency: "direct overridden"
-    description:
-      path: "../auth"
-      relative: true
-    source: path
-    version: "0.0.0"
-  auto_route:
-    dependency: transitive
-    description:
-      name: auto_route
-      sha256: b7651565019e583e9e9c357c576176ffd407e87f207440ace1b7b8a5b914f82a
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.1.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -252,14 +230,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-  cupertino_icons:
-    dependency: transitive
-    description:
-      name: cupertino_icons
-      sha256: e35129dc44c9118cee2a5603506d823bab99c68393879edb440e0090d07586be
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.5"
   dart_style:
     dependency: transitive
     description:
@@ -283,22 +253,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.8"
-  device_frame:
-    dependency: transitive
-    description:
-      name: device_frame
-      sha256: afe76182aec178d171953d9b4a50a43c57c7cf3c77d8b09a48bf30c8fa04dd9d
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
-  device_preview:
-    dependency: transitive
-    description:
-      name: device_preview
-      sha256: "2f097bf31b929e15e6756dbe0ec1bcb63952ab9ed51c25dc5a2c722d2b21fdaf"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   dio:
     dependency: transitive
     description:
@@ -376,54 +330,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.33.0"
-  flutter_keyboard_visibility:
-    dependency: transitive
-    description:
-      name: flutter_keyboard_visibility
-      sha256: "4983655c26ab5b959252ee204c2fffa4afeb4413cd030455194ec0caa3b8e7cb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.4.1"
-  flutter_keyboard_visibility_linux:
-    dependency: transitive
-    description:
-      name: flutter_keyboard_visibility_linux
-      sha256: "6fba7cd9bb033b6ddd8c2beb4c99ad02d728f1e6e6d9b9446667398b2ac39f08"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
-  flutter_keyboard_visibility_macos:
-    dependency: transitive
-    description:
-      name: flutter_keyboard_visibility_macos
-      sha256: c5c49b16fff453dfdafdc16f26bdd8fb8d55812a1d50b0ce25fc8d9f2e53d086
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
-  flutter_keyboard_visibility_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_keyboard_visibility_platform_interface
-      sha256: e43a89845873f7be10cb3884345ceb9aebf00a659f479d1c8f4293fcb37022a4
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
-  flutter_keyboard_visibility_web:
-    dependency: transitive
-    description:
-      name: flutter_keyboard_visibility_web
-      sha256: d3771a2e752880c79203f8d80658401d0c998e4183edca05a149f5098ce6e3d1
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
-  flutter_keyboard_visibility_windows:
-    dependency: transitive
-    description:
-      name: flutter_keyboard_visibility_windows
-      sha256: fc4b0f0b6be9b93ae527f3d527fb56ee2d918cd88bbca438c478af7bcfd0ef73
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   flutter_localizations:
     dependency: transitive
     description: flutter
@@ -554,14 +460,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.1"
-  keyboard_actions:
-    dependency: transitive
-    description:
-      name: keyboard_actions
-      sha256: "31e0ab2a706ac8f58887efa60efc1f19aecdf37d8ab0f665a0f156d1fbeab650"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.2.0"
   kt_dart:
     dependency: transitive
     description:
@@ -626,14 +524,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   network_info:
     dependency: "direct main"
     description:
@@ -753,14 +643,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.4"
-  provider:
-    dependency: transitive
-    description:
-      name: provider
-      sha256: cdbe7530b12ecd9eb455bdaa2fcb8d4dad22e80b8afb4798b41479d5ce26847f
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.0.5"
   pub_semver:
     dependency: transitive
     description:
@@ -777,15 +659,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
-  reactive_forms:
-    dependency: transitive
-    description:
-      path: "."
-      ref: "3fe9b4d1ada3169498f0244c9d4c251f01dcb325"
-      resolved-ref: "3fe9b4d1ada3169498f0244c9d4c251f01dcb325"
-      url: "git@github.com:innFactory/reactive_forms.git"
-    source: git
-    version: "14.3.0"
   riverpod:
     dependency: transitive
     description:
@@ -958,6 +831,14 @@ packages:
       relative: true
     source: path
     version: "0.0.0"
+  synchronized:
+    dependency: transitive
+    description:
+      name: synchronized
+      sha256: "5fcbd27688af6082f5abd611af56ee575342c30e87541d0245f7ff99faa02c60"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   term_glyph:
     dependency: transitive
     description:
@@ -1079,5 +960,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.0.0-134.0.dev <4.0.0"
-  flutter: ">=3.7.12"
+  dart: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"

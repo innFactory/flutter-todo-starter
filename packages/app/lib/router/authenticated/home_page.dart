@@ -1,20 +1,36 @@
 import 'package:app/router/router.dart';
 import 'package:auth/auth.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:connectivity_checker/connectivity_checker.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:sync/sync.dart';
 
 /// {@template sign_in_page}
 /// The page that is shown when the user is authenticated. This page is
 /// responsible for showing the menu of the app and the navigation to sub pages
 /// {@endtemplate}
 @RoutePage()
-class HomePage extends ConsumerWidget {
+class HomePage extends HookConsumerWidget {
   /// {@macro sign_in_page}
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final syncRepo = ref.watch(syncRepositoryProvider);
+
+    useEffect(() {
+      final connectivitySubscription =
+          ConnectivityWrapper.instance.onStatusChange.listen((status) {
+        if (status == ConnectivityStatus.CONNECTED) {
+          syncRepo.syncAll().run();
+        }
+      });
+
+      return connectivitySubscription.cancel;
+    }, []);
+
     return AutoTabsScaffold(
       appBarBuilder: (context, tabsRouter) {
         return AppBar(
