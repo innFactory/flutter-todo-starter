@@ -1,10 +1,11 @@
-import '../../../sync.dart';
+import 'sync_entity_type.dart';
+import 'sync_status.dart';
 
 class SyncEntity {
   SyncEntity({
     required this.id,
     required this.entityLocalId,
-    required this.type,
+    required this.syncEntityType,
     required this.status,
     required this.modifiedAt,
   });
@@ -15,7 +16,7 @@ class SyncEntity {
   final int entityLocalId;
 
   /// The type of entity that is represented by this sync entity.
-  final SyncEntityType type;
+  final SyncEntityType syncEntityType;
 
   /// The synchronisation status of this entity.
   final SyncStatus status;

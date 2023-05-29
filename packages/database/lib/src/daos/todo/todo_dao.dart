@@ -6,26 +6,37 @@ import 'package:todo/todo.dart';
 abstract class TodoDao {
   factory TodoDao(DriftLocalDatabase db) = TodoDaoImpl;
 
-  TaskEither<Failure, Todo> createOrUpdate(Todo todo,
-      {bool addToSyncQueue = true});
+  TaskEither<Failure, Todo> createOrUpdate(
+    Todo todo, {
+    bool addToSyncQueue = true,
+  });
 
-  TaskEither<Failure, Todo> createOrUpdateFromRemote(Todo todo, int? localId);
+  TaskEither<Failure, Todo> createOrUpdateFromRemote(
+    Todo todo,
+    TodoLocalId? localId,
+  );
 
   Stream<List<Todo>> watchTodos();
 
+  Stream<Either<Failure, Todo>> watchTodoById({
+    TodoLocalId? localId,
+    TodoRemoteId? remoteId,
+  });
+
   TaskEither<Failure, List<Todo>> getTodos();
 
-  TaskEither<Failure, Todo> getTodoById({TodoId? localId, String? remoteId});
+  TaskEither<Failure, Todo> getTodoById({
+    TodoLocalId? localId,
+    TodoRemoteId? remoteId,
+  });
 
-  TaskEither<Failure, int> deleteByLocalIdHard(int localId);
+  TaskEither<Failure, int> deleteByLocalIdHard(TodoLocalId localId);
 
-  TaskEither<Failure, int> deleteByLocalIdSoft(int localId);
+  TaskEither<Failure, int> deleteByLocalIdSoft(TodoLocalId localId);
 
-  // TaskEither<Failure, List<int>> deleteByLocalIdsSoft(Set<int> localIds);
+  TaskEither<Failure, int> deleteByRemoteId(TodoRemoteId remoteId);
 
-  TaskEither<Failure, int> deleteByRemoteId(String remoteId);
+  TaskEither<Failure, int> deleteByRemoteIdSoft(TodoRemoteId remoteId);
 
-  TaskEither<Failure, int> deleteByRemoteIdSoft(String remoteId);
-
-  TaskEither<Failure, int> deleteByRemoteIds(Set<String> remoteIds);
+  TaskEither<Failure, int> deleteByRemoteIds(List<TodoRemoteId> remoteIds);
 }

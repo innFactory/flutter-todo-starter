@@ -13,6 +13,6 @@ class SyncTable extends Table {
       dateTime().withDefault(currentDateAndTime)();
   TextColumn get localSyncStatus => text()
       .map(const EnumNameConverter(SyncStatus.values))
-      .withDefault(Constant(SyncStatus.created.name))();
+      .withDefault(Constant(SyncStatus.modified.name))();
   TextColumn get entityType => textEnum<SyncEntityType>()();
 }

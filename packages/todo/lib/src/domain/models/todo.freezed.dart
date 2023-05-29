@@ -16,14 +16,14 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Todo {
-  TodoId? get localId => throw _privateConstructorUsedError;
-  String? get remoteId => throw _privateConstructorUsedError;
+  TodoLocalId? get localId => throw _privateConstructorUsedError;
+  TodoRemoteId? get remoteId => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   Set<String> get tags => throw _privateConstructorUsedError;
   bool get isCompleted => throw _privateConstructorUsedError;
-  TodoId? get localParentId => throw _privateConstructorUsedError;
-  String? get remoteParentId => throw _privateConstructorUsedError;
+  TodoLocalId? get localParentId => throw _privateConstructorUsedError;
+  TodoRemoteId? get remoteParentId => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
   SyncStatus get syncStatus => throw _privateConstructorUsedError;
@@ -38,14 +38,14 @@ abstract class $TodoCopyWith<$Res> {
       _$TodoCopyWithImpl<$Res, Todo>;
   @useResult
   $Res call(
-      {TodoId? localId,
-      String? remoteId,
+      {TodoLocalId? localId,
+      TodoRemoteId? remoteId,
       String title,
       String description,
       Set<String> tags,
       bool isCompleted,
-      TodoId? localParentId,
-      String? remoteParentId,
+      TodoLocalId? localParentId,
+      TodoRemoteId? remoteParentId,
       DateTime createdAt,
       DateTime updatedAt,
       SyncStatus syncStatus});
@@ -80,11 +80,11 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
       localId: freezed == localId
           ? _value.localId
           : localId // ignore: cast_nullable_to_non_nullable
-              as TodoId?,
+              as TodoLocalId?,
       remoteId: freezed == remoteId
           ? _value.remoteId
           : remoteId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as TodoRemoteId?,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -104,11 +104,11 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
       localParentId: freezed == localParentId
           ? _value.localParentId
           : localParentId // ignore: cast_nullable_to_non_nullable
-              as TodoId?,
+              as TodoLocalId?,
       remoteParentId: freezed == remoteParentId
           ? _value.remoteParentId
           : remoteParentId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as TodoRemoteId?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -132,14 +132,14 @@ abstract class _$$_TodoCopyWith<$Res> implements $TodoCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {TodoId? localId,
-      String? remoteId,
+      {TodoLocalId? localId,
+      TodoRemoteId? remoteId,
       String title,
       String description,
       Set<String> tags,
       bool isCompleted,
-      TodoId? localParentId,
-      String? remoteParentId,
+      TodoLocalId? localParentId,
+      TodoRemoteId? remoteParentId,
       DateTime createdAt,
       DateTime updatedAt,
       SyncStatus syncStatus});
@@ -170,11 +170,11 @@ class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res, _$_Todo>
       localId: freezed == localId
           ? _value.localId
           : localId // ignore: cast_nullable_to_non_nullable
-              as TodoId?,
+              as TodoLocalId?,
       remoteId: freezed == remoteId
           ? _value.remoteId
           : remoteId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as TodoRemoteId?,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -194,11 +194,11 @@ class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res, _$_Todo>
       localParentId: freezed == localParentId
           ? _value.localParentId
           : localParentId // ignore: cast_nullable_to_non_nullable
-              as TodoId?,
+              as TodoLocalId?,
       remoteParentId: freezed == remoteParentId
           ? _value.remoteParentId
           : remoteParentId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as TodoRemoteId?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -233,9 +233,9 @@ class _$_Todo implements _Todo {
       : _tags = tags;
 
   @override
-  final TodoId? localId;
+  final TodoLocalId? localId;
   @override
-  final String? remoteId;
+  final TodoRemoteId? remoteId;
   @override
   final String title;
   @override
@@ -251,9 +251,9 @@ class _$_Todo implements _Todo {
   @override
   final bool isCompleted;
   @override
-  final TodoId? localParentId;
+  final TodoLocalId? localParentId;
   @override
-  final String? remoteParentId;
+  final TodoRemoteId? remoteParentId;
   @override
   final DateTime createdAt;
   @override
@@ -316,22 +316,22 @@ class _$_Todo implements _Todo {
 
 abstract class _Todo implements Todo {
   const factory _Todo(
-      {required final TodoId? localId,
-      required final String? remoteId,
+      {required final TodoLocalId? localId,
+      required final TodoRemoteId? remoteId,
       required final String title,
       required final String description,
       required final Set<String> tags,
       required final bool isCompleted,
-      required final TodoId? localParentId,
-      required final String? remoteParentId,
+      required final TodoLocalId? localParentId,
+      required final TodoRemoteId? remoteParentId,
       required final DateTime createdAt,
       required final DateTime updatedAt,
       required final SyncStatus syncStatus}) = _$_Todo;
 
   @override
-  TodoId? get localId;
+  TodoLocalId? get localId;
   @override
-  String? get remoteId;
+  TodoRemoteId? get remoteId;
   @override
   String get title;
   @override
@@ -341,9 +341,9 @@ abstract class _Todo implements Todo {
   @override
   bool get isCompleted;
   @override
-  TodoId? get localParentId;
+  TodoLocalId? get localParentId;
   @override
-  String? get remoteParentId;
+  TodoRemoteId? get remoteParentId;
   @override
   DateTime get createdAt;
   @override

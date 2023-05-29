@@ -13,47 +13,15 @@ class LastSyncedDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   LastSyncedDaoImpl(super.attachedDatabase);
 
   @override
-  TaskEither<Failure, LastSyncedEntity> createOrUpdate(
-    LastSyncedEntity lastSynced,
-  ) {
-    return runTransaction(
-      () => transaction(
-        () async {
-          return into(tableInfo).insertReturning(
-            LastSyncedMapper.toLocal(lastSynced),
-            mode: InsertMode.insertOrReplace,
-          );
-        },
-      ),
-    ).map(LastSyncedMapper.fromLocal);
-  }
-
-  @override
-  TaskEither<Failure, LastSyncedEntity> getLastSyncEntityById(
-    int localId,
+  TaskEither<Failure, Unit> setLastSyncedTimestamp(
+    SyncIdentifier syncIdentifier,
   ) {
     return runTransaction(
       () => transaction(
         () async {
           final entity = await (select(tableInfo)
-                ..where((tbl) => tbl.localId.equals(localId)))
-              .getSingle();
-
-          return entity;
-        },
-      ),
-    ).map(LastSyncedMapper.fromLocal);
-  }
-
-  @override
-  TaskEither<Failure, Unit> setLastSyncedTimestampForSyncEntityType(
-    SyncEntityType entityType,
-  ) {
-    return runTransaction(
-      () => transaction(
-        () async {
-          final entity = await (select(tableInfo)
-                ..where((tbl) => tbl.entityType.equals(entityType.name)))
+                ..where((tbl) =>
+                    tbl.syncIdentifier.equals(syncIdentifier.identifier)))
               .getSingleOrNull();
 
           final updatedEntity = entity?.let(
@@ -61,10 +29,9 @@ class LastSyncedDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
                   lastSyncedAt: Value(DateTime.now()),
                 ),
               ) ??
-              LastSyncedMapper.toLocal(LastSyncedEntity.empty(
-                entityType,
-                DateTime.now(),
-              ));
+              LastSyncedTableCompanion(
+                syncIdentifier: Value(syncIdentifier.identifier),
+              );
 
           final lastSyncedLocalId =
               await into(tableInfo).insertOnConflictUpdate(updatedEntity);
@@ -88,33 +55,19 @@ class LastSyncedDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     );
   }
 
-  @override
-  TaskEither<Failure, Unit> deleteById(int lastSyncedId) {
-    return runTransaction(
-      () => transaction(
-        () async {
-          await (delete(tableInfo)
-                ..where((t) => t.localId.isValue(lastSyncedId)))
-              .go();
-
-          return unit;
-        },
-      ),
-    );
-  }
-
   TableInfo<LastSyncedTable, LocalLastSynced> get tableInfo =>
       attachedDatabase.lastSyncedTable;
 
   @override
-  TaskEither<Failure, LastSyncedEntity> getBySyncEntityType(
-    SyncEntityType entityType,
+  TaskEither<Failure, LastSyncedEntity> getBySyncIdentifier(
+    SyncIdentifier syncIdentifier,
   ) {
     return runTransaction(
       () => transaction(
         () async {
           return (select(tableInfo)
-                ..where((tbl) => tbl.entityType.equals(entityType.name)))
+                ..where((tbl) =>
+                    tbl.syncIdentifier.equals(syncIdentifier.identifier)))
               .getSingle();
         },
       ),

@@ -11,7 +11,7 @@ abstract class SyncDao {
   Stream<List<SyncEntity>> watchSyncEntities();
 
   TaskEither<Failure, List<SyncEntity>> getSyncEntities([
-    List<SyncEntityType> types = const [],
+    List<SyncEntityType> syncEntityTypes = SyncEntityType.values,
   ]);
 
   TaskEither<Failure, SyncEntity> getSyncEntityById(int localId);

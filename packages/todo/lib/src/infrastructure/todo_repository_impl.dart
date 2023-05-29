@@ -8,57 +8,68 @@ import 'package:todo/todo.dart';
 class TodoRepositoryImpl implements TodoRepository {
   TodoRepositoryImpl({
     required this.networkInfo,
+    required this.lastSyncedRepository,
     required this.todoApi,
     required this.todoDao,
   });
 
   final NetworkInfo networkInfo;
-  final TodoApiControllerApi todoApi;
+  final LastSyncedRepository lastSyncedRepository;
+  final TodoApi todoApi;
   final TodoDao todoDao;
 
   @override
-  TaskEither<Failure, Todo> createOrUpdateTodo(Todo todo) {
-    return todoDao.createOrUpdate(todo);
+  Stream<List<Todo>> watchTodos() => todoDao.watchTodos();
+
+  @override
+  TaskEither<Failure, List<Todo>> getTodos() => todoDao.getTodos();
+
+  @override
+  TaskEither<Failure, Todo> getTodoById(
+    TodoLocalId localId,
+    TodoRemoteId? remoteId,
+  ) {
+    return todoDao.getTodoById(localId: localId, remoteId: remoteId).orElse(
+      (failure) {
+        if (remoteId == null) return tLeft(failure);
+
+        return _fetchByIdFromRemote(localId, remoteId);
+      },
+    );
   }
 
   @override
+  Stream<Either<Failure, Todo>> watchTodoById(
+    TodoLocalId localId,
+    TodoRemoteId? remoteId,
+  ) {
+    return todoDao.watchTodoById(localId: localId, remoteId: remoteId).orElse(
+      (failure) {
+        if (remoteId == null) return tLeft(failure);
+
+        return _fetchByIdFromRemote(localId, remoteId);
+      },
+    );
+  }
+
+  @override
+  TaskEither<Failure, Todo> createOrUpdateTodo(Todo todo) =>
+      todoDao.createOrUpdate(todo);
+
+  @override
   TaskEither<Failure, Unit> deleteTodoById(
-    TodoId? localId, [
-    String? remoteId,
+    TodoLocalId? localId, [
+    TodoRemoteId? remoteId,
   ]) {
     if (localId == null && remoteId == null) {
       return tLeft(Failures.notFound);
     }
 
     if (localId != null) {
-      return todoDao.deleteByLocalIdSoft(localId.value).map((r) => unit);
+      return todoDao.deleteByLocalIdSoft(localId).map((r) => unit);
     }
 
     return todoDao.deleteByRemoteIdSoft(remoteId!).map((r) => unit);
-  }
-
-  @override
-  TaskEither<Failure, Todo> getTodoById(TodoId? localId, [String? remoteId]) {
-    return TaskEither(() async {
-      final todo =
-          await todoDao.getTodoById(localId: localId, remoteId: remoteId).run();
-
-      if (todo.isLeft() && remoteId != null) {
-        return _fetchByIdFromRemote(remoteId, localId).run();
-      }
-
-      return todo;
-    });
-  }
-
-  @override
-  Stream<List<Todo>> watchTodos() async* {
-    yield* todoDao.watchTodos();
-  }
-
-  @override
-  TaskEither<Failure, List<Todo>> getTodos() {
-    return todoDao.getTodos();
   }
 
   @override
@@ -67,7 +78,7 @@ class TodoRepositoryImpl implements TodoRepository {
     SyncStatus status,
   ) {
     return networkInfo.onlineOrFailure.flatMap(
-      (r) => getTodoById(TodoId(localId)).flatMap(
+      (r) => getTodoById(TodoLocalId(localId), null).flatMap(
         (todo) {
           switch (status) {
             case SyncStatus.synced:
@@ -76,56 +87,24 @@ class TodoRepositoryImpl implements TodoRepository {
             case SyncStatus.deleted:
               if (todo.remoteId != null) {
                 return todoApi
-                    .deleteTodoById(todoId: todo.remoteId!)
-                    .toTaskEither()
-                    .mapResponse()
-                    .flatMap(
-                      (r) => todoDao.deleteByLocalIdHard(todo.localId!.value),
+                    .deleteTodoById(todo.remoteId!)
+                    .andThen(
+                      () => todoDao.deleteByLocalIdHard(todo.localId!),
                     )
                     .map((r) => unit);
               } else {
                 return todoDao
-                    .deleteByLocalIdHard(todo.localId!.value)
+                    .deleteByLocalIdHard(todo.localId!)
                     .map((r) => unit);
               }
 
-            case SyncStatus.created:
+            case SyncStatus.modified:
               return _resolveParentId(todo)
                   .flatMap(
-                    (resolvedTodo) => todoApi
-                        .createTodo(todoCreation: TodoMapper.toDtoCreate(todo))
-                        .toTaskEither()
-                        .mapResponse()
-                        .flatMap(
+                    (resolvedTodo) => todoApi.createTodo(todo).flatMap(
                           (response) => todoDao.createOrUpdateFromRemote(
-                            TodoMapper.fromCreateTodoResponseContent(
-                              response,
-                              todo,
-                            ),
-                            localId,
-                          ),
-                        ),
-                  )
-                  .map((r) => unit);
-
-            case SyncStatus.updated:
-              return _resolveParentId(todo)
-                  .flatMap(
-                    (resolvedTodo) => todoApi
-                        .updateTodo(
-                          todoUpdate: TodoMapper.toDtoUpdate(todo),
-                          todoId: todo.remoteId!,
-                        )
-                        .toTaskEither()
-                        .mapResponse()
-                        .flatMap(
-                          (r) => todoDao.createOrUpdateFromRemote(
-                            TodoMapper.fromUpdateTodoResponseContent(r)
-                                .copyWith(
-                              localId: resolvedTodo.localId,
-                              localParentId: resolvedTodo.localParentId,
-                            ),
-                            localId,
+                            todo,
+                            TodoLocalId(localId),
                           ),
                         ),
                   )
@@ -137,33 +116,34 @@ class TodoRepositoryImpl implements TodoRepository {
   }
 
   @override
-  TaskEither<Failure, Unit> fetchFromRemote(DateTime? lastSyncedAt) {
-    return networkInfo.onlineOrFailure
+  TaskEither<Failure, Unit> fetchFromRemote() {
+    return networkInfo.onlineOrFailure.andThen(
+      () => lastSyncedRepository
+          .getLastSyncedAtTimestamp(const TodoSyncIdentifier())
+          .flatMap(_fetchFromRemote),
+    );
+  }
+
+  TaskEither<Failure, Unit> _fetchFromRemote(DateTime? timeStamp) {
+    return todoApi
+        .getTodosSync(timeStamp)
         .flatMap(
-          (r) => todoApi
-              .getTodosSync(timestamp: lastSyncedAt?.toIso8601String())
-              .toTaskEither()
-              .mapResponse()
-              .flatMap(
-                (response) => TaskEither.traverseList(
-                  response.entities,
-                  (todo) => todoDao.createOrUpdateFromRemote(
-                    TodoMapper.fromRemote(todo),
-                    null,
-                  ),
-                ).flatMap((r) {
-                  return todoDao.deleteByRemoteIds(
-                    response.deleted.toSet(),
-                  );
-                }),
-              ),
+          (response) => TaskEither.traverseList(
+            response.todos,
+            (todo) => todoDao.createOrUpdateFromRemote(todo, null),
+          ).andThen(() => todoDao.deleteByRemoteIds(response.deletedTodoIds)),
+        )
+        .andThen(
+          () => lastSyncedRepository.setLastSyncedAtTimestamp(
+            const TodoSyncIdentifier(),
+          ),
         )
         .map((r) => unit);
   }
 
   TaskEither<Failure, Todo> _resolveParentId(Todo todo) {
     if (todo.localParentId == null && todo.remoteParentId == null) {
-      return TaskEither.right(todo);
+      return tRight(todo);
     }
 
     return todoDao
@@ -180,18 +160,11 @@ class TodoRepositoryImpl implements TodoRepository {
   }
 
   TaskEither<Failure, Todo> _fetchByIdFromRemote(
-      String remoteId, TodoId? localId) {
-    return networkInfo.onlineOrFailure.flatMap(
-      (r) => todoApi
-          .getTodoById(todoId: remoteId)
-          .toTaskEither()
-          .mapResponse()
-          .flatMap(
-            (r) => todoDao.createOrUpdateFromRemote(
-              TodoMapper.fromRemoteById(r),
-              localId?.value,
-            ),
-          ),
-    );
+    TodoLocalId? localId,
+    TodoRemoteId remoteId,
+  ) {
+    return networkInfo.onlineOrFailure
+        .andThen(() => todoApi.getTodoById(remoteId))
+        .flatMap((todo) => todoDao.createOrUpdateFromRemote(todo, localId));
   }
 }

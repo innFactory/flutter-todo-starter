@@ -5,16 +5,14 @@ import 'package:sync/src/domain/models/last_synced_entity.dart';
 extension LastSyncedMapper on Never {
   static LastSyncedTableCompanion toLocal(LastSyncedEntity entity) {
     return LastSyncedTableCompanion(
-      localId: entity.id?.let(Value.new) ?? const Value.absent(),
-      entityType: Value(entity.entityType),
+      localId: entity.localId?.value.let(Value.new) ?? const Value.absent(),
       lastSyncedAt: entity.lastSyncedAt?.let(Value.new) ?? const Value.absent(),
     );
   }
 
   static LastSyncedEntity fromLocal(LocalLastSynced local) {
     return LastSyncedEntity(
-      id: local.localId,
-      entityType: local.entityType,
+      localId: LastSyncedEntityId(local.localId),
       lastSyncedAt: local.lastSyncedAt,
     );
   }

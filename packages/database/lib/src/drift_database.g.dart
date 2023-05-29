@@ -26,7 +26,7 @@ class $TodoTableTable extends TodoTable
       'remote_id', aliasedName, true,
       type: DriftSqlType.string,
       requiredDuringInsert: false,
-      $customConstraints: 'UNIQUE ON CONFLICT REPLACE');
+      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
@@ -104,7 +104,7 @@ class $TodoTableTable extends TodoTable
               'local_sync_status', aliasedName, false,
               type: DriftSqlType.string,
               requiredDuringInsert: false,
-              defaultValue: Constant(SyncStatus.created.name))
+              defaultValue: Constant(SyncStatus.modified.name))
           .withConverter<SyncStatus>($TodoTableTable.$converterlocalSyncStatus);
   @override
   List<GeneratedColumn> get $columns => [
@@ -681,7 +681,7 @@ class $SyncTableTable extends SyncTable
               'local_sync_status', aliasedName, false,
               type: DriftSqlType.string,
               requiredDuringInsert: false,
-              defaultValue: Constant(SyncStatus.created.name))
+              defaultValue: Constant(SyncStatus.modified.name))
           .withConverter<SyncStatus>($SyncTableTable.$converterlocalSyncStatus);
   static const VerificationMeta _entityTypeMeta =
       const VerificationMeta('entityType');
@@ -973,16 +973,16 @@ class $LastSyncedTableTable extends LastSyncedTable
   late final GeneratedColumn<DateTime> lastSyncedAt = GeneratedColumn<DateTime>(
       'last_synced_at', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  static const VerificationMeta _entityTypeMeta =
-      const VerificationMeta('entityType');
+  static const VerificationMeta _syncIdentifierMeta =
+      const VerificationMeta('syncIdentifier');
   @override
-  late final GeneratedColumnWithTypeConverter<SyncEntityType, String>
-      entityType = GeneratedColumn<String>('entity_type', aliasedName, false,
-              type: DriftSqlType.string, requiredDuringInsert: true)
-          .withConverter<SyncEntityType>(
-              $LastSyncedTableTable.$converterentityType);
+  late final GeneratedColumn<String> syncIdentifier = GeneratedColumn<String>(
+      'sync_identifier', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
   @override
-  List<GeneratedColumn> get $columns => [localId, lastSyncedAt, entityType];
+  List<GeneratedColumn> get $columns => [localId, lastSyncedAt, syncIdentifier];
   @override
   String get aliasedName => _alias ?? 'last_synced';
   @override
@@ -1002,7 +1002,14 @@ class $LastSyncedTableTable extends LastSyncedTable
           lastSyncedAt.isAcceptableOrUnknown(
               data['last_synced_at']!, _lastSyncedAtMeta));
     }
-    context.handle(_entityTypeMeta, const VerificationResult.success());
+    if (data.containsKey('sync_identifier')) {
+      context.handle(
+          _syncIdentifierMeta,
+          syncIdentifier.isAcceptableOrUnknown(
+              data['sync_identifier']!, _syncIdentifierMeta));
+    } else if (isInserting) {
+      context.missing(_syncIdentifierMeta);
+    }
     return context;
   }
 
@@ -1016,9 +1023,8 @@ class $LastSyncedTableTable extends LastSyncedTable
           .read(DriftSqlType.int, data['${effectivePrefix}local_id'])!,
       lastSyncedAt: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}last_synced_at']),
-      entityType: $LastSyncedTableTable.$converterentityType.fromSql(
-          attachedDatabase.typeMapping.read(
-              DriftSqlType.string, data['${effectivePrefix}entity_type'])!),
+      syncIdentifier: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}sync_identifier'])!,
     );
   }
 
@@ -1026,18 +1032,14 @@ class $LastSyncedTableTable extends LastSyncedTable
   $LastSyncedTableTable createAlias(String alias) {
     return $LastSyncedTableTable(attachedDatabase, alias);
   }
-
-  static JsonTypeConverter2<SyncEntityType, String, String>
-      $converterentityType =
-      const EnumNameConverter<SyncEntityType>(SyncEntityType.values);
 }
 
 class LocalLastSynced extends DataClass implements Insertable<LocalLastSynced> {
   final int localId;
   final DateTime? lastSyncedAt;
-  final SyncEntityType entityType;
+  final String syncIdentifier;
   const LocalLastSynced(
-      {required this.localId, this.lastSyncedAt, required this.entityType});
+      {required this.localId, this.lastSyncedAt, required this.syncIdentifier});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1045,10 +1047,7 @@ class LocalLastSynced extends DataClass implements Insertable<LocalLastSynced> {
     if (!nullToAbsent || lastSyncedAt != null) {
       map['last_synced_at'] = Variable<DateTime>(lastSyncedAt);
     }
-    {
-      final converter = $LastSyncedTableTable.$converterentityType;
-      map['entity_type'] = Variable<String>(converter.toSql(entityType));
-    }
+    map['sync_identifier'] = Variable<String>(syncIdentifier);
     return map;
   }
 
@@ -1058,7 +1057,7 @@ class LocalLastSynced extends DataClass implements Insertable<LocalLastSynced> {
       lastSyncedAt: lastSyncedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(lastSyncedAt),
-      entityType: Value(entityType),
+      syncIdentifier: Value(syncIdentifier),
     );
   }
 
@@ -1068,8 +1067,7 @@ class LocalLastSynced extends DataClass implements Insertable<LocalLastSynced> {
     return LocalLastSynced(
       localId: serializer.fromJson<int>(json['localId']),
       lastSyncedAt: serializer.fromJson<DateTime?>(json['lastSyncedAt']),
-      entityType: $LastSyncedTableTable.$converterentityType
-          .fromJson(serializer.fromJson<String>(json['entityType'])),
+      syncIdentifier: serializer.fromJson<String>(json['syncIdentifier']),
     );
   }
   @override
@@ -1078,76 +1076,75 @@ class LocalLastSynced extends DataClass implements Insertable<LocalLastSynced> {
     return <String, dynamic>{
       'localId': serializer.toJson<int>(localId),
       'lastSyncedAt': serializer.toJson<DateTime?>(lastSyncedAt),
-      'entityType': serializer.toJson<String>(
-          $LastSyncedTableTable.$converterentityType.toJson(entityType)),
+      'syncIdentifier': serializer.toJson<String>(syncIdentifier),
     };
   }
 
   LocalLastSynced copyWith(
           {int? localId,
           Value<DateTime?> lastSyncedAt = const Value.absent(),
-          SyncEntityType? entityType}) =>
+          String? syncIdentifier}) =>
       LocalLastSynced(
         localId: localId ?? this.localId,
         lastSyncedAt:
             lastSyncedAt.present ? lastSyncedAt.value : this.lastSyncedAt,
-        entityType: entityType ?? this.entityType,
+        syncIdentifier: syncIdentifier ?? this.syncIdentifier,
       );
   @override
   String toString() {
     return (StringBuffer('LocalLastSynced(')
           ..write('localId: $localId, ')
           ..write('lastSyncedAt: $lastSyncedAt, ')
-          ..write('entityType: $entityType')
+          ..write('syncIdentifier: $syncIdentifier')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(localId, lastSyncedAt, entityType);
+  int get hashCode => Object.hash(localId, lastSyncedAt, syncIdentifier);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is LocalLastSynced &&
           other.localId == this.localId &&
           other.lastSyncedAt == this.lastSyncedAt &&
-          other.entityType == this.entityType);
+          other.syncIdentifier == this.syncIdentifier);
 }
 
 class LastSyncedTableCompanion extends UpdateCompanion<LocalLastSynced> {
   final Value<int> localId;
   final Value<DateTime?> lastSyncedAt;
-  final Value<SyncEntityType> entityType;
+  final Value<String> syncIdentifier;
   const LastSyncedTableCompanion({
     this.localId = const Value.absent(),
     this.lastSyncedAt = const Value.absent(),
-    this.entityType = const Value.absent(),
+    this.syncIdentifier = const Value.absent(),
   });
   LastSyncedTableCompanion.insert({
     this.localId = const Value.absent(),
     this.lastSyncedAt = const Value.absent(),
-    required SyncEntityType entityType,
-  }) : entityType = Value(entityType);
+    required String syncIdentifier,
+  }) : syncIdentifier = Value(syncIdentifier);
   static Insertable<LocalLastSynced> custom({
     Expression<int>? localId,
     Expression<DateTime>? lastSyncedAt,
-    Expression<String>? entityType,
+    Expression<String>? syncIdentifier,
   }) {
     return RawValuesInsertable({
       if (localId != null) 'local_id': localId,
       if (lastSyncedAt != null) 'last_synced_at': lastSyncedAt,
-      if (entityType != null) 'entity_type': entityType,
+      if (syncIdentifier != null) 'sync_identifier': syncIdentifier,
     });
   }
 
   LastSyncedTableCompanion copyWith(
       {Value<int>? localId,
       Value<DateTime?>? lastSyncedAt,
-      Value<SyncEntityType>? entityType}) {
+      Value<String>? syncIdentifier}) {
     return LastSyncedTableCompanion(
       localId: localId ?? this.localId,
       lastSyncedAt: lastSyncedAt ?? this.lastSyncedAt,
-      entityType: entityType ?? this.entityType,
+      syncIdentifier: syncIdentifier ?? this.syncIdentifier,
     );
   }
 
@@ -1160,9 +1157,8 @@ class LastSyncedTableCompanion extends UpdateCompanion<LocalLastSynced> {
     if (lastSyncedAt.present) {
       map['last_synced_at'] = Variable<DateTime>(lastSyncedAt.value);
     }
-    if (entityType.present) {
-      final converter = $LastSyncedTableTable.$converterentityType;
-      map['entity_type'] = Variable<String>(converter.toSql(entityType.value));
+    if (syncIdentifier.present) {
+      map['sync_identifier'] = Variable<String>(syncIdentifier.value);
     }
     return map;
   }
@@ -1172,7 +1168,7 @@ class LastSyncedTableCompanion extends UpdateCompanion<LocalLastSynced> {
     return (StringBuffer('LastSyncedTableCompanion(')
           ..write('localId: $localId, ')
           ..write('lastSyncedAt: $lastSyncedAt, ')
-          ..write('entityType: $entityType')
+          ..write('syncIdentifier: $syncIdentifier')
           ..write(')'))
         .toString();
   }

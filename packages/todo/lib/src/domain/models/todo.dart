@@ -4,21 +4,25 @@ import 'package:sync/sync.dart';
 
 part 'todo.freezed.dart';
 
-class TodoId extends ValueId<int> {
-  const TodoId(int value) : super(value);
+class TodoLocalId extends ValueId<int> {
+  const TodoLocalId(int value) : super(value);
+}
+
+class TodoRemoteId extends ValueId<String> {
+  const TodoRemoteId(String value) : super(value);
 }
 
 @freezed
 class Todo with _$Todo {
   const factory Todo({
-    required TodoId? localId,
-    required String? remoteId,
+    required TodoLocalId? localId,
+    required TodoRemoteId? remoteId,
     required String title,
     required String description,
     required Set<String> tags,
     required bool isCompleted,
-    required TodoId? localParentId,
-    required String? remoteParentId,
+    required TodoLocalId? localParentId,
+    required TodoRemoteId? remoteParentId,
     required DateTime createdAt,
     required DateTime updatedAt,
     required SyncStatus syncStatus,
@@ -37,7 +41,7 @@ class Todo with _$Todo {
       remoteParentId: null,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
-      syncStatus: SyncStatus.created,
+      syncStatus: SyncStatus.modified,
     );
   }
 }

@@ -29,15 +29,16 @@ class SyncDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   }
 
   @override
-  TaskEither<Failure, List<SyncEntity>> getSyncEntities(
-      [List<SyncEntityType> types = SyncEntityType.values]) {
+  TaskEither<Failure, List<SyncEntity>> getSyncEntities([
+    List<SyncEntityType> syncEntityTypes = SyncEntityType.values,
+  ]) {
     return runTransaction(
       () => transaction(
         () async {
           return (select(tableInfo)
                 ..where(
                   (tbl) => tbl.entityType.isIn(
-                    types.map((e) => e.name),
+                    syncEntityTypes.map((e) => e.name),
                   ),
                 ))
               .get();

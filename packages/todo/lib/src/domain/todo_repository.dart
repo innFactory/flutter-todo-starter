@@ -8,18 +8,26 @@ abstract class TodoRepository {
 
   Stream<List<Todo>> watchTodos();
 
+  Stream<Either<Failure, Todo>> watchTodoById(
+    TodoLocalId localId,
+    TodoRemoteId? remoteId,
+  );
+
   @useResult
   TaskEither<Failure, List<Todo>> getTodos();
 
   @useResult
-  TaskEither<Failure, Todo> getTodoById(TodoId todoId);
+  TaskEither<Failure, Todo> getTodoById(
+    TodoLocalId localId,
+    TodoRemoteId? remoteId,
+  );
 
   @useResult
-  TaskEither<Failure, Unit> deleteTodoById(TodoId todoId);
+  TaskEither<Failure, Unit> deleteTodoById(TodoLocalId todoId);
 
   @useResult
   TaskEither<Failure, Unit> pushToRemote(int localId, SyncStatus syncStatus);
 
   @useResult
-  TaskEither<Failure, Unit> fetchFromRemote(DateTime? lastSyncedAt);
+  TaskEither<Failure, Unit> fetchFromRemote();
 }

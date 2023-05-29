@@ -1,5 +1,5 @@
 import 'package:api/api.dart';
-import 'package:api/src/logging_interceptor.dart';
+import 'package:api/src/common/logging_interceptor.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';

@@ -1,26 +1,26 @@
+import 'package:core/core.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../sync.dart';
-
 part 'last_synced_entity.freezed.dart';
+
+class LastSyncedEntityId extends ValueId<int> {
+  const LastSyncedEntityId(int value) : super(value);
+}
 
 @freezed
 class LastSyncedEntity with _$LastSyncedEntity {
   factory LastSyncedEntity({
-    required int? id,
-
-    /// The type of entity that is represented by this last synced entity.
-    required SyncEntityType entityType,
+    LastSyncedEntityId? localId,
 
     /// The Timestamp of the last sync process.
     required DateTime? lastSyncedAt,
   }) = _LastSyncedEntity;
 
-  factory LastSyncedEntity.empty(SyncEntityType entityType,
-      [DateTime? lastSyncedAt]) {
+  factory LastSyncedEntity.empty([
+    DateTime? lastSyncedAt,
+  ]) {
     return LastSyncedEntity(
-      id: null,
-      entityType: entityType,
+      localId: null,
       lastSyncedAt: lastSyncedAt,
     );
   }

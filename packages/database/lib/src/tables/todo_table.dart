@@ -7,8 +7,7 @@ class TodoTable extends Table {
   String get tableName => 'todo';
 
   IntColumn get localId => integer().autoIncrement()();
-  TextColumn get remoteId =>
-      text().nullable().customConstraint('UNIQUE ON CONFLICT REPLACE')();
+  TextColumn get remoteId => text().nullable().unique()();
   TextColumn get title => text()();
   TextColumn get description => text()();
   BoolColumn get isCompleted => boolean()();
@@ -22,19 +21,15 @@ class TodoTable extends Table {
   DateTimeColumn get createdAt => dateTime().nullable()();
   DateTimeColumn get updatedAt => dateTime().nullable()();
   TextColumn get localSyncStatus =>
-      textEnum<SyncStatus>().withDefault(Constant(SyncStatus.created.name))();
+      textEnum<SyncStatus>().withDefault(Constant(SyncStatus.modified.name))();
 }
 
 class TagsConverter extends TypeConverter<List<String>, String> {
   const TagsConverter();
 
   @override
-  List<String> fromSql(String fromDb) {
-    return fromDb.split(',');
-  }
+  List<String> fromSql(String fromDb) => fromDb.split(',');
 
   @override
-  String toSql(List<String> value) {
-    return value.join(',');
-  }
+  String toSql(List<String> value) => value.join(',');
 }

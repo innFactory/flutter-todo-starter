@@ -9,7 +9,7 @@ extension SyncMapper on Never {
       entityId: Value(entity.entityLocalId),
       entityModifiedAt: Value(entity.modifiedAt),
       localSyncStatus: Value(entity.status),
-      entityType: Value(entity.type),
+      entityType: Value(entity.syncEntityType),
     );
   }
 
@@ -17,7 +17,7 @@ extension SyncMapper on Never {
     return SyncEntity(
       id: local.localId,
       entityLocalId: local.entityId,
-      type: local.entityType,
+      syncEntityType: local.entityType,
       status: local.localSyncStatus,
       modifiedAt: local.entityModifiedAt,
     );

@@ -18,13 +18,13 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final syncRepo = ref.watch(syncRepositoryProvider);
+    final syncController = ref.watch(syncControllerProvider);
 
     useEffect(() {
       final connectivitySubscription =
           ConnectivityWrapper.instance.onStatusChange.listen((status) {
         if (status == ConnectivityStatus.CONNECTED) {
-          syncRepo.syncAll().run();
+          syncController.pushChangesToRemote().run();
         }
       });
 

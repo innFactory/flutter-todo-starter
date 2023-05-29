@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:sync/sync.dart';
 
 @DataClassName('LocalLastSynced')
 class LastSyncedTable extends Table {
@@ -8,5 +7,5 @@ class LastSyncedTable extends Table {
 
   IntColumn get localId => integer().autoIncrement()();
   DateTimeColumn get lastSyncedAt => dateTime().nullable()();
-  TextColumn get entityType => textEnum<SyncEntityType>()();
+  TextColumn get syncIdentifier => text().unique()();
 }

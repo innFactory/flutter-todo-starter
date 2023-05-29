@@ -16,10 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$LastSyncedEntity {
-  int? get id => throw _privateConstructorUsedError;
-
-  /// The type of entity that is represented by this last synced entity.
-  SyncEntityType get entityType => throw _privateConstructorUsedError;
+  LastSyncedEntityId? get localId => throw _privateConstructorUsedError;
 
   /// The Timestamp of the last sync process.
   DateTime? get lastSyncedAt => throw _privateConstructorUsedError;
@@ -35,7 +32,7 @@ abstract class $LastSyncedEntityCopyWith<$Res> {
           LastSyncedEntity value, $Res Function(LastSyncedEntity) then) =
       _$LastSyncedEntityCopyWithImpl<$Res, LastSyncedEntity>;
   @useResult
-  $Res call({int? id, SyncEntityType entityType, DateTime? lastSyncedAt});
+  $Res call({LastSyncedEntityId? localId, DateTime? lastSyncedAt});
 }
 
 /// @nodoc
@@ -51,19 +48,14 @@ class _$LastSyncedEntityCopyWithImpl<$Res, $Val extends LastSyncedEntity>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? entityType = null,
+    Object? localId = freezed,
     Object? lastSyncedAt = freezed,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      entityType: null == entityType
-          ? _value.entityType
-          : entityType // ignore: cast_nullable_to_non_nullable
-              as SyncEntityType,
+      localId: freezed == localId
+          ? _value.localId
+          : localId // ignore: cast_nullable_to_non_nullable
+              as LastSyncedEntityId?,
       lastSyncedAt: freezed == lastSyncedAt
           ? _value.lastSyncedAt
           : lastSyncedAt // ignore: cast_nullable_to_non_nullable
@@ -80,7 +72,7 @@ abstract class _$$_LastSyncedEntityCopyWith<$Res>
       __$$_LastSyncedEntityCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, SyncEntityType entityType, DateTime? lastSyncedAt});
+  $Res call({LastSyncedEntityId? localId, DateTime? lastSyncedAt});
 }
 
 /// @nodoc
@@ -94,19 +86,14 @@ class __$$_LastSyncedEntityCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? entityType = null,
+    Object? localId = freezed,
     Object? lastSyncedAt = freezed,
   }) {
     return _then(_$_LastSyncedEntity(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      entityType: null == entityType
-          ? _value.entityType
-          : entityType // ignore: cast_nullable_to_non_nullable
-              as SyncEntityType,
+      localId: freezed == localId
+          ? _value.localId
+          : localId // ignore: cast_nullable_to_non_nullable
+              as LastSyncedEntityId?,
       lastSyncedAt: freezed == lastSyncedAt
           ? _value.lastSyncedAt
           : lastSyncedAt // ignore: cast_nullable_to_non_nullable
@@ -118,15 +105,10 @@ class __$$_LastSyncedEntityCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_LastSyncedEntity implements _LastSyncedEntity {
-  _$_LastSyncedEntity(
-      {required this.id, required this.entityType, required this.lastSyncedAt});
+  _$_LastSyncedEntity({this.localId, required this.lastSyncedAt});
 
   @override
-  final int? id;
-
-  /// The type of entity that is represented by this last synced entity.
-  @override
-  final SyncEntityType entityType;
+  final LastSyncedEntityId? localId;
 
   /// The Timestamp of the last sync process.
   @override
@@ -134,7 +116,7 @@ class _$_LastSyncedEntity implements _LastSyncedEntity {
 
   @override
   String toString() {
-    return 'LastSyncedEntity(id: $id, entityType: $entityType, lastSyncedAt: $lastSyncedAt)';
+    return 'LastSyncedEntity(localId: $localId, lastSyncedAt: $lastSyncedAt)';
   }
 
   @override
@@ -142,15 +124,13 @@ class _$_LastSyncedEntity implements _LastSyncedEntity {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_LastSyncedEntity &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.entityType, entityType) ||
-                other.entityType == entityType) &&
+            (identical(other.localId, localId) || other.localId == localId) &&
             (identical(other.lastSyncedAt, lastSyncedAt) ||
                 other.lastSyncedAt == lastSyncedAt));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, entityType, lastSyncedAt);
+  int get hashCode => Object.hash(runtimeType, localId, lastSyncedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -161,16 +141,11 @@ class _$_LastSyncedEntity implements _LastSyncedEntity {
 
 abstract class _LastSyncedEntity implements LastSyncedEntity {
   factory _LastSyncedEntity(
-      {required final int? id,
-      required final SyncEntityType entityType,
+      {final LastSyncedEntityId? localId,
       required final DateTime? lastSyncedAt}) = _$_LastSyncedEntity;
 
   @override
-  int? get id;
-  @override
-
-  /// The type of entity that is represented by this last synced entity.
-  SyncEntityType get entityType;
+  LastSyncedEntityId? get localId;
   @override
 
   /// The Timestamp of the last sync process.
