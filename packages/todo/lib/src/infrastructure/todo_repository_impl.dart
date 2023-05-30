@@ -8,12 +8,14 @@ import 'package:todo/todo.dart';
 class TodoRepositoryImpl implements TodoRepository {
   TodoRepositoryImpl({
     required this.networkInfo,
+    required this.syncRepository,
     required this.lastSyncedRepository,
     required this.todoApi,
     required this.todoDao,
   });
 
   final NetworkInfo networkInfo;
+  final SyncRepository syncRepository;
   final LastSyncedRepository lastSyncedRepository;
   final TodoApi todoApi;
   final TodoDao todoDao;
@@ -26,7 +28,7 @@ class TodoRepositoryImpl implements TodoRepository {
 
   @override
   TaskEither<Failure, Todo> getTodoById(
-    TodoLocalId localId,
+    TodoLocalId? localId,
     TodoRemoteId? remoteId,
   ) {
     return todoDao.getTodoById(localId: localId, remoteId: remoteId).orElse(
@@ -54,13 +56,13 @@ class TodoRepositoryImpl implements TodoRepository {
 
   @override
   TaskEither<Failure, Todo> createOrUpdateTodo(Todo todo) =>
-      todoDao.createOrUpdate(todo);
+      todoDao.createOrUpdate(todo, addToSyncQueue: true);
 
   @override
   TaskEither<Failure, Unit> deleteTodoById(
-    TodoLocalId? localId, [
+    TodoLocalId? localId,
     TodoRemoteId? remoteId,
-  ]) {
+  ) {
     if (localId == null && remoteId == null) {
       return tLeft(Failures.notFound);
     }
@@ -74,8 +76,10 @@ class TodoRepositoryImpl implements TodoRepository {
 
   @override
   TaskEither<Failure, Unit> syncToRemote(int localId) {
-    return networkInfo.onlineOrFailure.flatMap(
-      (r) => getTodoById(TodoLocalId(localId), null).flatMap(
+    return syncRepository.processSyncEntity(
+      SyncEntityType.todo,
+      localId,
+      (entity) => getTodoById(TodoLocalId(localId), null).flatMap(
         (todo) {
           switch (todo.syncStatus) {
             case SyncStatus.synced:
@@ -83,16 +87,11 @@ class TodoRepositoryImpl implements TodoRepository {
 
             case SyncStatus.deleted:
               if (todo.remoteId != null) {
-                return todoApi
-                    .deleteTodoById(todo.remoteId!)
-                    .andThen(
+                return todoApi.deleteTodoById(todo.remoteId!).andThen(
                       () => todoDao.deleteByLocalIdHard(todo.localId!),
-                    )
-                    .map((r) => unit);
+                    );
               } else {
-                return todoDao
-                    .deleteByLocalIdHard(todo.localId!)
-                    .map((r) => unit);
+                return todoDao.deleteByLocalIdHard(todo.localId!);
               }
 
             case SyncStatus.modified:
@@ -114,10 +113,10 @@ class TodoRepositoryImpl implements TodoRepository {
                         ),
                       );
                 },
-              ).map((r) => unit);
+              );
           }
         },
-      ),
+      ).map((r) => unit),
     );
   }
 
@@ -142,10 +141,10 @@ class TodoRepositoryImpl implements TodoRepository {
         );
       },
     ).flatMap(
-      (r) => todoDao.createOrUpdate(
+      (parent) => todoDao.createOrUpdate(
         todo.copyWith(
-          localParentId: r.localId,
-          remoteParentId: r.remoteId,
+          localParentId: parent.localId,
+          remoteParentId: parent.remoteId,
         ),
         addToSyncQueue: false,
       ),

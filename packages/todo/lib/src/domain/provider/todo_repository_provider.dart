@@ -13,18 +13,14 @@ final todoRepositoryProvider = Provider.autoDispose<TodoRepository>(
     final driftDatabase = ref.watch(driftDatabaseProvider);
     final todoDao = TodoDao(driftDatabase);
     final lastSyncedRepository = ref.watch(lastSyncedRepositoryProvider);
+    final syncRepository = ref.watch(syncRepositoryProvider);
 
     return TodoRepositoryImpl(
       networkInfo: networkInfo,
       lastSyncedRepository: lastSyncedRepository,
+      syncRepository: syncRepository,
       todoApi: todoApi,
       todoDao: todoDao,
     );
   },
-  dependencies: [
-    networkInfoProvider,
-    driftDatabaseProvider,
-    apiClientProvider,
-    lastSyncedRepositoryProvider,
-  ],
 );

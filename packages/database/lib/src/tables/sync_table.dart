@@ -6,10 +6,11 @@ class SyncTable extends Table {
   @override
   String get tableName => 'sync';
 
-  IntColumn get localId => integer().autoIncrement()();
-
   IntColumn get entityId => integer()();
+  TextColumn get entityType => textEnum<SyncEntityType>()();
   DateTimeColumn get entityModifiedAt =>
       dateTime().withDefault(currentDateAndTime)();
-  TextColumn get entityType => textEnum<SyncEntityType>()();
+
+  @override
+  Set<Column<Object>>? get primaryKey => {entityId, entityType};
 }

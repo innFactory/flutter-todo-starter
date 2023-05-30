@@ -42,11 +42,7 @@ class SyncController {
       () => syncRepository.getSyncEntities().flatMap(
             (syncEntities) => TaskEither.sequenceList<Failure, Unit>(
               syncEntities
-                  .map(
-                    (entity) => _syncChangesForEntityType(entity).andThen(
-                      () => syncRepository.deleteSyncEntity(entity.id!),
-                    ),
-                  )
+                  .map((entity) => _syncChangesForEntityType(entity))
                   .toList(),
             ).map((r) => unit),
           ),
@@ -54,7 +50,7 @@ class SyncController {
   }
 
   TaskEither<Failure, Unit> _syncChangesForEntityType(SyncEntity entity) {
-    switch (entity.syncEntityType) {
+    switch (entity.entityType) {
       case SyncEntityType.todo:
         return todoRepository.syncToRemote(entity.entityLocalId);
     }

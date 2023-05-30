@@ -348,6 +348,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  forms:
+    dependency: "direct overridden"
+    description:
+      path: "../forms"
+      relative: true
+    source: path
+    version: "0.0.0"
   fpdart:
     dependency: transitive
     description:
@@ -460,6 +467,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.1"
+  keyboard_actions:
+    dependency: transitive
+    description:
+      name: keyboard_actions
+      sha256: "31e0ab2a706ac8f58887efa60efc1f19aecdf37d8ab0f665a0f156d1fbeab650"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.0"
   kt_dart:
     dependency: transitive
     description:
@@ -659,6 +674,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
+  reactive_forms:
+    dependency: transitive
+    description:
+      path: "."
+      ref: "3fe9b4d1ada3169498f0244c9d4c251f01dcb325"
+      resolved-ref: "3fe9b4d1ada3169498f0244c9d4c251f01dcb325"
+      url: "git@github.com:innFactory/reactive_forms.git"
+    source: git
+    version: "14.3.0"
   riverpod:
     dependency: transitive
     description:

@@ -17,12 +17,15 @@ abstract interface class TodoRepository {
 
   @useResult
   TaskEither<Failure, Todo> getTodoById(
-    TodoLocalId localId,
+    TodoLocalId? localId,
     TodoRemoteId? remoteId,
   );
 
   @useResult
-  TaskEither<Failure, Unit> deleteTodoById(TodoLocalId todoId);
+  TaskEither<Failure, Unit> deleteTodoById(
+    TodoLocalId? todoId,
+    TodoRemoteId? remoteId,
+  );
 
   @useResult
   TaskEither<Failure, Unit> syncToRemote(int localId);

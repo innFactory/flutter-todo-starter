@@ -16,28 +16,27 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   @override
   TaskEither<Failure, Todo> createOrUpdate(
     Todo todo, {
-    bool addToSyncQueue = true,
+    required bool addToSyncQueue,
   }) {
     return runTransaction(
-      () => transaction(
-        () async {
-          final maybeOldTodo = await todo.localId?.let(
-            (localId) => (select(tableInfo)
-                  ..where((tbl) => tbl.localId.equals(localId.value)))
-                .getSingleOrNull(),
-          );
+      database: attachedDatabase,
+      () async {
+        final maybeOldTodo = await todo.localId?.let(
+          (localId) => (select(tableInfo)
+                ..where((tbl) => tbl.localId.equals(localId.value)))
+              .getSingleOrNull(),
+        );
 
-          return into(tableInfo).insertReturning(
-            TodoMapper.toLocal(todo).copyWith(
-              localUpdatedAt: Value(DateTime.now()),
-              localSyncStatus: const Value(SyncStatus.modified),
-              localCreatedAt: maybeOldTodo?.localCreatedAt.let(Value.new) ??
-                  const Value.absent(),
-            ),
-            mode: InsertMode.insertOrReplace,
-          );
-        },
-      ),
+        return into(tableInfo).insertReturning(
+          TodoMapper.toLocal(todo).copyWith(
+            localUpdatedAt: Value(DateTime.now()),
+            localSyncStatus: const Value(SyncStatus.modified),
+            localCreatedAt: maybeOldTodo?.localCreatedAt.let(Value.new) ??
+                const Value.absent(),
+          ),
+          mode: InsertMode.insertOrReplace,
+        );
+      },
     ).flatMap(
       (local) {
         if (!addToSyncQueue) {
@@ -55,55 +54,52 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     TodoLocalId? localId,
   ) {
     return runTransaction(
-      () => transaction(
-        () async {
-          final maybeOldTodo = await (select(tableInfo)
-                ..where(
-                  (tbl) => localId != null
-                      ? tbl.localId.equals(localId.value)
-                      : tbl.remoteId.equals(todo.remoteId!.value),
-                ))
-              .getSingleOrNull();
+      database: attachedDatabase,
+      () async {
+        final maybeOldTodo = await (select(tableInfo)
+              ..where(
+                (tbl) => localId != null
+                    ? tbl.localId.equals(localId.value)
+                    : tbl.remoteId.equals(todo.remoteId!.value),
+              ))
+            .getSingleOrNull();
 
-          if (maybeOldTodo != null &&
-              maybeOldTodo.localUpdatedAt.isAfter(todo.updatedAt)) {
-            // TODO: Merging logic
-            return maybeOldTodo;
-          }
+        if (maybeOldTodo != null &&
+            maybeOldTodo.localUpdatedAt.isAfter(todo.updatedAt)) {
+          // TODO: Merging logic
+          return maybeOldTodo;
+        }
 
-          final createOrUpdateTodo = TodoMapper.toLocal(todo).copyWith(
-            localId:
-                maybeOldTodo?.localId.let(Value.new) ?? const Value.absent(),
-            localParentId: maybeOldTodo?.localParentId.let(Value.new) ??
-                const Value.absent(),
-            localUpdatedAt: Value(DateTime.now()),
-            localSyncStatus: const Value(SyncStatus.synced),
-            localCreatedAt: maybeOldTodo?.localCreatedAt.let(Value.new) ??
-                const Value.absent(),
-          );
+        final createOrUpdateTodo = TodoMapper.toLocal(todo).copyWith(
+          localId: maybeOldTodo?.localId.let(Value.new) ?? const Value.absent(),
+          localParentId: maybeOldTodo?.localParentId.let(Value.new) ??
+              const Value.absent(),
+          localUpdatedAt: Value(DateTime.now()),
+          localSyncStatus: const Value(SyncStatus.synced),
+          localCreatedAt: maybeOldTodo?.localCreatedAt.let(Value.new) ??
+              const Value.absent(),
+        );
 
-          return into(tableInfo).insertReturning(
-            createOrUpdateTodo,
-            mode: InsertMode.insertOrReplace,
-          );
-        },
-      ),
+        return into(tableInfo).insertReturning(
+          createOrUpdateTodo,
+          mode: InsertMode.insertOrReplace,
+        );
+      },
     ).map(TodoMapper.fromLocal);
   }
 
   @override
   TaskEither<Failure, List<Todo>> getTodos() {
     return runTransaction(
-      () => transaction(
-        () async {
-          return (select(tableInfo)
-                ..where(
-                  (tbl) =>
-                      tbl.localSyncStatus.isNotValue(SyncStatus.deleted.name),
-                ))
-              .get();
-        },
-      ),
+      database: attachedDatabase,
+      () async {
+        return (select(tableInfo)
+              ..where(
+                (tbl) =>
+                    tbl.localSyncStatus.isNotValue(SyncStatus.deleted.name),
+              ))
+            .get();
+      },
     ).map((r) => r.map(TodoMapper.fromLocal).toList());
   }
 
@@ -117,17 +113,16 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     }
 
     return runTransaction(
-      () => transaction(
-        () async {
-          return (select(tableInfo)
-                ..where(
-                  (tbl) => localId != null
-                      ? tbl.localId.equals(localId.value)
-                      : tbl.remoteId.equals(remoteId!.value),
-                ))
-              .getSingle();
-        },
-      ),
+      database: attachedDatabase,
+      () async {
+        return (select(tableInfo)
+              ..where(
+                (tbl) => localId != null
+                    ? tbl.localId.equals(localId.value)
+                    : tbl.remoteId.equals(remoteId!.value),
+              ))
+            .getSingle();
+      },
     ).map((a) {
       return TodoMapper.fromLocal(a);
     });
@@ -150,28 +145,26 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   @override
   TaskEither<Failure, int> deleteByLocalIdHard(TodoLocalId localId) {
     return runTransaction(
-      () => transaction(
-        () => (delete(tableInfo)
-              ..where((tbl) => tbl.localId.equals(localId.value)))
-            .go(),
-      ),
+      database: attachedDatabase,
+      () => (delete(tableInfo)
+            ..where((tbl) => tbl.localId.equals(localId.value)))
+          .go(),
     );
   }
 
   @override
   TaskEither<Failure, int> deleteByLocalIdSoft(TodoLocalId localId) {
-    return getTodoById(localId: TodoLocalId(localId.value)).flatMap((todo) {
+    return getTodoById(localId: localId).flatMap((todo) {
       return runTransaction(
-        () => transaction(
-          () async {
-            return into(tableInfo).insertOnConflictUpdate(
-              TodoMapper.toLocal(todo).copyWith(
-                localId: Value(localId.value),
-                localSyncStatus: const Value(SyncStatus.deleted),
-              ),
-            );
-          },
-        ),
+        database: attachedDatabase,
+        () async {
+          return into(tableInfo).insertOnConflictUpdate(
+            TodoMapper.toLocal(todo).copyWith(
+              localId: Value(localId.value),
+              localSyncStatus: const Value(SyncStatus.deleted),
+            ),
+          );
+        },
       ).flatMap(
         (id) => _addToSyncQueue(localId.value),
       );
@@ -181,42 +174,42 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   @override
   TaskEither<Failure, int> deleteByRemoteId(TodoRemoteId remoteId) {
     return runTransaction(
-      () => transaction(
-        () => (delete(tableInfo)
-              ..where((tbl) => tbl.remoteId.equals(remoteId.value)))
-            .go(),
-      ),
-    );
-  }
-
-  @override
-  TaskEither<Failure, int> deleteByRemoteIds(List<TodoRemoteId> remoteIds) {
-    return runTransaction(
-      () => transaction(
-        () => (delete(tableInfo)
-              ..where(
-                (tbl) => tbl.remoteId.isIn(remoteIds.map((e) => e.value)),
-              ))
-            .go(),
-      ),
+      database: attachedDatabase,
+      () => (delete(tableInfo)
+            ..where((tbl) => tbl.remoteId.equals(remoteId.value)))
+          .go(),
     );
   }
 
   @override
   TaskEither<Failure, int> deleteByRemoteIdSoft(TodoRemoteId remoteId) {
+    return getTodoById(remoteId: remoteId).flatMap((todo) {
+      return runTransaction(
+        database: attachedDatabase,
+        () async {
+          await into(tableInfo).insertOnConflictUpdate(
+            TodoMapper.toLocal(todo).copyWith(
+              localSyncStatus: const Value(SyncStatus.deleted),
+            ),
+          );
+
+          return todo.localId;
+        },
+      ).flatMap(
+        (id) => _addToSyncQueue(id!.value),
+      );
+    });
+  }
+
+  @override
+  TaskEither<Failure, int> deleteByRemoteIds(List<TodoRemoteId> remoteIds) {
     return runTransaction(
-      () => transaction(
-        () => customUpdate(
-          'UPDATE ${tableInfo.actualTableName} SET local_sync_status = ${SyncStatus.deleted.name} WHERE remote_id = ?',
-          variables: [Variable.withString(remoteId.value)],
-          updates: {tableInfo},
-          updateKind: UpdateKind.update,
-        ),
-      ),
-    ).flatMap(
-      (r) => getTodoById(remoteId: remoteId).flatMap(
-        (r) => _addToSyncQueue(r.localId!.value),
-      ),
+      database: attachedDatabase,
+      () => (delete(tableInfo)
+            ..where(
+              (tbl) => tbl.remoteId.isIn(remoteIds.map((e) => e.value)),
+            ))
+          .go(),
     );
   }
 

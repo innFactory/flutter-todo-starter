@@ -27,24 +27,11 @@ part 'drift_database.g.dart';
 ])
 class DriftLocalDatabase extends _$DriftLocalDatabase {
   DriftLocalDatabase([QueryExecutor? executor])
-      : super(executor ?? _openConnection()) {
-    // clear();
-  }
+      : super(executor ?? _openConnection());
 
   // you should bump this number whenever you change or add a table definition.
   @override
   int get schemaVersion => 1;
-
-  // Future<void> clear() {
-  //   return transaction(() async {
-  //     // you only need this if you've manually enabled foreign keys
-  //     await customStatement('PRAGMA foreign_keys = OFF');
-
-  //     for (final table in allTables) {
-  //       await delete(table).go();
-  //     }
-  //   });
-  // }
 
   @override
   MigrationStrategy get migration {
@@ -67,31 +54,23 @@ class DriftLocalDatabase extends _$DriftLocalDatabase {
           );
         }
       },
-      beforeOpen: (details) async {
-        await customStatement('PRAGMA foreign_keys = ON');
-      },
+      // beforeOpen: (openingDetails) async {
+      //   if (kDebugMode) {
+      //     final m = Migrator(this);
+
+      //     for (final table in allTables) {
+      //       await m.deleteTable(table.actualTableName);
+      //       await m.createTable(table);
+      //     }
+      //   }
+      // },
     );
   }
 }
 
 LazyDatabase _openConnection() {
-  // const String schemaVersionKey = 'isar_schema_version';
-  // final int currentSchemaVersion = DriftLocalDatabase
-  //().schemaVersion;
-
   return LazyDatabase(() async {
-    // final prefs = awa`it SharedPreferences.getInstance();
-    // final schemaVersion = prefs.getInt(schemaVersionKey) ?? 0;
     final dbFolder = await getApplicationDocumentsDirectory();
-
-    // if (schemaVersion < currentSchemaVersion) {
-    //   logI(
-    //     'Local database schema version is $schemaVersion, but '
-    //     '$currentSchemaVersion is required. Clearing local database.',
-    //   );
-    //   await File(p.join(dbFolder.path, 'db.sqlite')).delete(recursive: true);
-    //   await prefs.setInt(schemaVersionKey, currentSchemaVersion);
-    // }
 
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.

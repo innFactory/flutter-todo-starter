@@ -1,7 +1,7 @@
 import 'package:core/core.dart';
 import 'package:sync/sync.dart';
 
-abstract class SyncRepository {
+abstract interface class SyncRepository {
   /// Watch all entities requiring synchronisation.
   Stream<List<SyncEntity>> watchSyncEntities();
 
@@ -10,5 +10,9 @@ abstract class SyncRepository {
   TaskEither<Failure, List<SyncEntity>> getSyncEntities();
 
   @useResult
-  TaskEither<Failure, Unit> deleteSyncEntity(SyncEntityId syncEntityId);
+  TaskEither<Failure, Unit> modifySyncEntity(
+    SyncEntityType type,
+    int localId,
+    TaskEither<Failure, Unit> Function(SyncEntity entity) process,
+  );
 }

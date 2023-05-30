@@ -17,40 +17,38 @@ class LastSyncedDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     SyncIdentifier syncIdentifier,
   ) {
     return runTransaction(
-      () => transaction(
-        () async {
-          final entity = await (select(tableInfo)
-                ..where((tbl) =>
-                    tbl.syncIdentifier.equals(syncIdentifier.identifier)))
-              .getSingleOrNull();
+      database: attachedDatabase,
+      () async {
+        final entity = await (select(tableInfo)
+              ..where((tbl) =>
+                  tbl.syncIdentifier.equals(syncIdentifier.identifier)))
+            .getSingleOrNull();
 
-          final updatedEntity = entity?.let(
-                (p0) => p0.copyWith(
-                  lastSyncedAt: Value(DateTime.now()),
-                ),
-              ) ??
-              LastSyncedTableCompanion(
-                syncIdentifier: Value(syncIdentifier.identifier),
+        final updatedEntity = entity?.let(
+              (p0) => p0.copyWith(
                 lastSyncedAt: Value(DateTime.now()),
-              );
+              ),
+            ) ??
+            LastSyncedTableCompanion(
+              syncIdentifier: Value(syncIdentifier.identifier),
+              lastSyncedAt: Value(DateTime.now()),
+            );
 
-          final lastSyncedLocalId =
-              await into(tableInfo).insertOnConflictUpdate(updatedEntity);
+        final lastSyncedLocalId =
+            await into(tableInfo).insertOnConflictUpdate(updatedEntity);
 
-          return lastSyncedLocalId;
-        },
-      ),
+        return lastSyncedLocalId;
+      },
     ).map((_) => unit);
   }
 
   @override
   TaskEither<Failure, List<LastSyncedEntity>> getLastSyncedTimestamps() {
     return runTransaction(
-      () => transaction(
-        () async {
-          return tableInfo.select().get();
-        },
-      ),
+      database: attachedDatabase,
+      () async {
+        return tableInfo.select().get();
+      },
     ).map(
       (r) => r.map(LastSyncedMapper.fromLocal).toList(),
     );
@@ -64,14 +62,13 @@ class LastSyncedDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     SyncIdentifier syncIdentifier,
   ) {
     return runTransaction(
-      () => transaction(
-        () async {
-          return (select(tableInfo)
-                ..where((tbl) =>
-                    tbl.syncIdentifier.equals(syncIdentifier.identifier)))
-              .getSingle();
-        },
-      ),
+      database: attachedDatabase,
+      () async {
+        return (select(tableInfo)
+              ..where((tbl) =>
+                  tbl.syncIdentifier.equals(syncIdentifier.identifier)))
+            .getSingle();
+      },
     ).map(LastSyncedMapper.fromLocal);
   }
 }

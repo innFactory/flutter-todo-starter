@@ -10,11 +10,12 @@ abstract interface class SyncDao {
 
   Stream<List<SyncEntity>> watchSyncEntities();
 
-  TaskEither<Failure, List<SyncEntity>> getSyncEntities([
-    List<SyncEntityType> syncEntityTypes = SyncEntityType.values,
-  ]);
+  TaskEither<Failure, List<SyncEntity>> getSyncEntities();
 
-  TaskEither<Failure, SyncEntity> getSyncEntityById(SyncEntityId localId);
+  TaskEither<Failure, SyncEntity> getSyncEntity(
+    SyncEntityType type,
+    int localId,
+  );
 
-  TaskEither<Failure, Unit> deleteById(SyncEntityId localId);
+  TaskEither<Failure, Unit> deleteSyncEntity(SyncEntity entity);
 }

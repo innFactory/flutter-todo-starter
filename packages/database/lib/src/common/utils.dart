@@ -3,9 +3,12 @@ import 'package:database/database.dart';
 import 'package:database/src/common/drift_failure.dart';
 import 'package:sync/sync.dart';
 
-TaskEither<Failure, TR> runTransaction<TR>(Future<TR> Function() transaction) {
+TaskEither<Failure, TR> runTransaction<TR>(
+  Future<TR> Function() transaction, {
+  required DriftLocalDatabase database,
+}) {
   return TaskEither.tryCatch(
-    () => transaction(),
+    () => database.transaction(() => transaction()),
     (error, stackTrace) => DriftFailure(
       error: error,
       stackTrace: stackTrace,
@@ -42,5 +45,6 @@ TaskEither<Failure, int> updateSyncEntity({
 
       return inserted;
     },
+    database: database,
   );
 }

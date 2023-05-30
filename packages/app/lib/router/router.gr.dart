@@ -50,6 +50,24 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const OverviewPage(),
       );
     },
+    TodoEditRoute.name: (routeData) {
+      final args = routeData.argsAs<TodoEditRouteArgs>(
+          orElse: () => const TodoEditRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: TodoEditPage(
+          key: args.key,
+          localId: args.localId,
+          remoteId: args.remoteId,
+        ),
+      );
+    },
+    TodoCreateRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const TodoCreatePage(),
+      );
+    },
     TodoRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -166,6 +184,63 @@ class OverviewRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'OverviewRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [TodoEditPage]
+class TodoEditRoute extends PageRouteInfo<TodoEditRouteArgs> {
+  TodoEditRoute({
+    Key? key,
+    TodoLocalId? localId,
+    TodoRemoteId? remoteId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          TodoEditRoute.name,
+          args: TodoEditRouteArgs(
+            key: key,
+            localId: localId,
+            remoteId: remoteId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'TodoEditRoute';
+
+  static const PageInfo<TodoEditRouteArgs> page =
+      PageInfo<TodoEditRouteArgs>(name);
+}
+
+class TodoEditRouteArgs {
+  const TodoEditRouteArgs({
+    this.key,
+    this.localId,
+    this.remoteId,
+  });
+
+  final Key? key;
+
+  final TodoLocalId? localId;
+
+  final TodoRemoteId? remoteId;
+
+  @override
+  String toString() {
+    return 'TodoEditRouteArgs{key: $key, localId: $localId, remoteId: $remoteId}';
+  }
+}
+
+/// generated route for
+/// [TodoCreatePage]
+class TodoCreateRoute extends PageRouteInfo<void> {
+  const TodoCreateRoute({List<PageRouteInfo>? children})
+      : super(
+          TodoCreateRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'TodoCreateRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

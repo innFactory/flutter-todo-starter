@@ -8,7 +8,7 @@ abstract interface class TodoDao {
 
   TaskEither<Failure, Todo> createOrUpdate(
     Todo todo, {
-    bool addToSyncQueue = true,
+    required bool addToSyncQueue,
   });
 
   TaskEither<Failure, Todo> createOrUpdateFromRemote(

@@ -649,22 +649,19 @@ class $SyncTableTable extends SyncTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $SyncTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _localIdMeta =
-      const VerificationMeta('localId');
-  @override
-  late final GeneratedColumn<int> localId = GeneratedColumn<int>(
-      'local_id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
   static const VerificationMeta _entityIdMeta =
       const VerificationMeta('entityId');
   @override
   late final GeneratedColumn<int> entityId = GeneratedColumn<int>(
       'entity_id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _entityTypeMeta =
+      const VerificationMeta('entityType');
+  @override
+  late final GeneratedColumnWithTypeConverter<SyncEntityType, String>
+      entityType = GeneratedColumn<String>('entity_type', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<SyncEntityType>($SyncTableTable.$converterentityType);
   static const VerificationMeta _entityModifiedAtMeta =
       const VerificationMeta('entityModifiedAt');
   @override
@@ -673,16 +670,9 @@ class $SyncTableTable extends SyncTable
           type: DriftSqlType.dateTime,
           requiredDuringInsert: false,
           defaultValue: currentDateAndTime);
-  static const VerificationMeta _entityTypeMeta =
-      const VerificationMeta('entityType');
-  @override
-  late final GeneratedColumnWithTypeConverter<SyncEntityType, String>
-      entityType = GeneratedColumn<String>('entity_type', aliasedName, false,
-              type: DriftSqlType.string, requiredDuringInsert: true)
-          .withConverter<SyncEntityType>($SyncTableTable.$converterentityType);
   @override
   List<GeneratedColumn> get $columns =>
-      [localId, entityId, entityModifiedAt, entityType];
+      [entityId, entityType, entityModifiedAt];
   @override
   String get aliasedName => _alias ?? 'sync';
   @override
@@ -692,41 +682,35 @@ class $SyncTableTable extends SyncTable
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('local_id')) {
-      context.handle(_localIdMeta,
-          localId.isAcceptableOrUnknown(data['local_id']!, _localIdMeta));
-    }
     if (data.containsKey('entity_id')) {
       context.handle(_entityIdMeta,
           entityId.isAcceptableOrUnknown(data['entity_id']!, _entityIdMeta));
     } else if (isInserting) {
       context.missing(_entityIdMeta);
     }
+    context.handle(_entityTypeMeta, const VerificationResult.success());
     if (data.containsKey('entity_modified_at')) {
       context.handle(
           _entityModifiedAtMeta,
           entityModifiedAt.isAcceptableOrUnknown(
               data['entity_modified_at']!, _entityModifiedAtMeta));
     }
-    context.handle(_entityTypeMeta, const VerificationResult.success());
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {localId};
+  Set<GeneratedColumn> get $primaryKey => {entityId, entityType};
   @override
   LocalSync map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return LocalSync(
-      localId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}local_id'])!,
       entityId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}entity_id'])!,
-      entityModifiedAt: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime, data['${effectivePrefix}entity_modified_at'])!,
       entityType: $SyncTableTable.$converterentityType.fromSql(attachedDatabase
           .typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}entity_type'])!),
+      entityModifiedAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}entity_modified_at'])!,
     );
   }
 
@@ -741,34 +725,30 @@ class $SyncTableTable extends SyncTable
 }
 
 class LocalSync extends DataClass implements Insertable<LocalSync> {
-  final int localId;
   final int entityId;
-  final DateTime entityModifiedAt;
   final SyncEntityType entityType;
+  final DateTime entityModifiedAt;
   const LocalSync(
-      {required this.localId,
-      required this.entityId,
-      required this.entityModifiedAt,
-      required this.entityType});
+      {required this.entityId,
+      required this.entityType,
+      required this.entityModifiedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['local_id'] = Variable<int>(localId);
     map['entity_id'] = Variable<int>(entityId);
-    map['entity_modified_at'] = Variable<DateTime>(entityModifiedAt);
     {
       final converter = $SyncTableTable.$converterentityType;
       map['entity_type'] = Variable<String>(converter.toSql(entityType));
     }
+    map['entity_modified_at'] = Variable<DateTime>(entityModifiedAt);
     return map;
   }
 
   SyncTableCompanion toCompanion(bool nullToAbsent) {
     return SyncTableCompanion(
-      localId: Value(localId),
       entityId: Value(entityId),
-      entityModifiedAt: Value(entityModifiedAt),
       entityType: Value(entityType),
+      entityModifiedAt: Value(entityModifiedAt),
     );
   }
 
@@ -776,120 +756,113 @@ class LocalSync extends DataClass implements Insertable<LocalSync> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return LocalSync(
-      localId: serializer.fromJson<int>(json['localId']),
       entityId: serializer.fromJson<int>(json['entityId']),
-      entityModifiedAt: serializer.fromJson<DateTime>(json['entityModifiedAt']),
       entityType: $SyncTableTable.$converterentityType
           .fromJson(serializer.fromJson<String>(json['entityType'])),
+      entityModifiedAt: serializer.fromJson<DateTime>(json['entityModifiedAt']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'localId': serializer.toJson<int>(localId),
       'entityId': serializer.toJson<int>(entityId),
-      'entityModifiedAt': serializer.toJson<DateTime>(entityModifiedAt),
       'entityType': serializer.toJson<String>(
           $SyncTableTable.$converterentityType.toJson(entityType)),
+      'entityModifiedAt': serializer.toJson<DateTime>(entityModifiedAt),
     };
   }
 
   LocalSync copyWith(
-          {int? localId,
-          int? entityId,
-          DateTime? entityModifiedAt,
-          SyncEntityType? entityType}) =>
+          {int? entityId,
+          SyncEntityType? entityType,
+          DateTime? entityModifiedAt}) =>
       LocalSync(
-        localId: localId ?? this.localId,
         entityId: entityId ?? this.entityId,
-        entityModifiedAt: entityModifiedAt ?? this.entityModifiedAt,
         entityType: entityType ?? this.entityType,
+        entityModifiedAt: entityModifiedAt ?? this.entityModifiedAt,
       );
   @override
   String toString() {
     return (StringBuffer('LocalSync(')
-          ..write('localId: $localId, ')
           ..write('entityId: $entityId, ')
-          ..write('entityModifiedAt: $entityModifiedAt, ')
-          ..write('entityType: $entityType')
+          ..write('entityType: $entityType, ')
+          ..write('entityModifiedAt: $entityModifiedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(localId, entityId, entityModifiedAt, entityType);
+  int get hashCode => Object.hash(entityId, entityType, entityModifiedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is LocalSync &&
-          other.localId == this.localId &&
           other.entityId == this.entityId &&
-          other.entityModifiedAt == this.entityModifiedAt &&
-          other.entityType == this.entityType);
+          other.entityType == this.entityType &&
+          other.entityModifiedAt == this.entityModifiedAt);
 }
 
 class SyncTableCompanion extends UpdateCompanion<LocalSync> {
-  final Value<int> localId;
   final Value<int> entityId;
-  final Value<DateTime> entityModifiedAt;
   final Value<SyncEntityType> entityType;
+  final Value<DateTime> entityModifiedAt;
+  final Value<int> rowid;
   const SyncTableCompanion({
-    this.localId = const Value.absent(),
     this.entityId = const Value.absent(),
-    this.entityModifiedAt = const Value.absent(),
     this.entityType = const Value.absent(),
+    this.entityModifiedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   SyncTableCompanion.insert({
-    this.localId = const Value.absent(),
     required int entityId,
-    this.entityModifiedAt = const Value.absent(),
     required SyncEntityType entityType,
+    this.entityModifiedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   })  : entityId = Value(entityId),
         entityType = Value(entityType);
   static Insertable<LocalSync> custom({
-    Expression<int>? localId,
     Expression<int>? entityId,
-    Expression<DateTime>? entityModifiedAt,
     Expression<String>? entityType,
+    Expression<DateTime>? entityModifiedAt,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (localId != null) 'local_id': localId,
       if (entityId != null) 'entity_id': entityId,
-      if (entityModifiedAt != null) 'entity_modified_at': entityModifiedAt,
       if (entityType != null) 'entity_type': entityType,
+      if (entityModifiedAt != null) 'entity_modified_at': entityModifiedAt,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   SyncTableCompanion copyWith(
-      {Value<int>? localId,
-      Value<int>? entityId,
+      {Value<int>? entityId,
+      Value<SyncEntityType>? entityType,
       Value<DateTime>? entityModifiedAt,
-      Value<SyncEntityType>? entityType}) {
+      Value<int>? rowid}) {
     return SyncTableCompanion(
-      localId: localId ?? this.localId,
       entityId: entityId ?? this.entityId,
-      entityModifiedAt: entityModifiedAt ?? this.entityModifiedAt,
       entityType: entityType ?? this.entityType,
+      entityModifiedAt: entityModifiedAt ?? this.entityModifiedAt,
+      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (localId.present) {
-      map['local_id'] = Variable<int>(localId.value);
-    }
     if (entityId.present) {
       map['entity_id'] = Variable<int>(entityId.value);
-    }
-    if (entityModifiedAt.present) {
-      map['entity_modified_at'] = Variable<DateTime>(entityModifiedAt.value);
     }
     if (entityType.present) {
       final converter = $SyncTableTable.$converterentityType;
       map['entity_type'] = Variable<String>(converter.toSql(entityType.value));
+    }
+    if (entityModifiedAt.present) {
+      map['entity_modified_at'] = Variable<DateTime>(entityModifiedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
@@ -897,10 +870,10 @@ class SyncTableCompanion extends UpdateCompanion<LocalSync> {
   @override
   String toString() {
     return (StringBuffer('SyncTableCompanion(')
-          ..write('localId: $localId, ')
           ..write('entityId: $entityId, ')
+          ..write('entityType: $entityType, ')
           ..write('entityModifiedAt: $entityModifiedAt, ')
-          ..write('entityType: $entityType')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }

@@ -15,65 +15,41 @@ class SyncDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   @override
   TaskEither<Failure, SyncEntity> createOrUpdate(SyncEntity entity) {
     return runTransaction(
-      () => transaction(
-        () async {
-          return into(tableInfo).insertReturning(
-            SyncMapper.toLocal(entity).copyWith(
-              entityModifiedAt: Value(DateTime.now()),
-            ),
-            mode: InsertMode.insertOrReplace,
-          );
-        },
-      ),
+      database: attachedDatabase,
+      () async {
+        return into(tableInfo).insertReturning(
+          SyncMapper.toLocal(entity).copyWith(
+            entityModifiedAt: Value(DateTime.now()),
+          ),
+          mode: InsertMode.insertOrReplace,
+        );
+      },
     ).map(SyncMapper.fromLocal);
   }
 
   @override
-  TaskEither<Failure, List<SyncEntity>> getSyncEntities([
-    List<SyncEntityType> syncEntityTypes = SyncEntityType.values,
-  ]) {
+  TaskEither<Failure, List<SyncEntity>> getSyncEntities() {
     return runTransaction(
-      () => transaction(
-        () async {
-          return (select(tableInfo)
-                ..where(
-                  (tbl) => tbl.entityType.isIn(
-                    syncEntityTypes.map((e) => e.name),
-                  ),
-                ))
-              .get();
-        },
-      ),
+      database: attachedDatabase,
+      () async {
+        return select(tableInfo).get();
+      },
     ).map((r) => r.map(SyncMapper.fromLocal).toList());
   }
 
   @override
-  TaskEither<Failure, SyncEntity> getSyncEntityById(SyncEntityId localId) {
+  TaskEither<Failure, Unit> deleteSyncEntity(SyncEntity entity) {
     return runTransaction(
-      () => transaction(
-        () async {
-          return (select(tableInfo)
-                ..where((tbl) => tbl.localId.equals(localId.value)))
-              .getSingle();
-        },
-      ),
-    ).map((a) {
-      return SyncMapper.fromLocal(a);
-    });
-  }
+      database: attachedDatabase,
+      () async {
+        await (delete(tableInfo)
+              ..where((t) =>
+                  t.entityType.isValue(entity.entityType.name) &
+                  t.entityId.isValue(entity.entityLocalId)))
+            .go();
 
-  @override
-  TaskEither<Failure, Unit> deleteById(SyncEntityId syncId) {
-    return runTransaction(
-      () => transaction(
-        () async {
-          await (delete(tableInfo)
-                ..where((t) => t.localId.isValue(syncId.value)))
-              .go();
-
-          return unit;
-        },
-      ),
+        return unit;
+      },
     );
   }
 
@@ -85,4 +61,18 @@ class SyncDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   }
 
   TableInfo<SyncTable, LocalSync> get tableInfo => attachedDatabase.syncTable;
+
+  @override
+  TaskEither<Failure, SyncEntity> getSyncEntity(
+    SyncEntityType type,
+    int localId,
+  ) {
+    return runTransaction(
+      database: attachedDatabase,
+      () => (tableInfo.select()
+            ..where((t) =>
+                t.entityType.isValue(type.name) & t.entityId.isValue(localId)))
+          .getSingle(),
+    ).map(SyncMapper.fromLocal);
+  }
 }
