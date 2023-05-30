@@ -5,20 +5,18 @@ import 'package:sync/sync.dart';
 extension SyncMapper on Never {
   static SyncTableCompanion toLocal(SyncEntity entity) {
     return SyncTableCompanion(
-      localId: entity.id?.let(Value.new) ?? const Value.absent(),
+      localId: entity.id?.value.let(Value.new) ?? const Value.absent(),
       entityId: Value(entity.entityLocalId),
       entityModifiedAt: Value(entity.modifiedAt),
-      localSyncStatus: Value(entity.status),
       entityType: Value(entity.syncEntityType),
     );
   }
 
   static SyncEntity fromLocal(LocalSync local) {
     return SyncEntity(
-      id: local.localId,
+      id: SyncEntityId(local.localId),
       entityLocalId: local.entityId,
       syncEntityType: local.entityType,
-      status: local.localSyncStatus,
       modifiedAt: local.entityModifiedAt,
     );
   }

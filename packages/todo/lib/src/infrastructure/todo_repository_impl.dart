@@ -73,14 +73,11 @@ class TodoRepositoryImpl implements TodoRepository {
   }
 
   @override
-  TaskEither<Failure, Unit> pushToRemote(
-    int localId,
-    SyncStatus status,
-  ) {
+  TaskEither<Failure, Unit> syncToRemote(int localId) {
     return networkInfo.onlineOrFailure.flatMap(
       (r) => getTodoById(TodoLocalId(localId), null).flatMap(
         (todo) {
-          switch (status) {
+          switch (todo.syncStatus) {
             case SyncStatus.synced:
               return tRight(unit);
 
@@ -99,18 +96,58 @@ class TodoRepositoryImpl implements TodoRepository {
               }
 
             case SyncStatus.modified:
-              return _resolveParentId(todo)
-                  .flatMap(
-                    (resolvedTodo) => todoApi.createTodo(todo).flatMap(
+              return _maybeSyncParent(todo).flatMap(
+                (resolvedTodo) {
+                  if (resolvedTodo.remoteId != null) {
+                    return todoApi.updateTodo(resolvedTodo).flatMap(
                           (response) => todoDao.createOrUpdateFromRemote(
-                            todo,
-                            TodoLocalId(localId),
+                            response,
+                            resolvedTodo.localId,
                           ),
+                        );
+                  }
+
+                  return todoApi.createTodo(resolvedTodo).flatMap(
+                        (response) => todoDao.createOrUpdateFromRemote(
+                          response,
+                          resolvedTodo.localId,
                         ),
-                  )
-                  .map((r) => unit);
+                      );
+                },
+              ).map((r) => unit);
           }
         },
+      ),
+    );
+  }
+
+  TaskEither<Failure, Todo> _maybeSyncParent(Todo todo) {
+    if (todo.localParentId == null && todo.remoteParentId == null) {
+      return tRight(todo);
+    }
+
+    return todoDao
+        .getTodoById(localId: todo.localParentId, remoteId: todo.remoteParentId)
+        .flatMap(
+      (parent) {
+        if (parent.syncStatus == SyncStatus.synced) {
+          return tRight(parent);
+        }
+
+        return syncToRemote(parent.localId!.value).andThen(
+          () => todoDao.getTodoById(
+            localId: todo.localParentId,
+            remoteId: todo.remoteParentId,
+          ),
+        );
+      },
+    ).flatMap(
+      (r) => todoDao.createOrUpdate(
+        todo.copyWith(
+          localParentId: r.localId,
+          remoteParentId: r.remoteId,
+        ),
+        addToSyncQueue: false,
       ),
     );
   }
@@ -139,24 +176,6 @@ class TodoRepositoryImpl implements TodoRepository {
           ),
         )
         .map((r) => unit);
-  }
-
-  TaskEither<Failure, Todo> _resolveParentId(Todo todo) {
-    if (todo.localParentId == null && todo.remoteParentId == null) {
-      return tRight(todo);
-    }
-
-    return todoDao
-        .getTodoById(localId: todo.localParentId, remoteId: todo.remoteParentId)
-        .flatMap(
-          (parent) => todoDao.createOrUpdate(
-            todo.copyWith(
-              localParentId: parent.localId,
-              remoteParentId: parent.remoteId,
-            ),
-            addToSyncQueue: false,
-          ),
-        );
   }
 
   TaskEither<Failure, Todo> _fetchByIdFromRemote(

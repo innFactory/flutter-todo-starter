@@ -1,6 +1,6 @@
 import 'package:core/core.dart';
 
-abstract class NetworkInfo {
+abstract interface class NetworkInfo {
   Stream<bool> get connectionStream;
 
   Future<bool> get isConnected;

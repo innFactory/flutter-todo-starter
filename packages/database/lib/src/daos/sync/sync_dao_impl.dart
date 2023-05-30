@@ -48,12 +48,12 @@ class SyncDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   }
 
   @override
-  TaskEither<Failure, SyncEntity> getSyncEntityById(int localId) {
+  TaskEither<Failure, SyncEntity> getSyncEntityById(SyncEntityId localId) {
     return runTransaction(
       () => transaction(
         () async {
           return (select(tableInfo)
-                ..where((tbl) => tbl.localId.equals(localId)))
+                ..where((tbl) => tbl.localId.equals(localId.value)))
               .getSingle();
         },
       ),
@@ -63,11 +63,12 @@ class SyncDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   }
 
   @override
-  TaskEither<Failure, Unit> deleteById(int syncId) {
+  TaskEither<Failure, Unit> deleteById(SyncEntityId syncId) {
     return runTransaction(
       () => transaction(
         () async {
-          await (delete(tableInfo)..where((t) => t.localId.isValue(syncId)))
+          await (delete(tableInfo)
+                ..where((t) => t.localId.isValue(syncId.value)))
               .go();
 
           return unit;
@@ -77,19 +78,11 @@ class SyncDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   }
 
   @override
-  TaskEither<Failure, int> deleteByEntityId(int localId) {
-    return runTransaction(
-      () => (delete(tableInfo)..where((tbl) => tbl.entityId.equals(localId)))
-          .go(),
-    );
-  }
-
-  TableInfo<SyncTable, LocalSync> get tableInfo => attachedDatabase.syncTable;
-
-  @override
   Stream<List<SyncEntity>> watchSyncEntities() {
     return tableInfo.select().watch().map(
           (event) => event.map(SyncMapper.fromLocal).toList(),
         );
   }
+
+  TableInfo<SyncTable, LocalSync> get tableInfo => attachedDatabase.syncTable;
 }

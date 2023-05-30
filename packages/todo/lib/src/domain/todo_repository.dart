@@ -1,8 +1,7 @@
 import 'package:core/core.dart';
-import 'package:sync/sync.dart';
 import 'package:todo/todo.dart';
 
-abstract class TodoRepository {
+abstract interface class TodoRepository {
   @useResult
   TaskEither<Failure, Todo> createOrUpdateTodo(Todo todo);
 
@@ -26,7 +25,7 @@ abstract class TodoRepository {
   TaskEither<Failure, Unit> deleteTodoById(TodoLocalId todoId);
 
   @useResult
-  TaskEither<Failure, Unit> pushToRemote(int localId, SyncStatus syncStatus);
+  TaskEither<Failure, Unit> syncToRemote(int localId);
 
   @useResult
   TaskEither<Failure, Unit> fetchFromRemote();

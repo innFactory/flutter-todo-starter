@@ -20,7 +20,7 @@ class SyncRepositoryImpl implements SyncRepository {
   }
 
   @override
-  TaskEither<Failure, Unit> deleteSyncEntity(int syncEntityId) {
+  TaskEither<Failure, Unit> deleteSyncEntity(SyncEntityId syncEntityId) {
     return syncDao.deleteById(syncEntityId);
   }
 }

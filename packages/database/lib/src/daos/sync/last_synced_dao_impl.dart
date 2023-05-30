@@ -31,6 +31,7 @@ class LastSyncedDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
               ) ??
               LastSyncedTableCompanion(
                 syncIdentifier: Value(syncIdentifier.identifier),
+                lastSyncedAt: Value(DateTime.now()),
               );
 
           final lastSyncedLocalId =

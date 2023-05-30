@@ -56,10 +56,7 @@ class SyncController {
   TaskEither<Failure, Unit> _syncChangesForEntityType(SyncEntity entity) {
     switch (entity.syncEntityType) {
       case SyncEntityType.todo:
-        return todoRepository.pushToRemote(
-          entity.entityLocalId,
-          entity.status,
-        );
+        return todoRepository.syncToRemote(entity.entityLocalId);
     }
   }
 

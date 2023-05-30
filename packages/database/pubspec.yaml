@@ -2,8 +2,8 @@ name: database
 publish_to: none
 
 environment:
-  sdk: ">=2.18.4 <3.0.0"
-  flutter: ">=3.7.12"
+  sdk: ">=3.0.0"
+  flutter: ">=3.10.2"
 
 dependencies:
   flutter:

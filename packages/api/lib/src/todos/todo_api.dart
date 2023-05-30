@@ -1,7 +1,7 @@
 import 'package:core/core.dart';
 import 'package:todo/todo.dart';
 
-abstract class TodoApi {
+abstract interface class TodoApi {
   @useResult
   TaskEither<Failure, List<Todo>> getTodos();
 

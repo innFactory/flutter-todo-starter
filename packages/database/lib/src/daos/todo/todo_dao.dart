@@ -3,7 +3,7 @@ import 'package:database/database.dart';
 import 'package:database/src/daos/todo/todo_dao_impl.dart';
 import 'package:todo/todo.dart';
 
-abstract class TodoDao {
+abstract interface class TodoDao {
   factory TodoDao(DriftLocalDatabase db) = TodoDaoImpl;
 
   TaskEither<Failure, Todo> createOrUpdate(

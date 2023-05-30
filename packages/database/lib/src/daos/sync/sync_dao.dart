@@ -3,7 +3,7 @@ import 'package:database/database.dart';
 import 'package:database/src/daos/sync/sync_dao_impl.dart';
 import 'package:sync/sync.dart';
 
-abstract class SyncDao {
+abstract interface class SyncDao {
   factory SyncDao(DriftLocalDatabase db) = SyncDaoImpl;
 
   TaskEither<Failure, SyncEntity> createOrUpdate(SyncEntity entity);
@@ -14,9 +14,7 @@ abstract class SyncDao {
     List<SyncEntityType> syncEntityTypes = SyncEntityType.values,
   ]);
 
-  TaskEither<Failure, SyncEntity> getSyncEntityById(int localId);
+  TaskEither<Failure, SyncEntity> getSyncEntityById(SyncEntityId localId);
 
-  TaskEither<Failure, Unit> deleteById(int localId);
-
-  TaskEither<Failure, int> deleteByEntityId(int entityId);
+  TaskEither<Failure, Unit> deleteById(SyncEntityId localId);
 }

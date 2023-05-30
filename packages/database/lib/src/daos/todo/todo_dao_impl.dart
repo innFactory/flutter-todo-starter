@@ -44,10 +44,7 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
           return TaskEither.right(local);
         }
 
-        return _addToSyncQueue(
-          local.localId,
-          SyncStatus.modified,
-        ).map((r) => local);
+        return _addToSyncQueue(local.localId).map((r) => local);
       },
     ).map(TodoMapper.fromLocal);
   }
@@ -176,10 +173,7 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
           },
         ),
       ).flatMap(
-        (id) => _addToSyncQueue(
-          localId.value,
-          SyncStatus.deleted,
-        ),
+        (id) => _addToSyncQueue(localId.value),
       );
     });
   }
@@ -221,10 +215,7 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
       ),
     ).flatMap(
       (r) => getTodoById(remoteId: remoteId).flatMap(
-        (r) => _addToSyncQueue(
-          r.localId!.value,
-          SyncStatus.deleted,
-        ),
+        (r) => _addToSyncQueue(r.localId!.value),
       ),
     );
   }
@@ -257,15 +248,11 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     }
   }
 
-  TaskEither<Failure, int> _addToSyncQueue(
-    int localId,
-    SyncStatus syncStatus,
-  ) {
+  TaskEither<Failure, int> _addToSyncQueue(int localId) {
     return updateSyncEntity(
       database: attachedDatabase,
       entityId: localId,
       entityType: SyncEntityType.todo,
-      syncStatus: syncStatus,
     );
   }
 

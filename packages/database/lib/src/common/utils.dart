@@ -17,17 +17,28 @@ TaskEither<Failure, int> updateSyncEntity({
   required DriftLocalDatabase database,
   required int entityId,
   required SyncEntityType entityType,
-  required SyncStatus syncStatus,
 }) {
   return runTransaction(
     () async {
-      final inserted = await database.into(database.syncTable).insert(
-            SyncTableCompanion(
-              entityId: Value(entityId),
-              localSyncStatus: Value(syncStatus),
-              entityType: Value(entityType),
-            ),
+      final oldSyncEntity = await (database.select(database.syncTable)
+            ..where((tbl) {
+              return tbl.entityId.equals(entityId) &
+                  tbl.entityType.equals(entityType.name);
+            }))
+          .getSingleOrNull();
+
+      final newSyncEntity = oldSyncEntity?.copyWith(
+            entityModifiedAt: DateTime.now(),
+          ) ??
+          SyncTableCompanion(
+            entityId: Value(entityId),
+            entityType: Value(entityType),
+            entityModifiedAt: Value(DateTime.now()),
           );
+
+      final inserted = await database
+          .into(database.syncTable)
+          .insertOnConflictUpdate(newSyncEntity);
 
       return inserted;
     },

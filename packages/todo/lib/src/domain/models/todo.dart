@@ -33,8 +33,8 @@ class Todo with _$Todo {
     return Todo(
       localId: null,
       remoteId: null,
-      title: 'title',
-      description: 'description',
+      title: 'title2',
+      description: 'description2',
       tags: {},
       isCompleted: false,
       localParentId: null,
