@@ -76,7 +76,7 @@ class TodoRepositoryImpl implements TodoRepository {
 
   @override
   TaskEither<Failure, Unit> syncToRemote(int localId) {
-    return syncRepository.processSyncEntity(
+    return syncRepository.modifySyncEntity(
       SyncEntityType.todo,
       localId,
       (entity) => getTodoById(TodoLocalId(localId), null).flatMap(

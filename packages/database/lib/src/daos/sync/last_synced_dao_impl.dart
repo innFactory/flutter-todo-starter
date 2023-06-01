@@ -46,9 +46,7 @@ class LastSyncedDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   TaskEither<Failure, List<LastSyncedEntity>> getLastSyncedTimestamps() {
     return runTransaction(
       database: attachedDatabase,
-      () async {
-        return tableInfo.select().get();
-      },
+      () => tableInfo.select().get(),
     ).map(
       (r) => r.map(LastSyncedMapper.fromLocal).toList(),
     );
@@ -63,12 +61,11 @@ class LastSyncedDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   ) {
     return runTransaction(
       database: attachedDatabase,
-      () async {
-        return (select(tableInfo)
-              ..where((tbl) =>
-                  tbl.syncIdentifier.equals(syncIdentifier.identifier)))
-            .getSingle();
-      },
+      () => (select(tableInfo)
+            ..where(
+              (tbl) => tbl.syncIdentifier.equals(syncIdentifier.identifier),
+            ))
+          .getSingle(),
     ).map(LastSyncedMapper.fromLocal);
   }
 }

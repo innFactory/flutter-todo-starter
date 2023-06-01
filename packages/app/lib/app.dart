@@ -6,7 +6,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:core/core.dart' hide TextDirection;
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
