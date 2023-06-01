@@ -1,0 +1,6 @@
+{
+  "i18n-ally.localesPaths": [
+    "flutter_sdk/dev/benchmarks/microbenchmarks/lib/language",
+    "flutter_sdk/dev/benchmarks/test_apps/stocks/lib/i18n"
+  ]
+}

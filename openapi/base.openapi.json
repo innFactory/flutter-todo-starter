@@ -1,0 +1,14 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "todo API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9000",
+      "description": "LOCAL todo"
+    }
+  ],
+  "paths": {}
+}

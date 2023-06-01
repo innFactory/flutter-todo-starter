@@ -1,8 +1,12 @@
 {
-  "cSpell.words": ["flavorizr", "melos"],
+  "cSpell.words": ["daos", "flavorizr", "isar", "melos"],
   "editor.codeActionsOnSave": {
     "source.fixAll": true,
     "source.organizeImports": true
   },
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "i18n-ally.localesPaths": ["assets/i18n"],
+  "files.watcherExclude": {
+    "**/target": true
+  }
 }

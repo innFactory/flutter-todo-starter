@@ -12,7 +12,12 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO
-    return const Placeholder();
+    return Scaffold(
+      body: Center(
+        child: FlutterLogo(
+          size: MediaQuery.of(context).size.shortestSide * 0.4,
+        ),
+      ),
+    );
   }
 }

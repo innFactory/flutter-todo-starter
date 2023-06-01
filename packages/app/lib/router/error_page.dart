@@ -15,6 +15,13 @@ class ErrorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Error'),
+      ),
+      body: Center(
+        child: Text('Error: $error'),
+      ),
+    );
   }
 }

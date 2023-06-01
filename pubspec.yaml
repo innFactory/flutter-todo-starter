@@ -2,7 +2,8 @@ name: workspace
 publish_to: "none"
 
 environment:
-  sdk: ">=2.19.6 <3.0.0"
+  sdk: ">=3.0.0"
+  flutter: ">=3.10.2"
 
 dependencies:
   flutter:

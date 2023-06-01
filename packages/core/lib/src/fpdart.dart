@@ -1,33 +1,68 @@
 import 'package:core/core.dart';
-import 'package:rxdart/rxdart.dart';
 
-/// Extension methods for [Stream]s containing [Either]s.
-extension StreamEitherX<L, R> on Stream<Either<L, R>> {
-  /// If the [Either] is [Right] then change its value from type `R` to
-  /// type `C` using function `f`.
-  Stream<Either<L, C>> switchMapRight<C>(Stream<C> Function(R) f) =>
-      switchMap((either) =>
-          either.fold((l) => Stream.value(left(l)), (r) => f(r).map(right)));
+export 'package:fpdart/fpdart.dart' hide Reader, now, id;
 
-  /// If the [Either] is [Right], then change its value from type `R` to
-  /// type `C` using function `f`.
-  Stream<Either<L, C>> mapRight<C>(C Function(R) f) =>
-      map((either) => either.map(f));
+Predicate<T> truePredicate<T>() => Predicate((_) => true);
 
-  /// If the [Either] is [Left], then change its value from type `L` to
-  /// type `C` using function `f`.
-  Stream<Either<C, R>> mapLeft<C>(C Function(L) f) =>
-      map((either) => either.mapLeft(f));
+/// Build a [TaskEither] that returns a `Right(right)`.
+///
+/// Shortcut for `TaskEither.right(r)`.
+TaskEither<L, R> tRight<L, R>(R right) =>
+    TaskEither(() async => Either.of(right));
 
-  /// If the Either is [Left], then return the result of `orElse`.
-  Stream<Either<T, R>> orElse<T>(TaskEither<T, R> Function(L) f) =>
-      asyncMap((either) => either.toTaskEither().orElse(f).run());
+/// Build a [TaskEither] that returns a `Left(left)`.
+///
+/// Shortcut for `TaskEither.left(l)`.
+TaskEither<L, R> tLeft<L, R>(L left) => TaskEither(() async => Left(left));
 
-  /// Used to chain a [TaskEither] onto the Streams [Either].
-  Stream<Either<L, T>> flatMap<T>(TaskEither<L, T> Function(R) f) =>
-      asyncMap((either) => either.toTaskEither().flatMap(f).run());
+extension TaskTaskEitherX<L, R> on Task<TaskEither<L, R>> {
+  /// Run the [Task] and return the [TaskEither] inside.
+  TaskEither<L, R> flatten() {
+    return TaskEither(() async {
+      final taskEither = await run();
+      return taskEither.run();
+    });
+  }
+}
 
-  /// If the [Either] ist [Right], then map it to a new Stream using `f`.
-  Stream<Either<L, C>> switchFlatMap<C>(Stream<Either<L, C>> Function(R) f) =>
-      switchMap((value) => value.fold((l) => Stream.value(left(l)), f));
+TaskEither<L, R> traverseTaskEitherFold<L, R, A, B>(
+  List<B> list,
+  TaskEither<L, A> Function(B) f,
+  Either<L, R> initialValue,
+  Either<L, R> Function(Either<L, R> previous, Either<L, A> current) reduce,
+) {
+  return TaskEither(() async {
+    final results = await Future.wait(list.map((e) => f(e).run()));
+    return results.fold<Either<L, R>>(initialValue, reduce);
+  });
+}
+
+extension FpdartNullable<T> on T? {
+  /// Convert a nullable value to an [Either] with a [Failure] on the left.
+  /// If the value is `null`, a [Failures.notFound] is returned.
+  Either<Failure, T> getOrNotFound() {
+    if (this == null) {
+      return const Left(Failures.notFound);
+    }
+
+    return Right(this as T);
+  }
+}
+
+extension FpdartFutureNullable<T> on Future<T?> {
+  /// Convert a nullable value to an [Either] with a [Failure] on the left.
+  /// If the value is `null`, a [Failures.notFound] is returned.
+  ///
+  /// This method will not catch [Exception]s and is therefore a little unsafe.
+  TaskEither<Failure, T> getOrNotFound() {
+    return TaskEither(() async {
+      final result = await this;
+
+      if (result == null) {
+        return const Left(Failures.notFound);
+      }
+
+      return Right(result);
+    });
+  }
 }

@@ -1,0 +1,14 @@
+{
+  "inputs": [
+    {
+      "inputFile": "./openapi/base.openapi.json"
+    },
+    {
+      "inputFile": "./backend/modules/api/target/scala-2.13/resource_managed/main/io.todo.metadata.definition.application.TodoApiController.json"
+    },
+    {
+      "inputFile": "./backend/modules/api/target/scala-2.13/resource_managed/main/io.todo.metadata.definition.application.HealthAPIController.json"
+    }
+  ],
+  "output": "./openapi.json"
+}

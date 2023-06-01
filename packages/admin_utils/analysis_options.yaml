@@ -1,0 +1,15 @@
+include: package:lint_factory/analysis_options.yaml
+
+linter:
+  rules:
+    - use_key_in_widget_constructors
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
