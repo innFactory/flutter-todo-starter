@@ -34,16 +34,18 @@ class TodoPage extends HookConsumerWidget {
     final todos = ref.watch(todoStreamProvider).valueOrNull ?? [];
 
     return Scaffold(
-      body: TodoListView(
-        todos: todos,
-        onCreatePressed: onItemCreate,
-        onEditPressed: onItemEdit,
-        onCompleteToggle: onCompleteTodo,
-        onDelete: (todo) => ref
-            .read(todoRepositoryProvider)
-            .deleteTodoById(todo.localId, todo.remoteId)
-            .run(),
-      ),
-    );
+        body: TodoListView(
+          todos: todos,
+          onEditPressed: onItemEdit,
+          onCompleteToggle: onCompleteTodo,
+          onDelete: (todo) => ref
+              .read(todoRepositoryProvider)
+              .deleteTodoById(todo.localId, todo.remoteId)
+              .run(),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: onItemCreate,
+          child: const Icon(Icons.add),
+        ));
   }
 }

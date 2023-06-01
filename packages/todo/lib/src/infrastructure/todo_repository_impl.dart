@@ -153,10 +153,15 @@ class TodoRepositoryImpl implements TodoRepository {
 
   @override
   TaskEither<Failure, Unit> fetchFromRemote() {
+    const identifier = TodoSyncIdentifier();
+
     return networkInfo.onlineOrFailure.andThen(
       () => lastSyncedRepository
-          .getLastSyncedAtTimestamp(const TodoSyncIdentifier())
-          .flatMap(_fetchFromRemote),
+          .getLastSyncedAtTimestamp(identifier)
+          .flatMap(_fetchFromRemote)
+          .andThen(
+            () => lastSyncedRepository.setLastSyncedAtTimestamp(identifier),
+          ),
     );
   }
 
@@ -167,11 +172,6 @@ class TodoRepositoryImpl implements TodoRepository {
           (response) => TaskEither.traverseList(
             response.todos,
             (todo) => todoDao.createOrUpdateFromRemote(todo, null),
-          ).andThen(() => todoDao.deleteByRemoteIds(response.deletedTodoIds)),
-        )
-        .andThen(
-          () => lastSyncedRepository.setLastSyncedAtTimestamp(
-            const TodoSyncIdentifier(),
           ),
         )
         .map((r) => unit);

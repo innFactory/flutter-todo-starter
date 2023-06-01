@@ -92,6 +92,7 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SplashPage(),
       );
     },
+    ...AdminUtilsModule().pagesMap,
   };
 }
 

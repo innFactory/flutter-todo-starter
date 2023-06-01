@@ -32,8 +32,8 @@ class SyncRepositoryImpl implements SyncRepository {
     return lock.synchronized(
       () => syncDao
           .getSyncEntity(type, localId)
-          .chainFirst(process)
-          .flatMap(syncDao.deleteSyncEntity),
+          .flatMap(process)
+          .andThen(() => syncDao.deleteSyncEntity(type, localId)),
     );
   }
 }

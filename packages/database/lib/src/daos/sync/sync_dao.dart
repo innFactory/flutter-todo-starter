@@ -17,5 +17,8 @@ abstract interface class SyncDao {
     int localId,
   );
 
-  TaskEither<Failure, Unit> deleteSyncEntity(SyncEntity entity);
+  TaskEither<Failure, Unit> deleteSyncEntity(
+    SyncEntityType type,
+    int localId,
+  );
 }

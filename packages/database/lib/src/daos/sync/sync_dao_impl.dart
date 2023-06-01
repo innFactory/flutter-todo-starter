@@ -38,14 +38,17 @@ class SyncDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   }
 
   @override
-  TaskEither<Failure, Unit> deleteSyncEntity(SyncEntity entity) {
+  TaskEither<Failure, Unit> deleteSyncEntity(
+    SyncEntityType type,
+    int localId,
+  ) {
     return runTransaction(
       database: attachedDatabase,
       () async {
         await (delete(tableInfo)
               ..where((t) =>
-                  t.entityType.isValue(entity.entityType.name) &
-                  t.entityId.isValue(entity.entityLocalId)))
+                  t.entityType.isValue(type.name) &
+                  t.entityId.isValue(localId)))
             .go();
 
         return unit;
@@ -69,7 +72,7 @@ class SyncDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   ) {
     return runTransaction(
       database: attachedDatabase,
-      () => (tableInfo.select()
+      () async => (tableInfo.select()
             ..where((t) =>
                 t.entityType.isValue(type.name) & t.entityId.isValue(localId)))
           .getSingle(),

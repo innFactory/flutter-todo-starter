@@ -1,3 +1,4 @@
+import 'package:admin_utils/admin_utils.dart';
 import 'package:app/router/auth/auth_router_page.dart';
 import 'package:app/router/auth/sign_in_page.dart';
 import 'package:app/router/authenticated/authenticated_router.dart';
@@ -17,7 +18,9 @@ part 'router.gr.dart';
 
 /// The `auto_route` router for the app. All relevant routes for the app are
 /// defined here.
-@AutoRouterConfig()
+@AutoRouterConfig(
+  modules: [AdminUtilsModule],
+)
 class AppRouter extends _$AppRouter {
   @override
   RouteType get defaultRouteType => const RouteType.adaptive();
@@ -61,6 +64,8 @@ class AppRouter extends _$AppRouter {
               ),
               AutoRoute(page: TodoEditRoute.page),
               AutoRoute(page: TodoCreateRoute.page),
+              AutoRoute(page: AdminRoute.page),
+              AutoRoute(page: DriftDbRoute.page),
             ],
           ),
         ],

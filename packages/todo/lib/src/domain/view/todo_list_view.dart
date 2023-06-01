@@ -6,14 +6,12 @@ import 'package:todo/todo.dart';
 class TodoListView extends ConsumerWidget {
   const TodoListView({
     super.key,
-    required this.onCreatePressed,
     required this.onEditPressed,
     required this.onCompleteToggle,
     required this.onDelete,
     required this.todos,
   });
 
-  final VoidCallback onCreatePressed;
   final void Function(Todo) onEditPressed;
   final void Function(Todo) onCompleteToggle;
   final void Function(Todo) onDelete;
@@ -29,38 +27,28 @@ class TodoListView extends ConsumerWidget {
     final todosWithParent = todos.where((element) =>
         element.localParentId != null || element.remoteParentId != null);
 
-    return Column(
-      children: [
-        IconButton(
-          onPressed: onCreatePressed,
-          icon: const Icon(Icons.add),
-        ),
-        Expanded(
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: todosWithoutParent.length,
-            itemBuilder: (context, index) {
-              final todo = todosWithoutParent[index];
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: todosWithoutParent.length,
+      itemBuilder: (context, index) {
+        final todo = todosWithoutParent[index];
 
-              final children = todosWithParent
-                  .where(
-                    (element) =>
-                        element.remoteParentId == todo.remoteId ||
-                        element.localParentId == todo.localId,
-                  )
-                  .toList();
+        final children = todosWithParent
+            .where(
+              (element) =>
+                  element.remoteParentId == todo.remoteId ||
+                  element.localParentId == todo.localId,
+            )
+            .toList();
 
-              return TodoListTile(
-                todo: todo,
-                onTap: onEditPressed,
-                onCompleteToggle: onCompleteToggle,
-                onDelete: onDelete,
-                children: children,
-              );
-            },
-          ),
-        ),
-      ],
+        return TodoListTile(
+          todo: todo,
+          onTap: onEditPressed,
+          onCompleteToggle: onCompleteToggle,
+          onDelete: onDelete,
+          children: children,
+        );
+      },
     );
   }
 }
