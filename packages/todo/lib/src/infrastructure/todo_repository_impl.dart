@@ -79,7 +79,12 @@ class TodoRepositoryImpl implements TodoRepository {
     return syncRepository.modifySyncEntity(
       SyncEntityType.todo,
       localId,
-      (entity) => getTodoById(TodoLocalId(localId), null).flatMap(
+      (entity) => getTodoById(TodoLocalId(localId), null).flatMap((todo) {
+        if (todo.remoteId == null) {
+          return tRight(todo);
+        }
+        return _fetchByIdFromRemote(todo.localId, todo.remoteId!);
+      }).flatMap(
         (todo) {
           switch (todo.syncStatus) {
             case SyncStatus.synced:
