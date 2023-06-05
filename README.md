@@ -4,21 +4,26 @@ This project is a starting point for scalable and complex flutter applications.
 
 ## Getting Started
 
-### FVM
+### FVM / Flutter
 
-This project uses [fvm](https://fvm.app/) to manage flutter versions. After installation run the following command to install the correct flutter version:
+This project uses [fvm](https://fvm.app/) to manage flutter versions. If you have already installed flutter or dart on your machine, you should uninstall it before installing fvm. After installation run the following command to install the correct flutter version:
 
 ```bash
+# To install the correct flutter version defined in .fvm/fvm_config.json
 fvm use
+
+# The template ususally uses the stable version of flutter. FVM doesn't care if your stable version is up to date. To make sure you have the latest stable version run the following command:
+fvm flutter upgrade
 ```
 
-This will prompt you to install the stable version of flutter if you don't already have it installed. To make working with `fvm` easier we recommend you to create an alias in your `.bashrc` or `.zshrc` file:
+To make working with `fvm` easier we recommend creating aliases for the `flutter` and `dart` commands in your `.bashrc` or `.zshrc` file:
 
 ```bash
 alias flutter="fvm flutter"
+alias dart="fvm dart"
 ```
 
-This will ensure that running any flutter command always uses the project's flutter version.
+This will ensure that running any `flutter` or `dart` command always uses the project's defined flutter version or the accompanying dart version.
 
 ### Melos
 
