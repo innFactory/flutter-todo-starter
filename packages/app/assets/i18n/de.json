@@ -1,4 +1,6 @@
 {
   "sign_in": "Log In",
-  "sign_out": "Ausloggen"
+  "sign_out": "Ausloggen",
+  "email": "E-Mail",
+  "password": "Passwort"
 }

@@ -21,11 +21,17 @@ class SignInFormView extends HookConsumerWidget {
             children: [
               ReactiveTextField(
                 formControl: formState.form.emailControl,
+                decoration: InputDecoration(
+                  hintText: context.translate('email'),
+                ),
               ),
               ReactiveTextField(
                 formControl: formState.form.passwordControl,
                 onSubmitted: (_) =>
                     ref.read(signInFormControllerProvider.notifier).submit(),
+                decoration: InputDecoration(
+                  hintText: context.translate('password'),
+                ),
                 obscureText: true,
               ),
               if (maybeAuthError.value != null)
