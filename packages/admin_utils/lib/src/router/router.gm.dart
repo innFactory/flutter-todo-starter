@@ -28,14 +28,9 @@ abstract class $AdminUtilsModule extends _i3.AutoRouterModule {
       );
     },
     AdminRoute.name: (routeData) {
-      final args = routeData.argsAs<AdminRouteArgs>();
       return _i3.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i2.AdminPage(
-          key: args.key,
-          database: args.database,
-          additionalActions: args.additionalActions,
-        ),
+        child: const _i2.AdminPage(),
       );
     },
   };
@@ -81,43 +76,14 @@ class DriftDbRouteArgs {
 
 /// generated route for
 /// [_i2.AdminPage]
-class AdminRoute extends _i3.PageRouteInfo<AdminRouteArgs> {
-  AdminRoute({
-    _i4.Key? key,
-    required _i5.GeneratedDatabase database,
-    required List<_i4.Widget> additionalActions,
-    List<_i3.PageRouteInfo>? children,
-  }) : super(
+class AdminRoute extends _i3.PageRouteInfo<void> {
+  const AdminRoute({List<_i3.PageRouteInfo>? children})
+      : super(
           AdminRoute.name,
-          args: AdminRouteArgs(
-            key: key,
-            database: database,
-            additionalActions: additionalActions,
-          ),
           initialChildren: children,
         );
 
   static const String name = 'AdminRoute';
 
-  static const _i3.PageInfo<AdminRouteArgs> page =
-      _i3.PageInfo<AdminRouteArgs>(name);
-}
-
-class AdminRouteArgs {
-  const AdminRouteArgs({
-    this.key,
-    required this.database,
-    required this.additionalActions,
-  });
-
-  final _i4.Key? key;
-
-  final _i5.GeneratedDatabase database;
-
-  final List<_i4.Widget> additionalActions;
-
-  @override
-  String toString() {
-    return 'AdminRouteArgs{key: $key, database: $database, additionalActions: $additionalActions}';
-  }
+  static const _i3.PageInfo<void> page = _i3.PageInfo<void>(name);
 }

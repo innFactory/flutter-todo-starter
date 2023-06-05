@@ -64,12 +64,12 @@ class AppRouter extends _$AppRouter {
               ),
               AutoRoute(page: TodoEditRoute.page),
               AutoRoute(page: TodoCreateRoute.page),
-              AutoRoute(page: AdminRoute.page),
               AutoRoute(page: DriftDbRoute.page),
             ],
           ),
         ],
       ),
+      ...AdminUtilsModule.routes,
     ];
   }
 }

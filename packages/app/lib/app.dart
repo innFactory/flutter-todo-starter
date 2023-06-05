@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:admin_utils/admin_utils.dart';
 import 'package:app/environment_provider.dart';
 import 'package:app/router/router.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:core/core.dart' hide TextDirection;
+import 'package:database/database.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 /// The root widget of the application. This widget is responsible for
@@ -46,7 +47,10 @@ class _App extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = useMemoized(AppRouter.new);
 
-    return KeyboardDismissOnTap(
+    return AdminProvider(
+      groups: [
+        DriftDatabaseAdminGroup(ref.watch(driftDatabaseProvider)),
+      ],
       child: MaterialApp.router(
         title: Environment.current.appTitle,
         locale: DevicePreview.locale(context),
