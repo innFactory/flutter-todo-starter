@@ -66,6 +66,8 @@ flutter run --flavor <environment> --target lib/main_<environment>.dart
 flutter run --flavor development --target lib/main_development.dart
 ```
 
+> Note: The mocked sign in credentials are `email` and `password`.
+
 ### Backend
 
 This repository also contains a simple backend service to store the todos. Get it running by following the instructions in the [backend README](./backend/README.md).
