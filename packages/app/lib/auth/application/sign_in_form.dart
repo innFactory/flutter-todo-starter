@@ -7,8 +7,8 @@ class SignInFormModel extends Equatable {
   });
 
   const SignInFormModel.initial()
-      : email = '',
-        password = '';
+      : email = 'email',
+        password = 'password';
 
   final String email;
   final String password;

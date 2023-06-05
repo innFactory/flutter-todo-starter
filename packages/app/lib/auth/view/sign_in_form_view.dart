@@ -26,6 +26,7 @@ class SignInFormView extends HookConsumerWidget {
                 formControl: formState.form.passwordControl,
                 onSubmitted: (_) =>
                     ref.read(signInFormControllerProvider.notifier).submit(),
+                obscureText: true,
               ),
               if (maybeAuthError.value != null)
                 Text(
