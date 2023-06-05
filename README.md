@@ -51,3 +51,21 @@ The most important commands are:
 * `melos bs` or `melos boostrap` - Run the [bootstrap](https://melos.invertase.dev/~melos-latest/commands/bootstrap) command (Install all dependencies in all packages)
 * `melos run build` - Run `build_runner` in all relevant packages
 * `melos run build:watch` - Run `build_runner` in all relevant packages in watch mode
+
+### Running the App
+
+The app has three environments: `development`, `staging` and `production`. But only
+`development` is initially configured.
+
+Using VSCode all environments are configured as launch configurations. If you need to run the app from the command line you can use the following command:
+
+```bash
+flutter run --flavor <environment> --target lib/main_<environment>.dart
+
+# Example
+flutter run --flavor development --target lib/main_development.dart
+```
+
+### Backend
+
+This repository also contains a simple backend service to store the todos. Get it running by following the instructions in the [backend README](./backend/README.md).
