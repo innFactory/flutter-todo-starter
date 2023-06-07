@@ -3,7 +3,7 @@ import 'package:app/router/auth/auth_router_page.dart';
 import 'package:app/router/auth/sign_in_page.dart';
 import 'package:app/router/authenticated/authenticated_router.dart';
 import 'package:app/router/authenticated/home_page.dart';
-import 'package:app/router/authenticated/overview_page.dart';
+import 'package:app/router/authenticated/sync_overview_page.dart';
 import 'package:app/router/authenticated/todo/todo_create_page.dart';
 import 'package:app/router/authenticated/todo/todo_edit_page.dart';
 import 'package:app/router/authenticated/todo/todo_page.dart';
@@ -59,7 +59,7 @@ class AppRouter extends _$AppRouter {
                 initial: true,
                 children: [
                   AutoRoute(page: TodoRoute.page, initial: true),
-                  AutoRoute(page: OverviewRoute.page),
+                  AutoRoute(page: SyncOverviewRoute.page),
                 ],
               ),
               AutoRoute(page: TodoEditRoute.page),

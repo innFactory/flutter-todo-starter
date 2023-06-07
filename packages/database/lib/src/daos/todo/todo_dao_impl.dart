@@ -143,6 +143,29 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   }
 
   @override
+  TaskEither<Failure, Todo> replaceTodo(Todo todo, SyncStatus syncStatus) {
+    return runTransaction(
+      () async {
+        final maybeOldTodo = await todo.localId?.let(
+          (localId) => (select(tableInfo)
+                ..where((tbl) => tbl.localId.equals(localId.value)))
+              .getSingleOrNull(),
+        );
+
+        return into(tableInfo).insertReturning(
+          TodoMapper.toLocal(todo).copyWith(
+            localSyncStatus: Value(syncStatus),
+            localCreatedAt: maybeOldTodo?.localCreatedAt.let(Value.new) ??
+                const Value.absent(),
+          ),
+          mode: InsertMode.replace,
+        );
+      },
+      database: attachedDatabase,
+    ).map(TodoMapper.fromLocal);
+  }
+
+  @override
   TaskEither<Failure, int> deleteByLocalIdHard(TodoLocalId localId) {
     return runTransaction(
       database: attachedDatabase,

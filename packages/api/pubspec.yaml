@@ -14,6 +14,9 @@ dependencies:
     path: ../api-client
   todo:
     path: ../todo
+  network_info:
+    path: ../network_info
+
   dio: ^5.0.1
   dio_smart_retry: ^5.0.0
   freezed_annotation: ^2.2.0

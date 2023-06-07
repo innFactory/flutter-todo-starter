@@ -32,4 +32,7 @@ abstract interface class TodoRepository {
 
   @useResult
   TaskEither<Failure, Unit> fetchFromRemote();
+
+  @useResult
+  TaskEither<Failure, Unit> revertChanges(int localId);
 }

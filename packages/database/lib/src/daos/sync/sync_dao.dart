@@ -10,6 +10,8 @@ abstract interface class SyncDao {
 
   Stream<List<SyncEntity>> watchSyncEntities();
 
+  Stream<List<SyncEntity>> watchSyncEntitiesWithError();
+
   TaskEither<Failure, List<SyncEntity>> getSyncEntities();
 
   TaskEither<Failure, SyncEntity> getSyncEntity(

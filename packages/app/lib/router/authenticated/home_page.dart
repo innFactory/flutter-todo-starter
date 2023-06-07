@@ -34,14 +34,15 @@ class HomePage extends HookConsumerWidget {
         return AppBar(
           title: Text(
             context.translate(
-                tabsRouter.activeIndex == 0 ? 'Todos' : 'Overview'),
+              tabsRouter.activeIndex == 0 ? 'Todos' : 'Sync Overview',
+            ),
           ),
         );
       },
       homeIndex: 0,
       routes: const [
         TodoRoute(),
-        OverviewRoute(),
+        SyncOverviewRoute(),
       ],
       bottomNavigationBuilder: (context, tabsRouter) {
         return DecoratedBox(
@@ -72,7 +73,7 @@ class HomePage extends HookConsumerWidget {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.view_list_outlined),
-                label: 'Overview',
+                label: 'Sync Overview',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.logout_outlined),

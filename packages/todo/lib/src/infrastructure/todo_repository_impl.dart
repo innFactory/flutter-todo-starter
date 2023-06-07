@@ -157,6 +157,33 @@ class TodoRepositoryImpl implements TodoRepository {
   }
 
   @override
+  TaskEither<Failure, Unit> revertChanges(int localId) {
+    return syncRepository.modifySyncEntity(
+      SyncEntityType.todo,
+      localId,
+      (entity) => getTodoById(TodoLocalId(localId), null).flatMap((r) {
+        if (r.remoteId == null) {
+          return todoDao.deleteByLocalIdHard(r.localId!);
+        }
+
+        return _resetToRemote(r.remoteId!, r.localId!);
+      }).map((r) => unit),
+    );
+  }
+
+  TaskEither<Failure, Todo> _resetToRemote(
+    TodoRemoteId remoteId,
+    TodoLocalId localId,
+  ) {
+    return todoApi.getTodoById(remoteId).flatMap(
+          (remoteTodo) => todoDao.replaceTodo(
+            remoteTodo.copyWith(localId: localId),
+            SyncStatus.synced,
+          ),
+        );
+  }
+
+  @override
   TaskEither<Failure, Unit> fetchFromRemote() {
     const identifier = TodoSyncIdentifier();
 
@@ -186,8 +213,8 @@ class TodoRepositoryImpl implements TodoRepository {
     TodoLocalId? localId,
     TodoRemoteId remoteId,
   ) {
-    return networkInfo.onlineOrFailure
-        .andThen(() => todoApi.getTodoById(remoteId))
+    return todoApi
+        .getTodoById(remoteId)
         .flatMap((todo) => todoDao.createOrUpdateFromRemote(todo, localId));
   }
 }

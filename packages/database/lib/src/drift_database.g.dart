@@ -670,9 +670,28 @@ class $SyncTableTable extends SyncTable
           type: DriftSqlType.dateTime,
           requiredDuringInsert: false,
           defaultValue: currentDateAndTime);
+  static const VerificationMeta _revertChangesMeta =
+      const VerificationMeta('revertChanges');
+  @override
+  late final GeneratedColumn<bool> revertChanges =
+      GeneratedColumn<bool>('revert_changes', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite: 'CHECK ("revert_changes" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }),
+          defaultValue: const Constant(false));
+  static const VerificationMeta _errorCodeMeta =
+      const VerificationMeta('errorCode');
+  @override
+  late final GeneratedColumn<String> errorCode = GeneratedColumn<String>(
+      'error_code', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [entityId, entityType, entityModifiedAt];
+      [entityId, entityType, entityModifiedAt, revertChanges, errorCode];
   @override
   String get aliasedName => _alias ?? 'sync';
   @override
@@ -695,6 +714,16 @@ class $SyncTableTable extends SyncTable
           entityModifiedAt.isAcceptableOrUnknown(
               data['entity_modified_at']!, _entityModifiedAtMeta));
     }
+    if (data.containsKey('revert_changes')) {
+      context.handle(
+          _revertChangesMeta,
+          revertChanges.isAcceptableOrUnknown(
+              data['revert_changes']!, _revertChangesMeta));
+    }
+    if (data.containsKey('error_code')) {
+      context.handle(_errorCodeMeta,
+          errorCode.isAcceptableOrUnknown(data['error_code']!, _errorCodeMeta));
+    }
     return context;
   }
 
@@ -711,6 +740,10 @@ class $SyncTableTable extends SyncTable
           .read(DriftSqlType.string, data['${effectivePrefix}entity_type'])!),
       entityModifiedAt: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}entity_modified_at'])!,
+      revertChanges: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}revert_changes'])!,
+      errorCode: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}error_code']),
     );
   }
 
@@ -728,10 +761,14 @@ class LocalSync extends DataClass implements Insertable<LocalSync> {
   final int entityId;
   final SyncEntityType entityType;
   final DateTime entityModifiedAt;
+  final bool revertChanges;
+  final String? errorCode;
   const LocalSync(
       {required this.entityId,
       required this.entityType,
-      required this.entityModifiedAt});
+      required this.entityModifiedAt,
+      required this.revertChanges,
+      this.errorCode});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -741,6 +778,10 @@ class LocalSync extends DataClass implements Insertable<LocalSync> {
       map['entity_type'] = Variable<String>(converter.toSql(entityType));
     }
     map['entity_modified_at'] = Variable<DateTime>(entityModifiedAt);
+    map['revert_changes'] = Variable<bool>(revertChanges);
+    if (!nullToAbsent || errorCode != null) {
+      map['error_code'] = Variable<String>(errorCode);
+    }
     return map;
   }
 
@@ -749,6 +790,10 @@ class LocalSync extends DataClass implements Insertable<LocalSync> {
       entityId: Value(entityId),
       entityType: Value(entityType),
       entityModifiedAt: Value(entityModifiedAt),
+      revertChanges: Value(revertChanges),
+      errorCode: errorCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(errorCode),
     );
   }
 
@@ -760,6 +805,8 @@ class LocalSync extends DataClass implements Insertable<LocalSync> {
       entityType: $SyncTableTable.$converterentityType
           .fromJson(serializer.fromJson<String>(json['entityType'])),
       entityModifiedAt: serializer.fromJson<DateTime>(json['entityModifiedAt']),
+      revertChanges: serializer.fromJson<bool>(json['revertChanges']),
+      errorCode: serializer.fromJson<String?>(json['errorCode']),
     );
   }
   @override
@@ -770,54 +817,71 @@ class LocalSync extends DataClass implements Insertable<LocalSync> {
       'entityType': serializer.toJson<String>(
           $SyncTableTable.$converterentityType.toJson(entityType)),
       'entityModifiedAt': serializer.toJson<DateTime>(entityModifiedAt),
+      'revertChanges': serializer.toJson<bool>(revertChanges),
+      'errorCode': serializer.toJson<String?>(errorCode),
     };
   }
 
   LocalSync copyWith(
           {int? entityId,
           SyncEntityType? entityType,
-          DateTime? entityModifiedAt}) =>
+          DateTime? entityModifiedAt,
+          bool? revertChanges,
+          Value<String?> errorCode = const Value.absent()}) =>
       LocalSync(
         entityId: entityId ?? this.entityId,
         entityType: entityType ?? this.entityType,
         entityModifiedAt: entityModifiedAt ?? this.entityModifiedAt,
+        revertChanges: revertChanges ?? this.revertChanges,
+        errorCode: errorCode.present ? errorCode.value : this.errorCode,
       );
   @override
   String toString() {
     return (StringBuffer('LocalSync(')
           ..write('entityId: $entityId, ')
           ..write('entityType: $entityType, ')
-          ..write('entityModifiedAt: $entityModifiedAt')
+          ..write('entityModifiedAt: $entityModifiedAt, ')
+          ..write('revertChanges: $revertChanges, ')
+          ..write('errorCode: $errorCode')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(entityId, entityType, entityModifiedAt);
+  int get hashCode => Object.hash(
+      entityId, entityType, entityModifiedAt, revertChanges, errorCode);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is LocalSync &&
           other.entityId == this.entityId &&
           other.entityType == this.entityType &&
-          other.entityModifiedAt == this.entityModifiedAt);
+          other.entityModifiedAt == this.entityModifiedAt &&
+          other.revertChanges == this.revertChanges &&
+          other.errorCode == this.errorCode);
 }
 
 class SyncTableCompanion extends UpdateCompanion<LocalSync> {
   final Value<int> entityId;
   final Value<SyncEntityType> entityType;
   final Value<DateTime> entityModifiedAt;
+  final Value<bool> revertChanges;
+  final Value<String?> errorCode;
   final Value<int> rowid;
   const SyncTableCompanion({
     this.entityId = const Value.absent(),
     this.entityType = const Value.absent(),
     this.entityModifiedAt = const Value.absent(),
+    this.revertChanges = const Value.absent(),
+    this.errorCode = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   SyncTableCompanion.insert({
     required int entityId,
     required SyncEntityType entityType,
     this.entityModifiedAt = const Value.absent(),
+    this.revertChanges = const Value.absent(),
+    this.errorCode = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : entityId = Value(entityId),
         entityType = Value(entityType);
@@ -825,12 +889,16 @@ class SyncTableCompanion extends UpdateCompanion<LocalSync> {
     Expression<int>? entityId,
     Expression<String>? entityType,
     Expression<DateTime>? entityModifiedAt,
+    Expression<bool>? revertChanges,
+    Expression<String>? errorCode,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (entityId != null) 'entity_id': entityId,
       if (entityType != null) 'entity_type': entityType,
       if (entityModifiedAt != null) 'entity_modified_at': entityModifiedAt,
+      if (revertChanges != null) 'revert_changes': revertChanges,
+      if (errorCode != null) 'error_code': errorCode,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -839,11 +907,15 @@ class SyncTableCompanion extends UpdateCompanion<LocalSync> {
       {Value<int>? entityId,
       Value<SyncEntityType>? entityType,
       Value<DateTime>? entityModifiedAt,
+      Value<bool>? revertChanges,
+      Value<String?>? errorCode,
       Value<int>? rowid}) {
     return SyncTableCompanion(
       entityId: entityId ?? this.entityId,
       entityType: entityType ?? this.entityType,
       entityModifiedAt: entityModifiedAt ?? this.entityModifiedAt,
+      revertChanges: revertChanges ?? this.revertChanges,
+      errorCode: errorCode ?? this.errorCode,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -861,6 +933,12 @@ class SyncTableCompanion extends UpdateCompanion<LocalSync> {
     if (entityModifiedAt.present) {
       map['entity_modified_at'] = Variable<DateTime>(entityModifiedAt.value);
     }
+    if (revertChanges.present) {
+      map['revert_changes'] = Variable<bool>(revertChanges.value);
+    }
+    if (errorCode.present) {
+      map['error_code'] = Variable<String>(errorCode.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -873,6 +951,8 @@ class SyncTableCompanion extends UpdateCompanion<LocalSync> {
           ..write('entityId: $entityId, ')
           ..write('entityType: $entityType, ')
           ..write('entityModifiedAt: $entityModifiedAt, ')
+          ..write('revertChanges: $revertChanges, ')
+          ..write('errorCode: $errorCode, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

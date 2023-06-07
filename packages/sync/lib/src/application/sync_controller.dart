@@ -39,13 +39,28 @@ class SyncController {
 
   TaskEither<Failure, Unit> pushChangesToRemote() {
     return _lock.synchronized(
-      () => syncRepository.getSyncEntities().flatMap(
-            (syncEntities) => TaskEither.sequenceList<Failure, Unit>(
+      () => syncRepository
+          .getSyncEntities()
+          .flatMap(
+            (syncEntities) => TaskEither.sequenceList(
               syncEntities
+                  .where(
+                    (element) =>
+                        element.revertChanges == false &&
+                        element.errorCode == null,
+                  )
                   .map((entity) => _syncChangesForEntityType(entity))
                   .toList(),
-            ).map((r) => unit),
-          ),
+            ).andThen(
+              () => TaskEither.sequenceList(
+                syncEntities
+                    .where((element) => element.revertChanges == true)
+                    .map((entity) => _revertChanges(entity))
+                    .toList(),
+              ),
+            ),
+          )
+          .map((r) => unit),
     );
   }
 
@@ -53,6 +68,23 @@ class SyncController {
     switch (entity.entityType) {
       case SyncEntityType.todo:
         return todoRepository.syncToRemote(entity.entityLocalId);
+    }
+  }
+
+  TaskEither<Failure, Unit> toggleRevertChange(SyncEntity entity) {
+    return syncRepository
+        .toggleRevertChangeForSyncEntity(entity)
+        .map((_) => unit);
+  }
+
+  TaskEither<Failure, Unit> retryChange(SyncEntity entity) {
+    return syncRepository.retryChangeForSyncEntity(entity).map((_) => unit);
+  }
+
+  TaskEither<Failure, Unit> _revertChanges(SyncEntity entity) {
+    switch (entity.entityType) {
+      case SyncEntityType.todo:
+        return todoRepository.revertChanges(entity.entityLocalId);
     }
   }
 

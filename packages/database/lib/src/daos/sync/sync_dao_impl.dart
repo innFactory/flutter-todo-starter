@@ -63,6 +63,15 @@ class SyncDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
         );
   }
 
+  @override
+  Stream<List<SyncEntity>> watchSyncEntitiesWithError() {
+    return (tableInfo.select()..where((t) => t.errorCode.isNotNull()))
+        .watch()
+        .map(
+          (event) => event.map(SyncMapper.fromLocal).toList(),
+        );
+  }
+
   TableInfo<SyncTable, LocalSync> get tableInfo => attachedDatabase.syncTable;
 
   @override

@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:database/database.dart';
 import 'package:database/src/daos/todo/todo_dao_impl.dart';
+import 'package:sync/sync.dart';
 import 'package:todo/todo.dart';
 
 abstract interface class TodoDao {
@@ -29,6 +30,8 @@ abstract interface class TodoDao {
     TodoLocalId? localId,
     TodoRemoteId? remoteId,
   });
+
+  TaskEither<Failure, Todo> replaceTodo(Todo todo, SyncStatus syncStatus);
 
   TaskEither<Failure, int> deleteByLocalIdHard(TodoLocalId localId);
 

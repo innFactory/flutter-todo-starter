@@ -7,6 +7,8 @@ extension SyncMapper on Never {
       entityId: Value(entity.entityLocalId),
       entityModifiedAt: Value(entity.modifiedAt),
       entityType: Value(entity.entityType),
+      revertChanges: Value(entity.revertChanges),
+      errorCode: Value(entity.errorCode),
     );
   }
 
@@ -15,6 +17,8 @@ extension SyncMapper on Never {
       entityLocalId: local.entityId,
       entityType: local.entityType,
       modifiedAt: local.entityModifiedAt,
+      revertChanges: local.revertChanges,
+      errorCode: local.errorCode,
     );
   }
 }

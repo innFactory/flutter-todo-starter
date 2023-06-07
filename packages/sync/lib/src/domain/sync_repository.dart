@@ -5,6 +5,9 @@ abstract interface class SyncRepository {
   /// Watch all entities requiring synchronisation.
   Stream<List<SyncEntity>> watchSyncEntities();
 
+  /// Watch all entities requiring synchronisation with an error.
+  Stream<List<SyncEntity>> watchSyncEntitiesWithError();
+
   /// Get all entities requiring synchronisation.
   @useResult
   TaskEither<Failure, List<SyncEntity>> getSyncEntities();
@@ -15,4 +18,10 @@ abstract interface class SyncRepository {
     int localId,
     TaskEither<Failure, Unit> Function(SyncEntity entity) process,
   );
+
+  @useResult
+  TaskEither<Failure, Unit> toggleRevertChangeForSyncEntity(SyncEntity entity);
+
+  @useResult
+  TaskEither<Failure, Unit> retryChangeForSyncEntity(SyncEntity entity);
 }

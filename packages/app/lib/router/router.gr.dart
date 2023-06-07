@@ -44,12 +44,6 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AuthRouterPage(),
       );
     },
-    OverviewRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const OverviewPage(),
-      );
-    },
     TodoEditRoute.name: (routeData) {
       final args = routeData.argsAs<TodoEditRouteArgs>(
           orElse: () => const TodoEditRouteArgs());
@@ -90,6 +84,12 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const SplashPage(),
+      );
+    },
+    SyncOverviewRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SyncOverviewPage(),
       );
     },
     ...AdminUtilsModule().pagesMap,
@@ -171,20 +171,6 @@ class AuthRouter extends PageRouteInfo<void> {
         );
 
   static const String name = 'AuthRouter';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [OverviewPage]
-class OverviewRoute extends PageRouteInfo<void> {
-  const OverviewRoute({List<PageRouteInfo>? children})
-      : super(
-          OverviewRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'OverviewRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -298,6 +284,20 @@ class SplashRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'SplashRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SyncOverviewPage]
+class SyncOverviewRoute extends PageRouteInfo<void> {
+  const SyncOverviewRoute({List<PageRouteInfo>? children})
+      : super(
+          SyncOverviewRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SyncOverviewRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

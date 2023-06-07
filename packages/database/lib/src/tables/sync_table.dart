@@ -10,6 +10,9 @@ class SyncTable extends Table {
   TextColumn get entityType => textEnum<SyncEntityType>()();
   DateTimeColumn get entityModifiedAt =>
       dateTime().withDefault(currentDateAndTime)();
+  BoolColumn get revertChanges =>
+      boolean().withDefault(const Constant(false))();
+  TextColumn get errorCode => text().nullable()();
 
   @override
   Set<Column<Object>>? get primaryKey => {entityId, entityType};
