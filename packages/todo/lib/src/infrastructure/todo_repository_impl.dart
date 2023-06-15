@@ -21,7 +21,8 @@ class TodoRepositoryImpl implements TodoRepository {
   final TodoDao todoDao;
 
   @override
-  Stream<List<Todo>> watchTodos() => todoDao.watchTodos();
+  Stream<List<Todo>> watchTodos({bool includeSoftDeleted = false}) =>
+      todoDao.watchTodos(includeSoftDeleted: includeSoftDeleted);
 
   @override
   TaskEither<Failure, List<Todo>> getTodos() => todoDao.getTodos();
@@ -198,15 +199,14 @@ class TodoRepositoryImpl implements TodoRepository {
   }
 
   TaskEither<Failure, Unit> _fetchFromRemote(DateTime? timeStamp) {
-    return todoApi
-        .getTodosSync(timeStamp)
-        .flatMap(
-          (response) => TaskEither.traverseList(
-            response.todos,
-            (todo) => todoDao.createOrUpdateFromRemote(todo, null),
-          ),
-        )
-        .map((r) => unit);
+    return todoApi.getTodosSync(timeStamp).flatMap(
+      (response) {
+        return TaskEither.traverseList(
+          response.todos,
+          (todo) => todoDao.createOrUpdateFromRemote(todo, null),
+        );
+      },
+    ).map((r) => unit);
   }
 
   TaskEither<Failure, Todo> _fetchByIdFromRemote(

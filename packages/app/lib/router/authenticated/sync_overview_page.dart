@@ -11,7 +11,8 @@ class SyncOverviewPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final syncEntities = ref.watch(syncEntityStreamProvider).valueOrNull ?? [];
-    final todos = ref.watch(todoStreamProvider).valueOrNull ?? [];
+    final todos =
+        ref.watch(todoWithSoftdeletedStreamProvider).valueOrNull ?? [];
     final format = DateFormat('dd.MM.yyyy HH:mm');
 
     final todosWithOpenSync = syncEntities

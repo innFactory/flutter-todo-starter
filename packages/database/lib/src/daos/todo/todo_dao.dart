@@ -17,7 +17,7 @@ abstract interface class TodoDao {
     TodoLocalId? localId,
   );
 
-  Stream<List<Todo>> watchTodos();
+  Stream<List<Todo>> watchTodos({bool includeSoftDeleted = false});
 
   Stream<Either<Failure, Todo>> watchTodoById({
     TodoLocalId? localId,

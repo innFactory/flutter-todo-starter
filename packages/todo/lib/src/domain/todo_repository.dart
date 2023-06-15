@@ -5,7 +5,9 @@ abstract interface class TodoRepository {
   @useResult
   TaskEither<Failure, Todo> createOrUpdateTodo(Todo todo);
 
-  Stream<List<Todo>> watchTodos();
+  Stream<List<Todo>> watchTodos({
+    bool includeSoftDeleted = false,
+  });
 
   Stream<Either<Failure, Todo>> watchTodoById(
     TodoLocalId localId,

@@ -129,8 +129,14 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
   }
 
   @override
-  Stream<List<Todo>> watchTodos() {
+  Stream<List<Todo>> watchTodos({bool includeSoftDeleted = false}) {
     try {
+      if (includeSoftDeleted) {
+        return select(tableInfo)
+            .watch()
+            .map((event) => event.map(TodoMapper.fromLocal).toList());
+      }
+
       return (select(tableInfo)
             ..where(
               (tbl) => tbl.localSyncStatus.isNotValue(SyncStatus.deleted.name),
