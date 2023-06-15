@@ -68,6 +68,43 @@ flutter run --flavor development --target lib/main_development.dart
 
 > Note: The mocked sign in credentials are `email` and `password`.
 
+
+## Project structure
+
+Generally the project consists of the following packages.
+
+### **app** (`packages/app`)
+
+This is the entry point for launching the app and contains the ui pages and routing.
+
+### **core** (`packages/core`)
+
+The core package contains the EnvironmentConfig, logging and utility functions used in all packages, etc. It also acts as a dependency core, providing essential packages with centrally defined versions.
+
+### **database** (`packages/database`, also referenced as "local")
+
+The database package contains the database and the corresponding local dtos, tables and daos.
+
+### **api-client** (`packages/api-client`)
+
+The api client package contains a generated api client, which processes the basic network requests and generates the corresponding remote dtos.
+
+### **api** (`packages/api`, also referenced as "remote")
+
+The api package references the generated api client and acts as a proxy which injects e.g. the auth token and provides wrapper functions for network requests for each feature.
+
+### **feature packages** (e.g. `packages/todo`)
+
+Each feature has its own package, which is divided into the following sections:
+
+- application: The application folder contains the logic for the ui, e.g. controller and usecases, as well as forms
+- domain: The domain folder contains models,  repositories, provider and widgets
+- infrastructure: The infrastructure folder contains the repository implementation and mapper functions
+
+### Functional Programming
+
+The Project uses functional programming patterns from [fpdart](https://pub.dev/packages/fpdart).
+
 ### Backend
 
 This repository also contains a simple backend service to store the todos. Get it running by following the instructions in the [backend README](./backend/README.md).

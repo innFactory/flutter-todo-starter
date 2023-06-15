@@ -39,7 +39,7 @@ cd .bin
  ./.bin/runFor.sh -n Name
  ```
 
-- Remove docker container volume mounted at __./local-runner/postigs__:
+- Remove docker container volume mounted at __./.bin/postigs__:
 
 ```bash
 ./.bin/runFor.sh -r
