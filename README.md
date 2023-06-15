@@ -1,4 +1,6 @@
-# Flutter Todo Starter
+
+
+# innFactory Flutter Todo Starter <img src="./docs/innFactoryIcon.svg" width="50" height="50">
 
 This project is a starting point for scalable and complex flutter applications.
 
