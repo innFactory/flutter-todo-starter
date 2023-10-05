@@ -32,7 +32,7 @@ This will ensure that running any `flutter` or `dart` command always uses the pr
 Additionally since the project uses an architecture made up of multiple packages, we use [melos](https://melos.invertase.dev/~melos-latest) to manage the packages. To install the correct version of melos and initialize the project run the following command:
 
 ```bash
-flutter pub get && flutter pub run init
+flutter pub get
 ```
 
 We also recommend you setup an alias for working with melos:
@@ -62,10 +62,10 @@ The app has three environments: `development`, `staging` and `production`. But o
 Using VSCode all environments are configured as launch configurations. If you need to run the app from the command line you can use the following command:
 
 ```bash
-flutter run --flavor <environment> --target lib/main_<environment>.dart
+flutter run --flavor <environment> --target packages/app/lib/main_<environment>.dart
 
 # Example
-flutter run --flavor development --target lib/main_development.dart
+flutter run --flavor development --target packages/app/lib/main_development.dart
 ```
 
 > Note: The mocked sign in credentials are `email` and `password`.
