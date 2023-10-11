@@ -8,4 +8,4 @@ dependencies:
   core:
     path: ../core
 
-  shared_preferences: ^2.1.0
+  shared_preferences: ^2.2.2

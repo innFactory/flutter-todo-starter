@@ -126,9 +126,10 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
 }
 
 /// @nodoc
-abstract class _$$_TodoCopyWith<$Res> implements $TodoCopyWith<$Res> {
-  factory _$$_TodoCopyWith(_$_Todo value, $Res Function(_$_Todo) then) =
-      __$$_TodoCopyWithImpl<$Res>;
+abstract class _$$TodoImplCopyWith<$Res> implements $TodoCopyWith<$Res> {
+  factory _$$TodoImplCopyWith(
+          _$TodoImpl value, $Res Function(_$TodoImpl) then) =
+      __$$TodoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -146,9 +147,10 @@ abstract class _$$_TodoCopyWith<$Res> implements $TodoCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res, _$_Todo>
-    implements _$$_TodoCopyWith<$Res> {
-  __$$_TodoCopyWithImpl(_$_Todo _value, $Res Function(_$_Todo) _then)
+class __$$TodoImplCopyWithImpl<$Res>
+    extends _$TodoCopyWithImpl<$Res, _$TodoImpl>
+    implements _$$TodoImplCopyWith<$Res> {
+  __$$TodoImplCopyWithImpl(_$TodoImpl _value, $Res Function(_$TodoImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -166,7 +168,7 @@ class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res, _$_Todo>
     Object? updatedAt = null,
     Object? syncStatus = null,
   }) {
-    return _then(_$_Todo(
+    return _then(_$TodoImpl(
       localId: freezed == localId
           ? _value.localId
           : localId // ignore: cast_nullable_to_non_nullable
@@ -217,8 +219,8 @@ class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res, _$_Todo>
 
 /// @nodoc
 
-class _$_Todo implements _Todo {
-  const _$_Todo(
+class _$TodoImpl implements _Todo {
+  const _$TodoImpl(
       {required this.localId,
       required this.remoteId,
       required this.title,
@@ -270,7 +272,7 @@ class _$_Todo implements _Todo {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Todo &&
+            other is _$TodoImpl &&
             (identical(other.localId, localId) || other.localId == localId) &&
             (identical(other.remoteId, remoteId) ||
                 other.remoteId == remoteId) &&
@@ -310,8 +312,8 @@ class _$_Todo implements _Todo {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_TodoCopyWith<_$_Todo> get copyWith =>
-      __$$_TodoCopyWithImpl<_$_Todo>(this, _$identity);
+  _$$TodoImplCopyWith<_$TodoImpl> get copyWith =>
+      __$$TodoImplCopyWithImpl<_$TodoImpl>(this, _$identity);
 }
 
 abstract class _Todo implements Todo {
@@ -326,7 +328,7 @@ abstract class _Todo implements Todo {
       required final TodoRemoteId? remoteParentId,
       required final DateTime createdAt,
       required final DateTime updatedAt,
-      required final SyncStatus syncStatus}) = _$_Todo;
+      required final SyncStatus syncStatus}) = _$TodoImpl;
 
   @override
   TodoLocalId? get localId;
@@ -352,5 +354,6 @@ abstract class _Todo implements Todo {
   SyncStatus get syncStatus;
   @override
   @JsonKey(ignore: true)
-  _$$_TodoCopyWith<_$_Todo> get copyWith => throw _privateConstructorUsedError;
+  _$$TodoImplCopyWith<_$TodoImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

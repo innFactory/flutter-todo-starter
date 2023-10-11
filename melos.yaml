@@ -1,49 +1,65 @@
-name: fluter-todo-starter
+name: flutter_todo_starter
+
+packages:
+  - "packages/**"
 
 sdkPath: .fvm/flutter_sdk
 
-packages:
-  - packages/*
+command:
+  bootstrap:
+    runPubGetInParallel: true
+    hooks:
+      post: melos run codegen --no-select
 
 scripts:
-  init:
+  icons:
+    run: sh tools/icons.sh
+    packageFilters:
+      scope: app
+
+  lint:all:
+    run: melos run analyze && melos run format
+    description: Run all static analysis checks
+
+  format:
+    run: melos exec -c 6 --fail-fast -- flutter format .
+  analyze:
+    run: melos exec -c 3 flutter analyze
+    description: Run analyze for Flutter packages in this project
+
+  test:
+    run: melos run test:selective --no-select
+    description: Run all Flutter tests in this project.
+  test:selective:
     run: |
-      melos bootstrap
-      melos run codegen --no-select
-
-  build:
-    exec: flutter pub run build_runner build --delete-conflicting-outputs
-    select-package:
-      depends-on: build_runner
-
-  build:watch:
-    exec: flutter pub run build_runner watch --delete-conflicting-outputs
-    select-package:
-      depends-on: build_runner
-
-  check:format:
-    run: melos exec -c 5 --fail-fast -- dart format --set-exit-if-changed .
-
-  check:analyze:
-    run: melos exec -c 5 --fail-fast -- flutter analyze
-
-  flavor:build:
-    exec: flutter pub run flutter_flavorizr
-    select-package:
-      scope: app
-
-  flavor:icons:
-    exec: dart run tools/icons.dart
-    select-package:
-      scope: app
+      melos exec -c 6 --fail-fast -- \
+        "flutter test --no-pub --reporter compact --no-test-assets"
+    description: Run `flutter test` for a specific package.
+    packageFilters:
+      dirExists:
+        - test
+      ignore:
+        - "*example*"
 
   clean:
     run: melos exec -c 6 -- flutter clean
     description: Clean Flutter packages
 
+  format:check:
+    run: melos exec -c 6 --fail-fast -- dart format --set-exit-if-changed .
   codegen:
     run: |
       melos exec -c 6 --depends-on="build_runner" -- flutter pub run build_runner build --delete-conflicting-outputs
     description: Run code generation using build_runner
-    select-package:
-      depends-on: "build_runner"
+    packageFilters:
+      dependsOn: "build_runner"
+
+  codegen:selective:
+    run: melos exec -c 1 --depends-on="build_runner" -- flutter pub run build_runner build --delete-conflicting-outputs
+    description: Run code generation using build_runner in a specific package
+    packageFilters:
+      dependsOn: "build_runner"
+
+  upgrade:
+    run: melos exec -c 6 -- flutter pub upgrade
+    description: Upgrade Flutter packages

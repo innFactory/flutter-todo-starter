@@ -1,34 +1,64 @@
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
-/// Log a message at level [Level.verbose].
+/// Log a message at level [Level.trace].
 void logV(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-  _logger.v(message, error, stackTrace);
+  _logger.t(
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    time: DateTime.now(),
+  );
 }
 
 /// Log a message at level [Level.debug].
 void logD(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-  _logger.d(message, error, stackTrace);
+  _logger.d(
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    time: DateTime.now(),
+  );
 }
 
 /// Log a message at level [Level.info].
 void logI(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-  _logger.i(message, error, stackTrace);
+  _logger.i(
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    time: DateTime.now(),
+  );
 }
 
 /// Log a message at level [Level.warning].
 void logW(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-  _logger.w(message, error, stackTrace);
+  _logger.w(
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    time: DateTime.now(),
+  );
 }
 
 /// Log a message at level [Level.error].
 void logE(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-  _logger.e(message, error, stackTrace);
+  _logger.e(
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    time: DateTime.now(),
+  );
 }
 
-/// Log a message at level [Level.wtf].
+/// Log a message at level [Level.fatal].
 void logWtf(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-  _logger.wtf(message, error, stackTrace);
+  _logger.f(
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    time: DateTime.now(),
+  );
 }
 
 final _logger = Logger(
@@ -75,7 +105,7 @@ class _CustomPrettyPrinter extends PrettyPrinter {
   final _discardPackages = ['logger', 'fpdart'];
 
   @override
-  String? formatStackTrace(StackTrace? stackTrace, int methodCount) {
+  String? formatStackTrace(StackTrace? stackTrace, int? methodCount) {
     var lines = stackTrace.toString().split('\n');
     if (stackTraceBeginIndex > 0 && stackTraceBeginIndex < lines.length - 1) {
       lines = lines.sublist(stackTraceBeginIndex);

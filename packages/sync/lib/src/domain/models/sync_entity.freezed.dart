@@ -95,11 +95,11 @@ class _$SyncEntityCopyWithImpl<$Res, $Val extends SyncEntity>
 }
 
 /// @nodoc
-abstract class _$$_SyncEntityCopyWith<$Res>
+abstract class _$$SyncEntityImplCopyWith<$Res>
     implements $SyncEntityCopyWith<$Res> {
-  factory _$$_SyncEntityCopyWith(
-          _$_SyncEntity value, $Res Function(_$_SyncEntity) then) =
-      __$$_SyncEntityCopyWithImpl<$Res>;
+  factory _$$SyncEntityImplCopyWith(
+          _$SyncEntityImpl value, $Res Function(_$SyncEntityImpl) then) =
+      __$$SyncEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -111,11 +111,11 @@ abstract class _$$_SyncEntityCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_SyncEntityCopyWithImpl<$Res>
-    extends _$SyncEntityCopyWithImpl<$Res, _$_SyncEntity>
-    implements _$$_SyncEntityCopyWith<$Res> {
-  __$$_SyncEntityCopyWithImpl(
-      _$_SyncEntity _value, $Res Function(_$_SyncEntity) _then)
+class __$$SyncEntityImplCopyWithImpl<$Res>
+    extends _$SyncEntityCopyWithImpl<$Res, _$SyncEntityImpl>
+    implements _$$SyncEntityImplCopyWith<$Res> {
+  __$$SyncEntityImplCopyWithImpl(
+      _$SyncEntityImpl _value, $Res Function(_$SyncEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -127,7 +127,7 @@ class __$$_SyncEntityCopyWithImpl<$Res>
     Object? errorCode = freezed,
     Object? revertChanges = null,
   }) {
-    return _then(_$_SyncEntity(
+    return _then(_$SyncEntityImpl(
       entityLocalId: null == entityLocalId
           ? _value.entityLocalId
           : entityLocalId // ignore: cast_nullable_to_non_nullable
@@ -154,8 +154,8 @@ class __$$_SyncEntityCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_SyncEntity implements _SyncEntity {
-  _$_SyncEntity(
+class _$SyncEntityImpl implements _SyncEntity {
+  _$SyncEntityImpl(
       {required this.entityLocalId,
       required this.entityType,
       required this.modifiedAt,
@@ -191,7 +191,7 @@ class _$_SyncEntity implements _SyncEntity {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SyncEntity &&
+            other is _$SyncEntityImpl &&
             (identical(other.entityLocalId, entityLocalId) ||
                 other.entityLocalId == entityLocalId) &&
             (identical(other.entityType, entityType) ||
@@ -211,8 +211,8 @@ class _$_SyncEntity implements _SyncEntity {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SyncEntityCopyWith<_$_SyncEntity> get copyWith =>
-      __$$_SyncEntityCopyWithImpl<_$_SyncEntity>(this, _$identity);
+  _$$SyncEntityImplCopyWith<_$SyncEntityImpl> get copyWith =>
+      __$$SyncEntityImplCopyWithImpl<_$SyncEntityImpl>(this, _$identity);
 }
 
 abstract class _SyncEntity implements SyncEntity {
@@ -221,7 +221,7 @@ abstract class _SyncEntity implements SyncEntity {
       required final SyncEntityType entityType,
       required final DateTime modifiedAt,
       required final String? errorCode,
-      required final bool revertChanges}) = _$_SyncEntity;
+      required final bool revertChanges}) = _$SyncEntityImpl;
 
   @override
 
@@ -245,6 +245,6 @@ abstract class _SyncEntity implements SyncEntity {
   bool get revertChanges;
   @override
   @JsonKey(ignore: true)
-  _$$_SyncEntityCopyWith<_$_SyncEntity> get copyWith =>
+  _$$SyncEntityImplCopyWith<_$SyncEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
