@@ -3,7 +3,7 @@ publish_to: none
 
 environment:
   sdk: ">=3.0.0"
-  flutter: ">=3.10.5"
+  flutter: ">=3.13.6"
 
 dependencies:
   flutter:
@@ -15,8 +15,8 @@ dependencies:
     git:
       url: git@github.com:innFactory/reactive_forms.git
       ref: 3fe9b4d1ada3169498f0244c9d4c251f01dcb325
-  freezed_annotation: ^2.2.0
-  flutter_hooks: ^0.18.6
+  freezed_annotation: ^2.4.1
+  flutter_hooks: ^0.20.3
   keyboard_actions: ^4.2.0
 
 dev_dependencies:

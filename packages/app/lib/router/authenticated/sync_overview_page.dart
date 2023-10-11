@@ -119,7 +119,21 @@ class SyncOverviewPage extends ConsumerWidget {
                                   ),
                                 ],
                               )
-                            : Text(format.format(syncEntity.modifiedAt)),
+                            : Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(format.format(syncEntity.modifiedAt)),
+                                  IconButton(
+                                    iconSize: 20,
+                                    padding: EdgeInsets.zero,
+                                    onPressed: () => ref
+                                        .read(syncControllerProvider)
+                                        .toggleRevertChange(syncEntity)
+                                        .run(),
+                                    icon: const Icon(Icons.undo),
+                                  ),
+                                ],
+                              ),
                   ),
                 );
               },

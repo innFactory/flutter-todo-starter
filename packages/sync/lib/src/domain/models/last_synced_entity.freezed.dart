@@ -65,22 +65,22 @@ class _$LastSyncedEntityCopyWithImpl<$Res, $Val extends LastSyncedEntity>
 }
 
 /// @nodoc
-abstract class _$$_LastSyncedEntityCopyWith<$Res>
+abstract class _$$LastSyncedEntityImplCopyWith<$Res>
     implements $LastSyncedEntityCopyWith<$Res> {
-  factory _$$_LastSyncedEntityCopyWith(
-          _$_LastSyncedEntity value, $Res Function(_$_LastSyncedEntity) then) =
-      __$$_LastSyncedEntityCopyWithImpl<$Res>;
+  factory _$$LastSyncedEntityImplCopyWith(_$LastSyncedEntityImpl value,
+          $Res Function(_$LastSyncedEntityImpl) then) =
+      __$$LastSyncedEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({LastSyncedEntityId? localId, DateTime? lastSyncedAt});
 }
 
 /// @nodoc
-class __$$_LastSyncedEntityCopyWithImpl<$Res>
-    extends _$LastSyncedEntityCopyWithImpl<$Res, _$_LastSyncedEntity>
-    implements _$$_LastSyncedEntityCopyWith<$Res> {
-  __$$_LastSyncedEntityCopyWithImpl(
-      _$_LastSyncedEntity _value, $Res Function(_$_LastSyncedEntity) _then)
+class __$$LastSyncedEntityImplCopyWithImpl<$Res>
+    extends _$LastSyncedEntityCopyWithImpl<$Res, _$LastSyncedEntityImpl>
+    implements _$$LastSyncedEntityImplCopyWith<$Res> {
+  __$$LastSyncedEntityImplCopyWithImpl(_$LastSyncedEntityImpl _value,
+      $Res Function(_$LastSyncedEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -89,7 +89,7 @@ class __$$_LastSyncedEntityCopyWithImpl<$Res>
     Object? localId = freezed,
     Object? lastSyncedAt = freezed,
   }) {
-    return _then(_$_LastSyncedEntity(
+    return _then(_$LastSyncedEntityImpl(
       localId: freezed == localId
           ? _value.localId
           : localId // ignore: cast_nullable_to_non_nullable
@@ -104,8 +104,8 @@ class __$$_LastSyncedEntityCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_LastSyncedEntity implements _LastSyncedEntity {
-  _$_LastSyncedEntity({this.localId, required this.lastSyncedAt});
+class _$LastSyncedEntityImpl implements _LastSyncedEntity {
+  _$LastSyncedEntityImpl({this.localId, required this.lastSyncedAt});
 
   @override
   final LastSyncedEntityId? localId;
@@ -123,7 +123,7 @@ class _$_LastSyncedEntity implements _LastSyncedEntity {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_LastSyncedEntity &&
+            other is _$LastSyncedEntityImpl &&
             (identical(other.localId, localId) || other.localId == localId) &&
             (identical(other.lastSyncedAt, lastSyncedAt) ||
                 other.lastSyncedAt == lastSyncedAt));
@@ -135,14 +135,15 @@ class _$_LastSyncedEntity implements _LastSyncedEntity {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_LastSyncedEntityCopyWith<_$_LastSyncedEntity> get copyWith =>
-      __$$_LastSyncedEntityCopyWithImpl<_$_LastSyncedEntity>(this, _$identity);
+  _$$LastSyncedEntityImplCopyWith<_$LastSyncedEntityImpl> get copyWith =>
+      __$$LastSyncedEntityImplCopyWithImpl<_$LastSyncedEntityImpl>(
+          this, _$identity);
 }
 
 abstract class _LastSyncedEntity implements LastSyncedEntity {
   factory _LastSyncedEntity(
       {final LastSyncedEntityId? localId,
-      required final DateTime? lastSyncedAt}) = _$_LastSyncedEntity;
+      required final DateTime? lastSyncedAt}) = _$LastSyncedEntityImpl;
 
   @override
   LastSyncedEntityId? get localId;
@@ -152,6 +153,6 @@ abstract class _LastSyncedEntity implements LastSyncedEntity {
   DateTime? get lastSyncedAt;
   @override
   @JsonKey(ignore: true)
-  _$$_LastSyncedEntityCopyWith<_$_LastSyncedEntity> get copyWith =>
+  _$$LastSyncedEntityImplCopyWith<_$LastSyncedEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

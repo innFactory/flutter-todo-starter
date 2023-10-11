@@ -41,15 +41,12 @@ class $TodoTableTable extends TodoTable
   static const VerificationMeta _isCompletedMeta =
       const VerificationMeta('isCompleted');
   @override
-  late final GeneratedColumn<bool> isCompleted =
-      GeneratedColumn<bool>('is_completed', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: true,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("is_completed" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }));
+  late final GeneratedColumn<bool> isCompleted = GeneratedColumn<bool>(
+      'is_completed', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_completed" IN (0, 1))'));
   static const VerificationMeta _localParentIdMeta =
       const VerificationMeta('localParentId');
   @override
@@ -123,9 +120,10 @@ class $TodoTableTable extends TodoTable
         localSyncStatus
       ];
   @override
-  String get aliasedName => _alias ?? 'todo';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'todo';
+  String get actualTableName => $name;
+  static const String $name = 'todo';
   @override
   VerificationContext validateIntegrity(Insertable<LocalTodo> instance,
       {bool isInserting = false}) {
@@ -673,16 +671,13 @@ class $SyncTableTable extends SyncTable
   static const VerificationMeta _revertChangesMeta =
       const VerificationMeta('revertChanges');
   @override
-  late final GeneratedColumn<bool> revertChanges =
-      GeneratedColumn<bool>('revert_changes', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("revert_changes" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(false));
+  late final GeneratedColumn<bool> revertChanges = GeneratedColumn<bool>(
+      'revert_changes', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("revert_changes" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _errorCodeMeta =
       const VerificationMeta('errorCode');
   @override
@@ -693,9 +688,10 @@ class $SyncTableTable extends SyncTable
   List<GeneratedColumn> get $columns =>
       [entityId, entityType, entityModifiedAt, revertChanges, errorCode];
   @override
-  String get aliasedName => _alias ?? 'sync';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'sync';
+  String get actualTableName => $name;
+  static const String $name = 'sync';
   @override
   VerificationContext validateIntegrity(Insertable<LocalSync> instance,
       {bool isInserting = false}) {
@@ -992,9 +988,10 @@ class $LastSyncedTableTable extends LastSyncedTable
   @override
   List<GeneratedColumn> get $columns => [localId, lastSyncedAt, syncIdentifier];
   @override
-  String get aliasedName => _alias ?? 'last_synced';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'last_synced';
+  String get actualTableName => $name;
+  static const String $name = 'last_synced';
   @override
   VerificationContext validateIntegrity(Insertable<LocalLastSynced> instance,
       {bool isInserting = false}) {
