@@ -1,19 +1,23 @@
 import 'package:app/auth/application/sign_in_form_controller.dart';
+import 'package:auth/auth.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:forms/forms.dart';
 
 class SignInFormView extends HookConsumerWidget {
-  const SignInFormView({super.key});
+  const SignInFormView({super.key, required this.onLoginSuccess});
+
+  final VoidCallback onLoginSuccess;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final maybeAuthError = useState<AuthFailure?>(null);
+    final maybeAuthError = useState<Failure?>(null);
 
     return ReactiveFormView<SignInFormModel, SignInForm>(
       provider: signInFormControllerProvider,
       focusBuilder: (form) => [form.emailControl, form.passwordControl],
-      onSubmitFailure: (value) => maybeAuthError.value = value as AuthFailure,
+      onSubmitFailure: (value) => maybeAuthError.value = value,
+      onSubmitSuccess: (_) => onLoginSuccess(),
       builder: (formState) {
         return Padding(
           padding: const EdgeInsets.all(20),
@@ -34,11 +38,16 @@ class SignInFormView extends HookConsumerWidget {
                 ),
                 obscureText: true,
               ),
-              if (maybeAuthError.value != null)
+              if (maybeAuthError.value != null) ...[
                 Text(
-                  maybeAuthError.value!.translate(I18n.of(context)),
+                  switch (maybeAuthError.value!) {
+                    InvalidCredentialsFailure() => 'Invalid Credentials',
+                    _ => 'Unknown Error',
+                  },
                   style: const TextStyle(color: Colors.red),
                 ),
+                const SizedBox(height: 20),
+              ],
               ElevatedButton(
                 onPressed: () =>
                     ref.read(signInFormControllerProvider.notifier).submit(),

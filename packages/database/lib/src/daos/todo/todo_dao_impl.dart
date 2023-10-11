@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:database/database.dart';
+import 'package:database/src/common/drift_failure.dart';
 import 'package:database/src/common/utils.dart';
 import 'package:database/src/tables/todo_table.dart';
 import 'package:sync/sync.dart';
@@ -109,7 +110,7 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     TodoRemoteId? remoteId,
   }) {
     if (localId == null && remoteId == null) {
-      return tLeft(Failures.notFound);
+      return tLeft(const NotFoundFailure());
     }
 
     return runTransaction(
@@ -248,7 +249,7 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
     TodoRemoteId? remoteId,
   }) {
     if (localId == null && remoteId == null) {
-      return Stream.value(left(Failures.notFound));
+      return Stream.value(left(const NotFoundFailure()));
     }
 
     try {
@@ -262,11 +263,11 @@ class TodoDaoImpl extends DatabaseAccessor<DriftLocalDatabase>
           .map(
             (event) => Either.fromNullable(
               event,
-              () => Failures.notFound,
+              NotFoundFailure.new,
             ).map(TodoMapper.fromLocal),
           );
     } catch (e) {
-      return Stream.value(left(Failures.database));
+      return Stream.value(left(DriftFailure(e)));
     }
   }
 

@@ -1,45 +1,37 @@
 import 'dart:async';
 
-import 'package:auth/src/model/auth_user.dart';
-import 'package:auth/src/repository/auth_repository.dart';
+import 'package:auth/auth.dart';
 import 'package:core/core.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-typedef SharedPreferencesBuilder = FutureOr<SharedPreferences> Function();
+import 'package:kv_store/kv_store.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
-    required SharedPreferencesBuilder sharedPreferences,
-  }) : _sharedPreferences = sharedPreferences;
+    KVStore kvStore = const SimpleKVStore(),
+  }) : _kvStore = kvStore;
 
   @visibleForTesting
   static const prefKeyPrefix = 'auth_';
   @visibleForTesting
   static const prefKeySignedIn = '${prefKeyPrefix}signed_in';
 
-  final SharedPreferencesBuilder _sharedPreferences;
+  final KVStore _kvStore;
   final StreamController<Option<AuthUser>> _authUserStreamController =
       StreamController<Option<AuthUser>>.broadcast();
 
   @override
-  Task<Unit> signOut() {
-    return Task(() async {
-      final prefs = await _sharedPreferences();
-      await prefs.setBool(prefKeySignedIn, false);
-      return unit;
-    }).chainFirst((_) => _emitAuthUser(none()));
+  TaskEither<Failure, Unit> signOut() {
+    return _kvStore
+        .setBool(prefKeySignedIn, false)
+        .andThen(_emitAuthUser(none()).toTaskEither);
   }
 
   @override
-  TaskEither<AuthFailure, Unit> signWithCredentials(
+  TaskEither<Failure, Unit> signWithCredentials(
     String email,
     String password,
   ) {
-    return TaskEither<AuthFailure, Option<AuthUser>>(() async {
+    return TaskEither<Failure, Option<AuthUser>>(() async {
       if (email == 'email' && password == 'password') {
-        final prefs = await _sharedPreferences();
-        await prefs.setBool(prefKeySignedIn, true);
-
         final user = Some(
           AuthUser(
             id: const AuthUserId('id'),
@@ -47,18 +39,24 @@ class AuthRepositoryImpl implements AuthRepository {
           ),
         );
 
-        return Right(user);
+        return right(user);
       } else {
-        return const Left(AuthFailure.invalidCredentials);
+        return left(const InvalidCredentialsFailure());
       }
-    }).flatMap((user) => TaskEither.fromTask(_emitAuthUser(user)));
+    })
+        .flatMap(
+          (user) => _kvStore.setBool(prefKeySignedIn, true).andThen(() {
+            return TaskEither.fromTask(_emitAuthUser(user));
+          }),
+        )
+        .mapLeft((l) => const InvalidCredentialsFailure());
   }
 
   @override
   Stream<Option<AuthUser>> watchAuthUser() async* {
-    final prefs = await _sharedPreferences();
+    final isAuthenticatedEither = await _kvStore.getBool(prefKeySignedIn).run();
 
-    final isAuthenticated = prefs.getBool(prefKeySignedIn);
+    final isAuthenticated = isAuthenticatedEither.getOrElse((_) => false);
 
     if (isAuthenticated == true) {
       yield const Some(
@@ -79,5 +77,10 @@ class AuthRepositoryImpl implements AuthRepository {
       _authUserStreamController.add(authUser);
       return unit;
     });
+  }
+
+  @override
+  TaskEither<Failure, bool> isUserSignedIn() {
+    return _kvStore.getBool(prefKeySignedIn);
   }
 }

@@ -51,9 +51,13 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     SignInRoute.name: (routeData) {
+      final args = routeData.argsAs<SignInRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const SignInPage(),
+        child: SignInPage(
+          key: args.key,
+          onLoginSuccess: args.onLoginSuccess,
+        ),
       );
     },
     SplashRoute.name: (routeData) {
@@ -191,16 +195,39 @@ class RootRouterRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [SignInPage]
-class SignInRoute extends PageRouteInfo<void> {
-  const SignInRoute({List<PageRouteInfo>? children})
-      : super(
+class SignInRoute extends PageRouteInfo<SignInRouteArgs> {
+  SignInRoute({
+    Key? key,
+    required void Function() onLoginSuccess,
+    List<PageRouteInfo>? children,
+  }) : super(
           SignInRoute.name,
+          args: SignInRouteArgs(
+            key: key,
+            onLoginSuccess: onLoginSuccess,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'SignInRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<SignInRouteArgs> page = PageInfo<SignInRouteArgs>(name);
+}
+
+class SignInRouteArgs {
+  const SignInRouteArgs({
+    this.key,
+    required this.onLoginSuccess,
+  });
+
+  final Key? key;
+
+  final void Function() onLoginSuccess;
+
+  @override
+  String toString() {
+    return 'SignInRouteArgs{key: $key, onLoginSuccess: $onLoginSuccess}';
+  }
 }
 
 /// generated route for

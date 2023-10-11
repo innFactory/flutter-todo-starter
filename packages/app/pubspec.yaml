@@ -49,10 +49,11 @@ dependencies:
     path: ../forms
   admin_utils:
     path: ../admin_utils
+  kv_store:
+    path: ../kv_store
 
   flutter_hooks: ^0.20.3
   device_preview: ^1.1.0
-  shared_preferences: ^2.2.2
   auto_route: ^7.8.4
   flutter_keyboard_visibility: ^5.4.1
   freezed_annotation: ^2.4.1

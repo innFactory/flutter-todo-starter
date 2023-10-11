@@ -11,7 +11,9 @@ import 'package:flutter/material.dart';
 @RoutePage()
 class SignInPage extends StatelessWidget {
   /// {@macro sign_in_page}
-  const SignInPage({super.key});
+  const SignInPage({super.key, required this.onLoginSuccess});
+
+  final VoidCallback onLoginSuccess;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class SignInPage extends StatelessWidget {
           context.translate('sign_in'),
         ),
       ),
-      body: const SignInFormView(),
+      body: SignInFormView(onLoginSuccess: onLoginSuccess),
     );
   }
 }

@@ -1,9 +1,11 @@
+import 'package:core/core.dart';
+
 /// The base class for all auth failures.
-abstract class AuthFailure {
-  const AuthFailure();
+sealed class AuthFailure extends Failure {
+  const AuthFailure(super.key);
 }
 
 /// The user has entered invalid credentials.
-class InvalidCredentialsFailure extends AuthFailure {
-  const InvalidCredentialsFailure();
+final class InvalidCredentialsFailure extends AuthFailure {
+  const InvalidCredentialsFailure() : super('invalidCredentialsFailure');
 }

@@ -46,7 +46,7 @@ void main() {
         final result = await networkInfo.onlineOrFailure.run();
         //* assert
         verify(mockConnectivity.checkConnectivity);
-        expect(result, const Left<Failure, Unit>(Failures.offline));
+        expect(result, const Left<Failure, Unit>(OfflineFailure()));
       },
     );
   });

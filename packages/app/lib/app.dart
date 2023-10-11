@@ -45,11 +45,13 @@ class _App extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final router = useMemoized(AppRouter.new);
+    final router = ref.watch(appRouterProvier);
+    final routerReevaluateListenable =
+        ref.watch(appRouterReevaluateListenableProvider);
 
     return AdminProvider(
-      groups: [
-        DriftDatabaseAdminGroup(ref.watch(driftDatabaseProvider)),
+      children: [
+        DriftAdminSection(ref.watch(driftDatabaseProvider)),
       ],
       child: MaterialApp.router(
         title: Environment.current.appTitle,
@@ -98,6 +100,7 @@ class _App extends HookConsumerWidget {
         routerDelegate: AutoRouterDelegate(
           router,
           navigatorObservers: () => [AutoRouteObserver()],
+          reevaluateListenable: routerReevaluateListenable,
         ),
         routeInformationParser: router.defaultRouteParser(),
       ),

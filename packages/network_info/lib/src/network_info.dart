@@ -12,7 +12,7 @@ extension NetworkInfoX on NetworkInfo {
       final isConnected = await this.isConnected;
 
       return isConnected.match(
-        () => const Left(Failures.offline),
+        () => const Left(OfflineFailure()),
         () => const Right(unit),
       );
     });

@@ -30,7 +30,7 @@ migrate_working_dir/
 .packages
 .pub-cache/
 .pub/
-/build/
+build/
 pubspec_overrides.yaml
 
 *.metals/*
@@ -42,9 +42,14 @@ app.*.symbols
 app.*.map.json
 
 # Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+android/app/debug
+android/app/profile
+android/app/release
 
 # Fvm
 .fvm/flutter_sdk
+
+# Code coverage
+coverage/
+/coverage_report/
+**/test/full_coverage_test.dart

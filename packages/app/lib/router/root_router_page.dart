@@ -1,4 +1,3 @@
-import 'package:admin_utils/admin_utils.dart';
 import 'package:app/router/router.dart';
 import 'package:app/router/splash_page.dart';
 import 'package:auth/auth.dart';
@@ -18,7 +17,6 @@ class RootRouterPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authUserStreamProvider);
-    useAdminShaker();
 
     return AutoRouter.declarative(
       placeholder: (context) => const SplashPage(),

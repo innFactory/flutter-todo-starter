@@ -1,11 +1,10 @@
-import 'package:admin_utils/admin_utils.dart';
 import 'package:flutter/widgets.dart';
 
 /// Provides admin screen configuration for the sub-tree.
 class AdminProvider extends InheritedWidget {
   const AdminProvider({
     super.key,
-    required this.groups,
+    required this.children,
     required super.child,
   });
 
@@ -13,11 +12,10 @@ class AdminProvider extends InheritedWidget {
     return context.dependOnInheritedWidgetOfExactType<AdminProvider>()!;
   }
 
-  final List<AdminGroup> groups;
+  final List<Widget> children;
 
   @override
   bool updateShouldNotify(covariant AdminProvider oldWidget) {
-    return groups != oldWidget.groups;
+    return children != oldWidget.children;
   }
-
 }

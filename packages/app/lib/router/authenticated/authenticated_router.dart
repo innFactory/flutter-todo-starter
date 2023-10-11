@@ -1,3 +1,4 @@
+import 'package:admin_utils/admin_utils.dart';
 import 'package:auto_route/auto_route.dart';
 
 /// {@template auth_router}
@@ -5,7 +6,7 @@ import 'package:auto_route/auto_route.dart';
 /// the parent router for all pages that require the user to be authenticated.
 /// {@endtemplate}
 @RoutePage(name: 'AuthenticatedRouter')
-class AuthenticatedRouterPage extends AutoRouter {
+class AuthenticatedRouterPage extends AutoRouter with AdminGestureWrapper {
   /// {@macro auth_router}
   const AuthenticatedRouterPage({super.key});
 }

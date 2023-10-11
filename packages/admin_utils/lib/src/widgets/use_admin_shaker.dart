@@ -1,4 +1,4 @@
-import 'package:admin_utils/admin_utils.dart';
+import 'package:admin_utils/src/router.gm.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

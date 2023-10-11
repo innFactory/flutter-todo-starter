@@ -65,7 +65,7 @@ class TodoRepositoryImpl implements TodoRepository {
     TodoRemoteId? remoteId,
   ) {
     if (localId == null && remoteId == null) {
-      return tLeft(Failures.notFound);
+      return tLeft(const NotFoundFailure());
     }
 
     if (localId != null) {
