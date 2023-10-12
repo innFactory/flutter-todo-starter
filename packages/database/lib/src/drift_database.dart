@@ -54,16 +54,16 @@ class DriftLocalDatabase extends _$DriftLocalDatabase {
           );
         }
       },
-      beforeOpen: (openingDetails) async {
-        if (kDebugMode) {
-          final m = Migrator(this);
+      // beforeOpen: (openingDetails) async {
+      //   if (kDebugMode) {
+      //     final m = Migrator(this);
 
-          for (final table in allTables) {
-            await m.deleteTable(table.actualTableName);
-            await m.createTable(table);
-          }
-        }
-      },
+      //     for (final table in allTables) {
+      //       await m.deleteTable(table.actualTableName);
+      //       await m.createTable(table);
+      //     }
+      //   }
+      // },
     );
   }
 }

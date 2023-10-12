@@ -2,6 +2,7 @@ name: flutter_todo_starter
 
 packages:
   - "packages/**"
+  - "app"
 
 sdkPath: .fvm/flutter_sdk
 

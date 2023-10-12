@@ -7,7 +7,7 @@
       "type": "dart",
       "flutterMode": "debug",
       "args": ["--flavor", "development"],
-      "program": "packages/app/lib/main_development.dart"
+      "program": "app/lib/main_development.dart"
     },
     {
       "name": "development Profile",
@@ -15,7 +15,7 @@
       "type": "dart",
       "flutterMode": "profile",
       "args": ["--flavor", "development"],
-      "program": "packages/app/lib/main_development.dart"
+      "program": "app/lib/main_development.dart"
     },
     {
       "name": "development Release",
@@ -23,7 +23,7 @@
       "type": "dart",
       "flutterMode": "release",
       "args": ["--flavor", "development"],
-      "program": "packages/app/lib/main_development.dart"
+      "program": "app/lib/main_development.dart"
     },
     {
       "name": "staging Debug",
@@ -31,7 +31,7 @@
       "type": "dart",
       "flutterMode": "debug",
       "args": ["--flavor", "staging"],
-      "program": "packages/app/lib/main_staging.dart"
+      "program": "app/lib/main_staging.dart"
     },
     {
       "name": "staging Profile",
@@ -39,7 +39,7 @@
       "type": "dart",
       "flutterMode": "profile",
       "args": ["--flavor", "staging"],
-      "program": "packages/app/lib/main_staging.dart"
+      "program": "app/lib/main_staging.dart"
     },
     {
       "name": "staging Release",
@@ -47,7 +47,7 @@
       "type": "dart",
       "flutterMode": "release",
       "args": ["--flavor", "staging"],
-      "program": "packages/app/lib/main_staging.dart"
+      "program": "app/lib/main_staging.dart"
     },
     {
       "name": "production Debug",
@@ -55,7 +55,7 @@
       "type": "dart",
       "flutterMode": "debug",
       "args": ["--flavor", "production"],
-      "program": "packages/app/lib/main_production.dart"
+      "program": "app/lib/main_production.dart"
     },
     {
       "name": "production Profile",
@@ -63,7 +63,7 @@
       "type": "dart",
       "flutterMode": "profile",
       "args": ["--flavor", "production"],
-      "program": "packages/app/lib/main_production.dart"
+      "program": "app/lib/main_production.dart"
     },
     {
       "name": "production Release",
@@ -71,7 +71,7 @@
       "type": "dart",
       "flutterMode": "release",
       "args": ["--flavor", "production"],
-      "program": "packages/app/lib/main_production.dart"
+      "program": "app/lib/main_production.dart"
     }
   ]
 }

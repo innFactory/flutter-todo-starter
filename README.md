@@ -62,10 +62,10 @@ The app has three environments: `development`, `staging` and `production`. But o
 Using VSCode all environments are configured as launch configurations. If you need to run the app from the command line you can use the following command:
 
 ```bash
-flutter run --flavor <environment> --target packages/app/lib/main_<environment>.dart
+flutter run --flavor <environment> --target app/lib/main_<environment>.dart
 
 # Example
-flutter run --flavor development --target packages/app/lib/main_development.dart
+flutter run --flavor development --target app/lib/main_development.dart
 ```
 
 > Note: The mocked sign in credentials are `email` and `password`.
@@ -75,7 +75,7 @@ flutter run --flavor development --target packages/app/lib/main_development.dart
 
 Generally the project consists of the following packages.
 
-### **app** (`packages/app`)
+### **app** (`app`)
 
 This is the entry point for launching the app and contains the ui pages and routing.
 

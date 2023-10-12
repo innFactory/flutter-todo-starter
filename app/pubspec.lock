@@ -12,7 +12,7 @@ packages:
   admin_utils:
     dependency: "direct main"
     description:
-      path: "../admin_utils"
+      path: "../packages/admin_utils"
       relative: true
     source: path
     version: "0.0.0"
@@ -27,14 +27,14 @@ packages:
   api:
     dependency: "direct overridden"
     description:
-      path: "../api"
+      path: "../packages/api"
       relative: true
     source: path
     version: "0.0.0"
   api_client:
     dependency: "direct overridden"
     description:
-      path: "../api-client"
+      path: "../packages/api-client"
       relative: true
     source: path
     version: "1.0.0"
@@ -65,7 +65,7 @@ packages:
   auth:
     dependency: "direct main"
     description:
-      path: "../auth"
+      path: "../packages/auth"
       relative: true
     source: path
     version: "0.0.0"
@@ -248,7 +248,7 @@ packages:
   core:
     dependency: "direct main"
     description:
-      path: "../core"
+      path: "../packages/core"
       relative: true
     source: path
     version: "0.0.0"
@@ -287,7 +287,7 @@ packages:
   database:
     dependency: "direct main"
     description:
-      path: "../database"
+      path: "../packages/database"
       relative: true
     source: path
     version: "0.0.0"
@@ -562,7 +562,7 @@ packages:
   forms:
     dependency: "direct main"
     description:
-      path: "../forms"
+      path: "../packages/forms"
       relative: true
     source: path
     version: "0.0.0"
@@ -705,7 +705,7 @@ packages:
   kv_store:
     dependency: "direct main"
     description:
-      path: "../kv_store"
+      path: "../packages/kv_store"
       relative: true
     source: path
     version: "0.0.0"
@@ -776,7 +776,7 @@ packages:
   network_info:
     dependency: "direct overridden"
     description:
-      path: "../network_info"
+      path: "../packages/network_info"
       relative: true
     source: path
     version: "0.0.0"
@@ -1133,7 +1133,7 @@ packages:
   sync:
     dependency: "direct main"
     description:
-      path: "../sync"
+      path: "../packages/sync"
       relative: true
     source: path
     version: "0.0.0"
@@ -1180,7 +1180,7 @@ packages:
   todo:
     dependency: "direct main"
     description:
-      path: "../todo"
+      path: "../packages/todo"
       relative: true
     source: path
     version: "0.0.0"
