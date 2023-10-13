@@ -113,6 +113,10 @@ This repository also contains a simple backend service to store the todos. Get i
 
 You will need to configure your IP address in the `packages/core/lib/src/environment.dart` file. To get the app connected to your local backend instance.
 
+### Flutter introduction tasks
+This repository also contains simple tasks to get familiar with the structure.
+These are available in [english](flutter_introduction_en.md) and [german](flutter_introduction_de.md).
+
 
 
 
