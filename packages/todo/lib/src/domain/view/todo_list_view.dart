@@ -33,20 +33,12 @@ class TodoListView extends ConsumerWidget {
       itemBuilder: (context, index) {
         final todo = todosWithoutParent[index];
 
-        final children = todosWithParent
-            .where(
-              (element) =>
-                  element.remoteParentId == todo.remoteId ||
-                  element.localParentId == todo.localId,
-            )
-            .toList();
-
         return TodoListTile(
           todo: todo,
           onTap: onEditPressed,
           onCompleteToggle: onCompleteToggle,
           onDelete: onDelete,
-          children: children,
+          todosWithParent: todosWithParent.toList(),
         );
       },
     );

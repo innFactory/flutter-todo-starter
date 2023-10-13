@@ -1,3 +1,4 @@
+import 'package:api/src/common/api_failure.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 
@@ -15,7 +16,7 @@ extension TaskEitherApiExtension<F extends Failure, T>
         return TaskEither.right(response.data as T);
       }
 
-      return TaskEither.left(Failures.api);
+      return TaskEither.left(ApiFailure(statusCode: response.statusCode));
     });
   }
 }
@@ -37,8 +38,9 @@ extension TaskEitherFromFuture<T> on Future<Response<T>> {
           error,
           stackTrace,
         );
-
-        return Failures.api;
+        return const ApiFailure(
+          statusCode: null,
+        );
       },
     );
   }

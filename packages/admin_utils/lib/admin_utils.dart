@@ -1,8 +1,10 @@
 library admin_utils;
 
-export 'src/router/pages/admin_page.dart';
-export 'src/router/pages/drift_db_page.dart';
-export 'src/router/router.dart';
-export 'src/router/router.gm.dart';
+export 'src/drift/drift_admin_section.dart';
+export 'src/router.dart';
+export 'src/widgets/admin_action.dart';
+export 'src/widgets/admin_gesture.dart';
+export 'src/widgets/admin_group.dart';
 export 'src/widgets/admin_provider.dart';
+export 'src/widgets/admin_title.dart';
 export 'src/widgets/use_admin_shaker.dart';

@@ -2,6 +2,7 @@ name: flutter_todo_starter
 
 packages:
   - "packages/**"
+  - "app"
 
 sdkPath: .fvm/flutter_sdk
 
@@ -28,18 +29,27 @@ scripts:
     description: Run analyze for Flutter packages in this project
 
   test:
-    run: melos run test:selective --no-select
+    run: melos run test:selective_unit_test --no-select
     description: Run all Flutter tests in this project.
-  test:selective:
+
+  test:coverage_report:
     run: |
-      melos exec -c 6 --fail-fast -- \
-        "flutter test --no-pub --reporter compact --no-test-assets"
-    description: Run `flutter test` for a specific package.
+      rm -r "$MELOS_ROOT_PATH/coverage_report"
+      melos exec --dir-exists="test" -- dart "$MELOS_ROOT_PATH/tools/full_coverage.dart"
+      melos run test
+      melos exec --dir-exists="coverage" -- dart "$MELOS_ROOT_PATH/tools/coverage.dart"
+
+  test:selective_unit_test:
+    run: melos exec --dir-exists="test" --fail-fast -- flutter test --no-pub --coverage
+    description: Run Flutter tests for a specific package in this project.
     packageFilters:
-      dirExists:
-        - test
-      ignore:
-        - "*example*"
+      dirExists: test
+
+  test:coverage_report_html:
+    run: |
+      melos run test:coverage_report
+      dir="$MELOS_ROOT_PATH/coverage_report"
+      genhtml --ignore-errors unmapped -o "$dir/html" "$dir/lcov.info"
 
   clean:
     run: melos exec -c 6 -- flutter clean

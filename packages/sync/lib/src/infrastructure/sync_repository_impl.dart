@@ -55,9 +55,9 @@ class SyncRepositoryImpl implements SyncRepository {
       () => syncDao.getSyncEntity(type, localId).flatMap((entity) {
         return TaskEither(() async {
           final result = await process(entity).run();
-          final errorCode = result.getLeft().toNullable()?.code;
+          final errorCode = result.getLeft().toNullable()?.key;
 
-          if (errorCode != null && errorCode != Failures.offline.code) {
+          if (errorCode != null && errorCode != OfflineFailure().key) {
             await syncDao
                 .createOrUpdate(
                   entity.copyWith(errorCode: errorCode, revertChanges: false),

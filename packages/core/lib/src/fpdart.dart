@@ -42,7 +42,7 @@ extension FpdartNullable<T> on T? {
   /// If the value is `null`, a [Failures.notFound] is returned.
   Either<Failure, T> getOrNotFound() {
     if (this == null) {
-      return const Left(Failures.notFound);
+      return const Left(NotFoundFailure());
     }
 
     return Right(this as T);
@@ -59,7 +59,7 @@ extension FpdartFutureNullable<T> on Future<T?> {
       final result = await this;
 
       if (result == null) {
-        return const Left(Failures.notFound);
+        return const Left(NotFoundFailure());
       }
 
       return Right(result);

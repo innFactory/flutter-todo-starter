@@ -10,8 +10,8 @@ TaskEither<Failure, TR> runTransaction<TR>(
   return TaskEither.tryCatch(
     () => database.transaction(() => transaction()),
     (error, stackTrace) => DriftFailure(
-      error: error,
-      stackTrace: stackTrace,
+      error,
+      stackTrace,
     ),
   );
 }

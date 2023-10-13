@@ -16,7 +16,6 @@ dependencies:
   todo:
     path: ../todo
 
-  shared_preferences: ^2.0.18
   path_provider: ^2.0.11
   drift: ^2.12.1
   sqlite3_flutter_libs: ^0.5.17
