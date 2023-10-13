@@ -76,25 +76,27 @@ class TodoFormView extends HookConsumerWidget {
                         element.remoteParentId == null)
                     .map((todo) {
                       return TodoListTile(
-                        todo: todo,
-                        onTap: (todo) {
-                          if (parentIdControlValue?.$1 == todo.localId &&
-                                  todo.localId != null ||
-                              parentIdControlValue?.$2 == todo.remoteId &&
-                                  todo.remoteId != null) {
-                            formState.form.parentIdControl.value = (null, null);
+                          todo: todo,
+                          todosWithParent: todos
+                              .where((element) =>
+                                  element.localParentId != null &&
+                                  element.remoteParentId != null)
+                              .toList(),
+                          onTap: (todo) {
+                            if (parentIdControlValue?.$1 == todo.localId &&
+                                    todo.localId != null ||
+                                parentIdControlValue?.$2 == todo.remoteId &&
+                                    todo.remoteId != null) {
+                              formState.form.parentIdControl.value =
+                                  (null, null);
 
-                            return;
-                          }
+                              return;
+                            }
 
-                          formState.form.parentIdControl.value =
-                              (todo.localId, todo.remoteId);
-                        },
-                        selected: (parentIdControlValue?.$1 == todo.localId &&
-                                todo.localId != null) ||
-                            (parentIdControlValue?.$2 == todo.remoteId &&
-                                todo.remoteId != null),
-                      );
+                            formState.form.parentIdControl.value =
+                                (todo.localId, todo.remoteId);
+                          },
+                          selectedId: parentIdControlValue);
                     })
                     .toList(),
               ),

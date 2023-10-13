@@ -1,4 +1,3 @@
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:sync/sync.dart';
 import 'package:todo/src/domain/models/todo.dart';
@@ -10,31 +9,50 @@ class TodoListTile extends StatelessWidget {
     this.onTap,
     this.onCompleteToggle,
     this.onDelete,
-    this.children = const [],
-    this.selected,
+    this.todosWithParent = const [],
+    this.selectedId,
+    this.indent = 0,
   });
 
   final Todo todo;
-  final List<Todo> children;
+  final List<Todo> todosWithParent;
   final void Function(Todo p1)? onTap;
   final void Function(Todo p1)? onCompleteToggle;
   final void Function(Todo p1)? onDelete;
-  final bool? selected;
+  final (TodoLocalId?, TodoRemoteId?)? selectedId;
+  final int indent;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: [todo, ...children]
-          .mapIndexed((index, e) => _TodoListTile(
-                todo: e,
-                onTap: onTap,
-                onCompleteToggle: onCompleteToggle,
-                onDelete: onDelete,
-                isFirst: index == 0,
-                selected: selected,
-              ))
-          .toList(),
+      children: [
+        _TodoListTile(
+          todo: todo,
+          onTap: onTap,
+          onCompleteToggle: onCompleteToggle,
+          onDelete: onDelete,
+          isFirst: true,
+          selected:
+              todo.localId == selectedId?.$1 || todo.remoteId == selectedId?.$2,
+          indent: indent,
+        ),
+        ...todosWithParent
+            .where(
+              (element) =>
+                  element.remoteParentId == todo.remoteId ||
+                  element.localParentId == todo.localId,
+            )
+            .map((e) => TodoListTile(
+                  todo: e,
+                  todosWithParent: todosWithParent,
+                  onCompleteToggle: onCompleteToggle,
+                  onDelete: onDelete,
+                  onTap: onTap,
+                  selectedId: selectedId,
+                  indent: indent + 1,
+                )),
+      ],
     );
   }
 }
@@ -47,6 +65,7 @@ class _TodoListTile extends StatelessWidget {
     required this.onDelete,
     required this.isFirst,
     required this.selected,
+    required this.indent,
   });
 
   final Todo todo;
@@ -55,11 +74,12 @@ class _TodoListTile extends StatelessWidget {
   final void Function(Todo p1)? onDelete;
   final bool isFirst;
   final bool? selected;
+  final int indent;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: isFirst ? 0 : 10),
+      padding: EdgeInsets.only(left: (5 * indent).toDouble()),
       child: ListTile(
         title: Text(todo.title),
         tileColor: todo.isCompleted ? Colors.green : Colors.red,

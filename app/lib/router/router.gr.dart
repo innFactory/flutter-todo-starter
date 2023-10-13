@@ -18,13 +18,13 @@ abstract class _$AppRouter extends RootStackRouter {
     AuthRouter.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const AuthRouterPage(),
+        child: WrappedRoute(child: const AuthRouterPage()),
       );
     },
     AuthenticatedRouter.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const AuthenticatedRouterPage(),
+        child: WrappedRoute(child: const AuthenticatedRouterPage()),
       );
     },
     ErrorRoute.name: (routeData) {
