@@ -33,17 +33,17 @@ android {
     productFlavors {
         development {
             dimension "flavor-type"
-            applicationId "de.innfactory.todo-starter.dev"
+            applicationId "de.innfactory.todostarter.dev"
             resValue "string", "app_name", "Todo Factory [DEV]"
         }
         staging {
             dimension "flavor-type"
-            applicationId "de.innfactory.todo-starter.stg"
+            applicationId "de.innfactory.todostarter.stg"
             resValue "string", "app_name", "Todo Factory [STG]"
         }
         production {
             dimension "flavor-type"
-            applicationId "de.innfactory.todo-starter"
+            applicationId "de.innfactory.todostarter"
             resValue "string", "app_name", "Todo Factory"
         }
     }
