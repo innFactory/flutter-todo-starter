@@ -49,10 +49,8 @@ melos run <script_name>
 
 The most important commands are:
 
-* `melos run init` - Combination of the [bootstrap](https://melos.invertase.dev/~melos-latest/commands/bootstrap) command and the `melos run build` script
 * `melos bs` or `melos boostrap` - Run the [bootstrap](https://melos.invertase.dev/~melos-latest/commands/bootstrap) command (Install all dependencies in all packages)
-* `melos run build` - Run `build_runner` in all relevant packages
-* `melos run build:watch` - Run `build_runner` in all relevant packages in watch mode
+* `melos run codegen` - Run `build_runner` in all relevant packages
 
 ### Running the App
 
