@@ -15,11 +15,11 @@ part 'typed_form_group.dart';
 
 /// A [ReactiveFormController] that can be used to manage a [FormGroup].
 ///
-/// [F] is the type of the failure of the form.
-/// [T] is the type of the entity of the form.
-abstract class ReactiveFormController<Domain,
-        Form extends TypedFormGroup<Domain>>
-    extends StateNotifier<ReactiveFormState<Domain, Form>> {
+/// [TFailure] is the type of the failure of the form.
+/// [TDomain] is the type of the entity of the form.
+abstract class ReactiveFormController<TFailure, TDomain,
+        TForm extends TypedFormGroup<TDomain>>
+    extends StateNotifier<ReactiveFormState<TFailure, TDomain, TForm>> {
   ReactiveFormController() : super(const ReactiveFormState.loading()) {
     _init();
   }
@@ -27,22 +27,22 @@ abstract class ReactiveFormController<Domain,
   StreamSubscription<dynamic>? _valueChangesSubscription;
   StreamSubscription<ControlStatus>? _statusChangesSubscription;
 
-  late Form form;
+  late TForm form;
 
   /// Load the initial state of the _form. Usually checks if an id of the entity
   /// is given and loads the entity from the repository. If no id is given, a
   /// new "empty" entity should be returned.
   @protected
-  TaskEither<Failure, Domain> get initialValue;
+  TaskEither<TFailure, TDomain> get initialValue;
 
   /// Create the form object with the initial value. Will only be called once.
   @protected
-  Form createForm(Domain initialValue);
+  TForm createForm(TDomain initialValue);
 
   @protected
-  TaskEither<Failure, Domain> onSubmit(Domain value);
+  TaskEither<TFailure, TDomain> onSubmit(TDomain value);
 
-  Future<void> updateForm(FutureOr<void> Function(Form form) update) async {
+  Future<void> updateForm(FutureOr<void> Function(TForm form) update) async {
     await state.whenOrNull(
       (form, isSubmitting, isPristine, isDisabled, submitFailureOrSuccess) {
         return update(form);

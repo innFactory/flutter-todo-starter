@@ -1,7 +1,7 @@
 part of 'todo_form_controller.dart';
 
 class TodoForm extends TypedFormGroup<Todo> {
-  TodoForm(Todo currentValue) : super(value: currentValue);
+  TodoForm(Todo currentValue) : super(currentValue);
 
   late final titleControl = createControl(
     'titleControl',

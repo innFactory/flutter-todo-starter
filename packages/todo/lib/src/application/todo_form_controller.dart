@@ -21,7 +21,9 @@ class TodoFormArgs extends Equatable {
 }
 
 final todoFormControllerProvider = StateNotifierProvider.autoDispose.family<
-    TodoFormController, ReactiveFormState<Todo, TodoForm>, TodoFormArgs?>(
+    TodoFormController,
+    ReactiveFormState<Failure, Todo, TodoForm>,
+    TodoFormArgs?>(
   (ref, args) {
     final todoRepository = ref.watch(todoRepositoryProvider);
 
@@ -29,7 +31,8 @@ final todoFormControllerProvider = StateNotifierProvider.autoDispose.family<
   },
 );
 
-class TodoFormController extends ReactiveFormController<Todo, TodoForm> {
+class TodoFormController
+    extends ReactiveFormController<Failure, Todo, TodoForm> {
   TodoFormController({
     required TodoRepository todoRepository,
     required TodoFormArgs? args,

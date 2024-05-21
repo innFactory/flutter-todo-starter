@@ -18,7 +18,7 @@ class SignInFormModel extends Equatable {
 }
 
 class SignInForm extends TypedFormGroup<SignInFormModel> {
-  SignInForm(SignInFormModel currentValue) : super(value: currentValue);
+  SignInForm(SignInFormModel currentValue) : super(currentValue);
 
   late final emailControl = createControl(
     'emailControl',

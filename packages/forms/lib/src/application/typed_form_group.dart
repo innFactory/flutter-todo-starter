@@ -31,20 +31,20 @@ class _ControlWrapper<T, R> {
   }
 }
 
-class _ControlCreate<T, R> {
+class _ControlCreate<TDomain, TValue> {
   _ControlCreate(this.form, this.key, this.select);
 
-  final TypedFormGroup<T> form;
+  final TypedFormGroup<TDomain> form;
   final String key;
-  final SelectValue<T, R> select;
+  final SelectValue<TDomain, TValue> select;
 
-  C call<C extends TypedFormBase<R>>(
-    C Function(R value) create, {
-    OnControlValueChanged<R>? onControlValueChanged,
+  C call<C extends TypedFormBase<TValue>>(
+    C Function(TValue value) create, {
+    OnControlValueChanged<TValue>? onControlValueChanged,
   }) {
     if (!form._controlWrapperByKey.containsKey(key)) {
-      final control = create(select(form._initialValue));
-      final wrapper = _ControlWrapper<T, R>(
+      final control = create(select(form.initialValue));
+      final wrapper = _ControlWrapper<TDomain, TValue>(
         control: control,
         select: select,
         onControlValueChanged: onControlValueChanged,
@@ -56,51 +56,89 @@ class _ControlCreate<T, R> {
   }
 }
 
-abstract class TypedFormGroup<T> extends AbstractControl<T>
-    with FormControlCollection<Object>, TypedFormBase {
-  TypedFormGroup({
-    required T value,
+abstract class TypedFormGroup<TDomain> extends AbstractControl<TDomain>
+    with TypedFormBase {
+  TypedFormGroup(
+    TDomain value, {
     super.disabled,
     super.asyncValidatorsDebounceTime,
-  })  : _initialValue = value,
+  })  : initialValue = value,
         _value = value;
 
   final Map<String, _ControlWrapper<dynamic, dynamic>> _controlWrapperByKey =
       {};
-  final T _initialValue;
-  T _value;
+  final TDomain initialValue;
+  TDomain _value;
 
   List<TypedFormBase<Object?>> get _controls =>
       _controlWrapperByKey.values.map((e) => e.control).toList(growable: false);
 
-  _ControlCreate<T, R> createControl<R>(
+  _ControlCreate<TDomain, R> createControl<R>(
     String key,
-    R Function(T value) select,
+    R Function(TDomain value) select,
   ) {
-    return _ControlCreate<T, R>(this, key, select);
+    return _ControlCreate<TDomain, R>(this, key, select);
+  }
+
+  final _collectionChanges =
+      StreamController<List<AbstractControl<Object?>>>.broadcast();
+
+  Stream<List<AbstractControl<Object?>>> get collectionChanges =>
+      _collectionChanges.stream;
+
+  /// Notify to listeners that the collection changed.
+  ///
+  /// This is for internal use only.
+  @protected
+  void emitsCollectionChanged(List<AbstractControl<Object?>> controls) {
+    _collectionChanges.add(List.unmodifiable(controls));
+  }
+
+  /// Walks the [path] to find the matching control.
+  ///
+  /// Returns null if no match is found.
+  AbstractControl<dynamic>? findControlInCollection(List<String> path) {
+    if (path.isEmpty) {
+      return null;
+    }
+
+    final result = path.fold<AbstractControl<dynamic>?>(this, (control, name) {
+      if (control != null && control is FormControlCollection<dynamic>) {
+        return control.contains(name) ? control.control(name) : null;
+      } else {
+        return null;
+      }
+    });
+
+    return result;
+  }
+
+  /// Close stream that emit collection change events
+  void closeCollectionEvents() {
+    _collectionChanges.close();
   }
 
   @override
   @protected
-  List<ValidatorFunction> get validators => const [];
+  List<Validator<dynamic>> get validators => const [];
 
   @override
   @protected
-  List<AsyncValidatorFunction> get asyncValidators => const [];
+  List<AsyncValidator<dynamic>> get asyncValidators => const [];
 
   @override
-  T get value => toDomain(_value);
+  TDomain get value => toDomain(_value);
 
   @override
-  set value(covariant T value) => updateValue(value);
+  set value(covariant TDomain value) => updateValue(value);
 
   @protected
-  T toDomain(T previousValue);
+  TDomain toDomain(TDomain previousValue);
 
   @protected
-  T applyFormGroupsToDomain(
-    List<TypedFormGroup<T>> formGroups,
-    T previousValue,
+  TDomain applyFormGroupsToDomain(
+    List<TypedFormGroup<TDomain>> formGroups,
+    TDomain previousValue,
   ) {
     return formGroups.fold(
       previousValue,
@@ -110,7 +148,7 @@ abstract class TypedFormGroup<T> extends AbstractControl<T>
 
   @override
   void updateValue(
-    covariant T value, {
+    covariant TDomain value, {
     bool updateParent = true,
     bool emitEvent = true,
   }) {
@@ -122,7 +160,7 @@ abstract class TypedFormGroup<T> extends AbstractControl<T>
 
   @override
   void patchValue(
-    covariant T value, {
+    covariant TDomain value, {
     bool updateParent = true,
     bool emitEvent = true,
   }) {
@@ -144,28 +182,28 @@ abstract class TypedFormGroup<T> extends AbstractControl<T>
     emitsCollectionChanged(_controls);
   }
 
-  @override
-  bool contains(String name) {
-    return _controlWrapperByKey.containsKey(name);
-  }
+  // @override
+  // bool contains(String name) {
+  //   return _controlWrapperByKey.containsKey(name);
+  // }
+
+  // @override
+  // AbstractControl<dynamic> control(String name) {
+  //   final namePath = name.split('.');
+  //   if (namePath.length > 1) {
+  //     final control = findControlInCollection(namePath);
+  //     if (control != null) {
+  //       return control;
+  //     }
+  //   } else if (contains(name)) {
+  //     return _controlWrapperByKey[name]!.control;
+  //   }
+
+  //   throw FormControlNotFoundException(controlName: name);
+  // }
 
   @override
-  AbstractControl<dynamic> control(String name) {
-    final namePath = name.split('.');
-    if (namePath.length > 1) {
-      final control = findControlInCollection(namePath);
-      if (control != null) {
-        return control;
-      }
-    } else if (contains(name)) {
-      return _controlWrapperByKey[name]!.control;
-    }
-
-    throw FormControlNotFoundException(controlName: name);
-  }
-
-  @override
-  T reduceValue() => toDomain(_value);
+  TDomain reduceValue() => toDomain(_value);
 
   @override
   void markAsDisabled({bool updateParent = true, bool emitEvent = true}) {

@@ -1,8 +1,7 @@
 part of 'reactive_form_controller.dart';
 
 class TypedFormArray<TDomain, TControl extends TypedFormBase<TDomain>>
-    extends AbstractControl<List<TControl>>
-    with FormControlCollection<TControl>, TypedFormBase {
+    extends AbstractControl<List<TControl>> with TypedFormBase {
   TypedFormArray(
     List<TControl> forms, {
     super.asyncValidators,
@@ -16,6 +15,44 @@ class TypedFormArray<TDomain, TControl extends TypedFormBase<TDomain>>
     if (disabled) {
       markAsDisabled(emitEvent: false);
     }
+  }
+
+  final _collectionChanges =
+      StreamController<List<AbstractControl<Object?>>>.broadcast();
+
+  Stream<List<AbstractControl<Object?>>> get collectionChanges =>
+      _collectionChanges.stream;
+
+  /// Notify to listeners that the collection changed.
+  ///
+  /// This is for internal use only.
+  @protected
+  void emitsCollectionChanged(List<AbstractControl<Object?>> controls) {
+    _collectionChanges.add(List.unmodifiable(controls));
+  }
+
+  /// Walks the [path] to find the matching control.
+  ///
+  /// Returns null if no match is found.
+  AbstractControl<dynamic>? findControlInCollection(List<String> path) {
+    if (path.isEmpty) {
+      return null;
+    }
+
+    final result = path.fold<AbstractControl<dynamic>?>(this, (control, name) {
+      if (control != null && control is FormControlCollection<dynamic>) {
+        return control.contains(name) ? control.control(name) : null;
+      } else {
+        return null;
+      }
+    });
+
+    return result;
+  }
+
+  /// Close stream that emit collection change events
+  void closeCollectionEvents() {
+    _collectionChanges.close();
   }
 
   final List<TControl> _forms = [];
@@ -115,35 +152,35 @@ class TypedFormArray<TDomain, TControl extends TypedFormBase<TDomain>>
     }
   }
 
-  @override
-  bool contains(String name) {
-    final index = int.tryParse(name);
-    if (index != null && index < _forms.length) {
-      return true;
-    }
+  // @override
+  // bool contains(String name) {
+  //   final index = int.tryParse(name);
+  //   if (index != null && index < _forms.length) {
+  //     return true;
+  //   }
 
-    return false;
-  }
+  //   return false;
+  // }
 
-  @override
-  AbstractControl<dynamic> control(String name) {
-    final namePath = name.split('.');
-    if (namePath.length > 1) {
-      final control = findControlInCollection(namePath);
-      if (control != null) {
-        return control;
-      }
-    } else {
-      final index = int.tryParse(name);
-      if (index == null) {
-        throw FormArrayInvalidIndexException(name);
-      } else if (index < _forms.length) {
-        return _forms[index];
-      }
-    }
+  // @override
+  // AbstractControl<dynamic> control(String name) {
+  //   final namePath = name.split('.');
+  //   if (namePath.length > 1) {
+  //     final control = findControlInCollection(namePath);
+  //     if (control != null) {
+  //       return control;
+  //     }
+  //   } else {
+  //     final index = int.tryParse(name);
+  //     if (index == null) {
+  //       throw FormArrayInvalidIndexException(name);
+  //     } else if (index < _forms.length) {
+  //       return _forms[index];
+  //     }
+  //   }
 
-    throw FormControlNotFoundException(controlName: name);
-  }
+  //   throw FormControlNotFoundException(controlName: name);
+  // }
 
   @override
   void dispose() {

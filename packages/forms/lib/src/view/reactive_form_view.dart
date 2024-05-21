@@ -2,32 +2,37 @@ import 'dart:async';
 
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:forms/src/application/reactive_form_controller.dart';
-import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
-typedef ReactiveFormStateLoadedBuilder<Domain,
+typedef ReactiveFormStateLoadedBuilder<Failure, Domain,
         Form extends TypedFormGroup<Domain>>
-    = Widget Function(ReactiveFormStateLoaded<Domain, Form> formState);
+    = Widget Function(ReactiveFormStateLoaded<Failure, Domain, Form> formState);
 
-typedef ReactiveFormFailureBuilder = Widget Function(Failure failure);
+typedef ReactiveFormFailureBuilder<Failure> = Widget Function(Failure failure);
 
-typedef ReactiveFormWillPopCallback<Domain, Form extends TypedFormGroup<Domain>>
+typedef ReactiveFormWillPopCallback<Failure, Domain,
+        Form extends TypedFormGroup<Domain>>
     = FutureOr<bool> Function()? Function(
-  ReactiveFormStateLoaded<Domain, Form> formState,
+  ReactiveFormStateLoaded<Failure, Domain, Form> formState,
 );
 
 typedef ReactiveFormDirtyWillPopCallback = FutureOr<bool> Function();
 
-typedef ReactiveFormWrapperBuilder<Domain, Form extends TypedFormGroup<Domain>>
-    = Widget Function(BuildContext context,
-        ReactiveFormState<Domain, Form> formState, Widget child);
+typedef ReactiveFormWrapperBuilder<TFailure, Domain,
+        Form extends TypedFormGroup<Domain>>
+    = Widget Function(
+  BuildContext context,
+  ReactiveFormState<TFailure, Domain, Form> formState,
+  Widget child,
+);
 
 typedef ReactiveFormFocusBuilder<Form> = List<FormControl<dynamic>> Function(
   Form form,
 );
 
-class ReactiveFormView<Domain, Form extends TypedFormGroup<Domain>>
+class ReactiveFormView<TFailure, TDomain, TForm extends TypedFormGroup<TDomain>>
     extends ConsumerWidget {
   const ReactiveFormView({
     super.key,
@@ -43,20 +48,21 @@ class ReactiveFormView<Domain, Form extends TypedFormGroup<Domain>>
     this.focusBuilder,
   });
 
-  final ProviderListenable<ReactiveFormState<Domain, Form>> provider;
+  final ProviderListenable<ReactiveFormState<TFailure, TDomain, TForm>>
+      provider;
 
   /// The widget to show when the form is loaded.
   ///
   /// Will already be wrapped in a [ReactiveForm] widget.
-  final ReactiveFormStateLoadedBuilder<Domain, Form> builder;
+  final ReactiveFormStateLoadedBuilder<TFailure, TDomain, TForm> builder;
 
   /// Builder that wraps the entire form. Helpful if you want to e.g. add
   /// a [Scaffold] around the form which depends on the form state.
-  final ReactiveFormWrapperBuilder<Domain, Form>? wrapperBuilder;
+  final ReactiveFormWrapperBuilder<TFailure, TDomain, TForm>? wrapperBuilder;
 
   /// The widget to show when the form is in an error state.
   /// If not provided, the default is a [Text] widget with the error message.
-  final ReactiveFormFailureBuilder? errorBuilder;
+  final ReactiveFormFailureBuilder<TFailure>? errorBuilder;
 
   /// The widget to show when the form is loading.
   /// If not provided, the default is a [ProProgressIndicator].
@@ -66,7 +72,7 @@ class ReactiveFormView<Domain, Form extends TypedFormGroup<Domain>>
   /// form state.
   ///
   /// Takes precedence over [onDirtyWillPop].
-  final ReactiveFormWillPopCallback<Domain, Form>? onWillPop;
+  final ReactiveFormWillPopCallback<TFailure, TDomain, TForm>? onWillPop;
 
   /// Called when the form state is dirty and the user tries to pop the page.
   ///
@@ -74,39 +80,42 @@ class ReactiveFormView<Domain, Form extends TypedFormGroup<Domain>>
   final ReactiveFormDirtyWillPopCallback? onDirtyWillPop;
 
   /// Executed when the form was submitted successfully.
-  final ValueChanged<Domain>? onSubmitSuccess;
+  final ValueChanged<TDomain>? onSubmitSuccess;
 
   /// Executed when the form was submitted unsuccessfully.
-  final ValueChanged<Failure>? onSubmitFailure;
+  final ValueChanged<TFailure>? onSubmitFailure;
 
   /// The [FocusNode]s in the order they appear in the form.
-  final ReactiveFormFocusBuilder<Form>? focusBuilder;
+  final ReactiveFormFocusBuilder<TForm>? focusBuilder;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<ReactiveFormState<Domain, Form>>(provider, (previous, next) {
-      final previousValue = previous?.mapOrNull(
-        (value) => value.submitFailureOrSuccess,
-      );
-      final nextValue = next.mapOrNull(
-        (value) => value.submitFailureOrSuccess,
-      );
-
-      if (previousValue != nextValue) {
-        nextValue?.fold(
-          (failure) {
-            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-              onSubmitFailure?.call(failure);
-            });
-          },
-          (value) {
-            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-              onSubmitSuccess?.call(value);
-            });
-          },
+    ref.listen<ReactiveFormState<TFailure, TDomain, TForm>>(
+      provider,
+      (previous, next) {
+        final previousValue = previous?.mapOrNull(
+          (value) => value.submitFailureOrSuccess,
         );
-      }
-    });
+        final nextValue = next.mapOrNull(
+          (value) => value.submitFailureOrSuccess,
+        );
+
+        if (previousValue != nextValue) {
+          nextValue?.fold(
+            (failure) {
+              WidgetsBinding.instance.addPostFrameCallback(
+                (timeStamp) => onSubmitFailure?.call(failure),
+              );
+            },
+            (value) {
+              WidgetsBinding.instance.addPostFrameCallback(
+                (timeStamp) => onSubmitSuccess?.call(value),
+              );
+            },
+          );
+        }
+      },
+    );
 
     final formState = ref.watch(provider);
 
@@ -114,10 +123,10 @@ class ReactiveFormView<Domain, Form extends TypedFormGroup<Domain>>
       (value) {
         return HookBuilder(
           builder: (context) {
-            final nodes = useState<List<FocusNode>?>(null);
+            final focusNodes = useState<List<FocusNode>?>(null);
 
-            void updateNodes() {
-              nodes.value = focusBuilder
+            void updateFocusNodes() {
+              focusNodes.value = focusBuilder
                   ?.call(value.form)
                   .map((e) => e.focusController?.focusNode)
                   .whereNotNull()
@@ -126,50 +135,30 @@ class ReactiveFormView<Domain, Form extends TypedFormGroup<Domain>>
 
             useEffect(() {
               WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                updateNodes();
+                updateFocusNodes();
               });
 
               final sub = value.form.valueChanges.listen((event) {
-                updateNodes();
+                updateFocusNodes();
               });
 
               return sub.cancel;
-            }, []);
+            }, [focusBuilder]);
 
-            return LayoutBuilder(builder: (context, constraints) {
-              return _FormControlInheritedStreamer(
-                control: value.form as AbstractControl<Object>,
-                stream: value.form.statusChanged,
-                child: WillPopScope(
-                  onWillPop: value.isSubmitting
-                      ? () async => false
-                      : onWillPop?.call(value)?.let((cb) => () async => cb()) ??
-                          (onDirtyWillPop != null && !value.isPristine
-                              ? () async => onDirtyWillPop!()
-                              : null),
-                  child: KeyboardActions(
-                    tapOutsideBehavior: TapOutsideBehavior.translucentDismiss,
-                    keepFocusOnTappingNode: true,
-                    config: KeyboardActionsConfig(
-                      keyboardBarColor: Theme.of(context).colorScheme.surface,
-                      actions: [
-                        ...?nodes.value
-                            ?.map(
-                                (node) => KeyboardActionsItem(focusNode: node))
-                            .toList(),
-                      ],
-                      defaultDoneWidget: Text(
-                        context.translate('actions.done'),
-                      ),
-                    ),
-                    child: ConstrainedBox(
-                      constraints: constraints,
-                      child: builder(value),
-                    ),
-                  ),
-                ),
-              );
-            });
+            return _FormControlInheritedStreamer(
+              control: value.form as AbstractControl<Object>,
+              stream: value.form.statusChanged,
+              // ignore: deprecated_member_use
+              child: WillPopScope(
+                onWillPop: value.isSubmitting
+                    ? () async => false
+                    : onWillPop?.call(value)?.let((cb) => () async => cb()) ??
+                        (onDirtyWillPop != null && !value.isPristine
+                            ? () async => onDirtyWillPop!()
+                            : null),
+                child: builder(value),
+              ),
+            );
           },
         );
       },

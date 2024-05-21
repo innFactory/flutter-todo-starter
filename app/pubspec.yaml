@@ -20,7 +20,7 @@ version: 0.1.0
 
 environment:
   sdk: ">=3.0.0"
-  flutter: ">=3.13.6"
+  flutter: ">=3.22.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -53,7 +53,11 @@ dependencies:
     path: ../packages/kv_store
 
   flutter_hooks: ^0.20.3
-  device_preview: ^1.1.0
+  device_preview:
+    git:
+      url: https://github.com/innFactory/flutter_device_preview.git
+      ref: 83cbd82612b89dfa273f61ea2413d6fba777c249
+      path: device_preview
   auto_route: ^7.8.4
   flutter_keyboard_visibility: ^5.4.1
   freezed_annotation: ^2.4.1

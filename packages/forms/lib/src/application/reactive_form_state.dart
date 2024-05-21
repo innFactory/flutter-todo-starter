@@ -1,17 +1,18 @@
 part of 'reactive_form_controller.dart';
 
 @freezed
-class ReactiveFormState<Domain, Form extends TypedFormGroup<Domain>>
-    with _$ReactiveFormState<Domain, Form> {
+class ReactiveFormState<TFailure, TDomain,
+        TFormGroup extends TypedFormGroup<TDomain>>
+    with _$ReactiveFormState<TFailure, TDomain, TFormGroup> {
   const factory ReactiveFormState({
-    required Form form,
+    required TFormGroup form,
     required bool isSubmitting,
     required bool isPristine,
     required bool isDisabled,
-    required Either<Failure, Domain>? submitFailureOrSuccess,
-  }) = ReactiveFormStateLoaded<Domain, Form>;
+    required Either<TFailure, TDomain>? submitFailureOrSuccess,
+  }) = ReactiveFormStateLoaded<TFailure, TDomain, TFormGroup>;
 
-  factory ReactiveFormState.initial(Form form) => ReactiveFormState(
+  factory ReactiveFormState.initial(TFormGroup form) => ReactiveFormState(
         form: form,
         isPristine: true,
         isSubmitting: false,
@@ -20,10 +21,10 @@ class ReactiveFormState<Domain, Form extends TypedFormGroup<Domain>>
       );
 
   const factory ReactiveFormState.loading() =
-      ReactiveFormStateLoading<Domain, Form>;
+      ReactiveFormStateLoading<TFailure, TDomain, TFormGroup>;
 
-  const factory ReactiveFormState.error(Failure failure) =
-      ReactiveFormStateError<Domain, Form>;
+  const factory ReactiveFormState.error(TFailure failure) =
+      ReactiveFormStateError<TFailure, TDomain, TFormGroup>;
 
   const ReactiveFormState._();
 

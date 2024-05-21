@@ -13,7 +13,7 @@ class SignInFormView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final maybeAuthError = useState<Failure?>(null);
 
-    return ReactiveFormView<SignInFormModel, SignInForm>(
+    return ReactiveFormView<Failure, SignInFormModel, SignInForm>(
       provider: signInFormControllerProvider,
       focusBuilder: (form) => [form.emailControl, form.passwordControl],
       onSubmitFailure: (value) => maybeAuthError.value = value,

@@ -67,7 +67,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   connectivity_plus: bf0076dd84a130856aa636df1c71ccaff908fa1d
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
@@ -77,6 +77,6 @@ SPEC CHECKSUMS:
   sqlite3: e0a0623a33a20a47cb5921552aebc6e9e437dc91
   sqlite3_flutter_libs: 0d61e18fab1bed977dbd2d2fc76a726044ca00e7
 
-PODFILE CHECKSUM: 81e499e09042076a786613ee3ad4e2c0f0d84318
+PODFILE CHECKSUM: 7793334925479b687040912487ef544f06de2e47
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.15.2

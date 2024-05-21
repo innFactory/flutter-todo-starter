@@ -5,7 +5,7 @@ import 'package:forms/forms.dart';
 part 'sign_in_form.dart';
 
 final signInFormControllerProvider = StateNotifierProvider.autoDispose<
-    SignInController, ReactiveFormState<SignInFormModel, SignInForm>>(
+    SignInController, ReactiveFormState<Failure, SignInFormModel, SignInForm>>(
   (ref) {
     final authRepository = ref.watch(authRepositoryProvider);
 
@@ -15,7 +15,7 @@ final signInFormControllerProvider = StateNotifierProvider.autoDispose<
 );
 
 class SignInController
-    extends ReactiveFormController<SignInFormModel, SignInForm> {
+    extends ReactiveFormController<Failure, SignInFormModel, SignInForm> {
   SignInController(this._authRepository);
 
   final AuthRepository _authRepository;

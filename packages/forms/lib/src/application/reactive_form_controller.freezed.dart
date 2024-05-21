@@ -12,79 +12,99 @@ part of 'reactive_form_controller.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$ReactiveFormState<Domain, Form extends TypedFormGroup<Domain>> {
+mixin _$ReactiveFormState<TFailure, TDomain,
+    TFormGroup extends TypedFormGroup<TDomain>> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(Form form, bool isSubmitting, bool isPristine,
-            bool isDisabled, Either<Failure, Domain>? submitFailureOrSuccess)
+    TResult Function(TFormGroup form, bool isSubmitting, bool isPristine,
+            bool isDisabled, Either<TFailure, TDomain>? submitFailureOrSuccess)
         $default, {
     required TResult Function() loading,
-    required TResult Function(Failure failure) error,
+    required TResult Function(TFailure failure) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(Form form, bool isSubmitting, bool isPristine,
-            bool isDisabled, Either<Failure, Domain>? submitFailureOrSuccess)?
+    TResult? Function(TFormGroup form, bool isSubmitting, bool isPristine,
+            bool isDisabled, Either<TFailure, TDomain>? submitFailureOrSuccess)?
         $default, {
     TResult? Function()? loading,
-    TResult? Function(Failure failure)? error,
+    TResult? Function(TFailure failure)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(Form form, bool isSubmitting, bool isPristine,
-            bool isDisabled, Either<Failure, Domain>? submitFailureOrSuccess)?
+    TResult Function(TFormGroup form, bool isSubmitting, bool isPristine,
+            bool isDisabled, Either<TFailure, TDomain>? submitFailureOrSuccess)?
         $default, {
     TResult Function()? loading,
-    TResult Function(Failure failure)? error,
+    TResult Function(TFailure failure)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(ReactiveFormStateLoaded<Domain, Form> value) $default, {
-    required TResult Function(ReactiveFormStateLoading<Domain, Form> value)
+    TResult Function(
+            ReactiveFormStateLoaded<TFailure, TDomain, TFormGroup> value)
+        $default, {
+    required TResult Function(
+            ReactiveFormStateLoading<TFailure, TDomain, TFormGroup> value)
         loading,
-    required TResult Function(ReactiveFormStateError<Domain, Form> value) error,
+    required TResult Function(
+            ReactiveFormStateError<TFailure, TDomain, TFormGroup> value)
+        error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(ReactiveFormStateLoaded<Domain, Form> value)? $default, {
-    TResult? Function(ReactiveFormStateLoading<Domain, Form> value)? loading,
-    TResult? Function(ReactiveFormStateError<Domain, Form> value)? error,
+    TResult? Function(
+            ReactiveFormStateLoaded<TFailure, TDomain, TFormGroup> value)?
+        $default, {
+    TResult? Function(
+            ReactiveFormStateLoading<TFailure, TDomain, TFormGroup> value)?
+        loading,
+    TResult? Function(
+            ReactiveFormStateError<TFailure, TDomain, TFormGroup> value)?
+        error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(ReactiveFormStateLoaded<Domain, Form> value)? $default, {
-    TResult Function(ReactiveFormStateLoading<Domain, Form> value)? loading,
-    TResult Function(ReactiveFormStateError<Domain, Form> value)? error,
+    TResult Function(
+            ReactiveFormStateLoaded<TFailure, TDomain, TFormGroup> value)?
+        $default, {
+    TResult Function(
+            ReactiveFormStateLoading<TFailure, TDomain, TFormGroup> value)?
+        loading,
+    TResult Function(
+            ReactiveFormStateError<TFailure, TDomain, TFormGroup> value)?
+        error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ReactiveFormStateCopyWith<Domain,
-    Form extends TypedFormGroup<Domain>, $Res> {
-  factory $ReactiveFormStateCopyWith(ReactiveFormState<Domain, Form> value,
-          $Res Function(ReactiveFormState<Domain, Form>) then) =
-      _$ReactiveFormStateCopyWithImpl<Domain, Form, $Res,
-          ReactiveFormState<Domain, Form>>;
+abstract class $ReactiveFormStateCopyWith<TFailure, TDomain,
+    TFormGroup extends TypedFormGroup<TDomain>, $Res> {
+  factory $ReactiveFormStateCopyWith(
+      ReactiveFormState<TFailure, TDomain, TFormGroup> value,
+      $Res Function(ReactiveFormState<TFailure, TDomain, TFormGroup>)
+          then) = _$ReactiveFormStateCopyWithImpl<TFailure, TDomain, TFormGroup,
+      $Res, ReactiveFormState<TFailure, TDomain, TFormGroup>>;
 }
 
 /// @nodoc
 class _$ReactiveFormStateCopyWithImpl<
-        Domain,
-        Form extends TypedFormGroup<Domain>,
+        TFailure,
+        TDomain,
+        TFormGroup extends TypedFormGroup<TDomain>,
         $Res,
-        $Val extends ReactiveFormState<Domain, Form>>
-    implements $ReactiveFormStateCopyWith<Domain, Form, $Res> {
+        $Val extends ReactiveFormState<TFailure, TDomain, TFormGroup>>
+    implements $ReactiveFormStateCopyWith<TFailure, TDomain, TFormGroup, $Res> {
   _$ReactiveFormStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -94,30 +114,36 @@ class _$ReactiveFormStateCopyWithImpl<
 }
 
 /// @nodoc
-abstract class _$$ReactiveFormStateLoadedCopyWith<Domain,
-    Form extends TypedFormGroup<Domain>, $Res> {
-  factory _$$ReactiveFormStateLoadedCopyWith(
-          _$ReactiveFormStateLoaded<Domain, Form> value,
-          $Res Function(_$ReactiveFormStateLoaded<Domain, Form>) then) =
-      __$$ReactiveFormStateLoadedCopyWithImpl<Domain, Form, $Res>;
+abstract class _$$ReactiveFormStateLoadedImplCopyWith<TFailure, TDomain,
+    TFormGroup extends TypedFormGroup<TDomain>, $Res> {
+  factory _$$ReactiveFormStateLoadedImplCopyWith(
+      _$ReactiveFormStateLoadedImpl<TFailure, TDomain, TFormGroup> value,
+      $Res Function(
+              _$ReactiveFormStateLoadedImpl<TFailure, TDomain, TFormGroup>)
+          then) = __$$ReactiveFormStateLoadedImplCopyWithImpl<TFailure, TDomain,
+      TFormGroup, $Res>;
   @useResult
   $Res call(
-      {Form form,
+      {TFormGroup form,
       bool isSubmitting,
       bool isPristine,
       bool isDisabled,
-      Either<Failure, Domain>? submitFailureOrSuccess});
+      Either<TFailure, TDomain>? submitFailureOrSuccess});
 }
 
 /// @nodoc
-class __$$ReactiveFormStateLoadedCopyWithImpl<Domain,
-        Form extends TypedFormGroup<Domain>, $Res>
-    extends _$ReactiveFormStateCopyWithImpl<Domain, Form, $Res,
-        _$ReactiveFormStateLoaded<Domain, Form>>
-    implements _$$ReactiveFormStateLoadedCopyWith<Domain, Form, $Res> {
-  __$$ReactiveFormStateLoadedCopyWithImpl(
-      _$ReactiveFormStateLoaded<Domain, Form> _value,
-      $Res Function(_$ReactiveFormStateLoaded<Domain, Form>) _then)
+class __$$ReactiveFormStateLoadedImplCopyWithImpl<TFailure, TDomain,
+        TFormGroup extends TypedFormGroup<TDomain>, $Res>
+    extends _$ReactiveFormStateCopyWithImpl<TFailure, TDomain, TFormGroup, $Res,
+        _$ReactiveFormStateLoadedImpl<TFailure, TDomain, TFormGroup>>
+    implements
+        _$$ReactiveFormStateLoadedImplCopyWith<TFailure, TDomain, TFormGroup,
+            $Res> {
+  __$$ReactiveFormStateLoadedImplCopyWithImpl(
+      _$ReactiveFormStateLoadedImpl<TFailure, TDomain, TFormGroup> _value,
+      $Res Function(
+              _$ReactiveFormStateLoadedImpl<TFailure, TDomain, TFormGroup>)
+          _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -129,11 +155,11 @@ class __$$ReactiveFormStateLoadedCopyWithImpl<Domain,
     Object? isDisabled = null,
     Object? submitFailureOrSuccess = freezed,
   }) {
-    return _then(_$ReactiveFormStateLoaded<Domain, Form>(
+    return _then(_$ReactiveFormStateLoadedImpl<TFailure, TDomain, TFormGroup>(
       form: null == form
           ? _value.form
           : form // ignore: cast_nullable_to_non_nullable
-              as Form,
+              as TFormGroup,
       isSubmitting: null == isSubmitting
           ? _value.isSubmitting
           : isSubmitting // ignore: cast_nullable_to_non_nullable
@@ -149,16 +175,17 @@ class __$$ReactiveFormStateLoadedCopyWithImpl<Domain,
       submitFailureOrSuccess: freezed == submitFailureOrSuccess
           ? _value.submitFailureOrSuccess
           : submitFailureOrSuccess // ignore: cast_nullable_to_non_nullable
-              as Either<Failure, Domain>?,
+              as Either<TFailure, TDomain>?,
     ));
   }
 }
 
 /// @nodoc
 
-class _$ReactiveFormStateLoaded<Domain, Form extends TypedFormGroup<Domain>>
-    extends ReactiveFormStateLoaded<Domain, Form> {
-  const _$ReactiveFormStateLoaded(
+class _$ReactiveFormStateLoadedImpl<TFailure, TDomain,
+        TFormGroup extends TypedFormGroup<TDomain>>
+    extends ReactiveFormStateLoaded<TFailure, TDomain, TFormGroup> {
+  const _$ReactiveFormStateLoadedImpl(
       {required this.form,
       required this.isSubmitting,
       required this.isPristine,
@@ -167,7 +194,7 @@ class _$ReactiveFormStateLoaded<Domain, Form extends TypedFormGroup<Domain>>
       : super._();
 
   @override
-  final Form form;
+  final TFormGroup form;
   @override
   final bool isSubmitting;
   @override
@@ -175,18 +202,19 @@ class _$ReactiveFormStateLoaded<Domain, Form extends TypedFormGroup<Domain>>
   @override
   final bool isDisabled;
   @override
-  final Either<Failure, Domain>? submitFailureOrSuccess;
+  final Either<TFailure, TDomain>? submitFailureOrSuccess;
 
   @override
   String toString() {
-    return 'ReactiveFormState<$Domain, $Form>(form: $form, isSubmitting: $isSubmitting, isPristine: $isPristine, isDisabled: $isDisabled, submitFailureOrSuccess: $submitFailureOrSuccess)';
+    return 'ReactiveFormState<$TFailure, $TDomain, $TFormGroup>(form: $form, isSubmitting: $isSubmitting, isPristine: $isPristine, isDisabled: $isDisabled, submitFailureOrSuccess: $submitFailureOrSuccess)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ReactiveFormStateLoaded<Domain, Form> &&
+            other is _$ReactiveFormStateLoadedImpl<TFailure, TDomain,
+                TFormGroup> &&
             const DeepCollectionEquality().equals(other.form, form) &&
             (identical(other.isSubmitting, isSubmitting) ||
                 other.isSubmitting == isSubmitting) &&
@@ -210,19 +238,23 @@ class _$ReactiveFormStateLoaded<Domain, Form extends TypedFormGroup<Domain>>
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ReactiveFormStateLoadedCopyWith<Domain, Form,
-          _$ReactiveFormStateLoaded<Domain, Form>>
-      get copyWith => __$$ReactiveFormStateLoadedCopyWithImpl<Domain, Form,
-          _$ReactiveFormStateLoaded<Domain, Form>>(this, _$identity);
+  _$$ReactiveFormStateLoadedImplCopyWith<TFailure, TDomain, TFormGroup,
+          _$ReactiveFormStateLoadedImpl<TFailure, TDomain, TFormGroup>>
+      get copyWith => __$$ReactiveFormStateLoadedImplCopyWithImpl<
+              TFailure,
+              TDomain,
+              TFormGroup,
+              _$ReactiveFormStateLoadedImpl<TFailure, TDomain, TFormGroup>>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(Form form, bool isSubmitting, bool isPristine,
-            bool isDisabled, Either<Failure, Domain>? submitFailureOrSuccess)
+    TResult Function(TFormGroup form, bool isSubmitting, bool isPristine,
+            bool isDisabled, Either<TFailure, TDomain>? submitFailureOrSuccess)
         $default, {
     required TResult Function() loading,
-    required TResult Function(Failure failure) error,
+    required TResult Function(TFailure failure) error,
   }) {
     return $default(
         form, isSubmitting, isPristine, isDisabled, submitFailureOrSuccess);
@@ -231,11 +263,11 @@ class _$ReactiveFormStateLoaded<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(Form form, bool isSubmitting, bool isPristine,
-            bool isDisabled, Either<Failure, Domain>? submitFailureOrSuccess)?
+    TResult? Function(TFormGroup form, bool isSubmitting, bool isPristine,
+            bool isDisabled, Either<TFailure, TDomain>? submitFailureOrSuccess)?
         $default, {
     TResult? Function()? loading,
-    TResult? Function(Failure failure)? error,
+    TResult? Function(TFailure failure)? error,
   }) {
     return $default?.call(
         form, isSubmitting, isPristine, isDisabled, submitFailureOrSuccess);
@@ -244,11 +276,11 @@ class _$ReactiveFormStateLoaded<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(Form form, bool isSubmitting, bool isPristine,
-            bool isDisabled, Either<Failure, Domain>? submitFailureOrSuccess)?
+    TResult Function(TFormGroup form, bool isSubmitting, bool isPristine,
+            bool isDisabled, Either<TFailure, TDomain>? submitFailureOrSuccess)?
         $default, {
     TResult Function()? loading,
-    TResult Function(Failure failure)? error,
+    TResult Function(TFailure failure)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -261,10 +293,15 @@ class _$ReactiveFormStateLoaded<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(ReactiveFormStateLoaded<Domain, Form> value) $default, {
-    required TResult Function(ReactiveFormStateLoading<Domain, Form> value)
+    TResult Function(
+            ReactiveFormStateLoaded<TFailure, TDomain, TFormGroup> value)
+        $default, {
+    required TResult Function(
+            ReactiveFormStateLoading<TFailure, TDomain, TFormGroup> value)
         loading,
-    required TResult Function(ReactiveFormStateError<Domain, Form> value) error,
+    required TResult Function(
+            ReactiveFormStateError<TFailure, TDomain, TFormGroup> value)
+        error,
   }) {
     return $default(this);
   }
@@ -272,9 +309,15 @@ class _$ReactiveFormStateLoaded<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(ReactiveFormStateLoaded<Domain, Form> value)? $default, {
-    TResult? Function(ReactiveFormStateLoading<Domain, Form> value)? loading,
-    TResult? Function(ReactiveFormStateError<Domain, Form> value)? error,
+    TResult? Function(
+            ReactiveFormStateLoaded<TFailure, TDomain, TFormGroup> value)?
+        $default, {
+    TResult? Function(
+            ReactiveFormStateLoading<TFailure, TDomain, TFormGroup> value)?
+        loading,
+    TResult? Function(
+            ReactiveFormStateError<TFailure, TDomain, TFormGroup> value)?
+        error,
   }) {
     return $default?.call(this);
   }
@@ -282,9 +325,15 @@ class _$ReactiveFormStateLoaded<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(ReactiveFormStateLoaded<Domain, Form> value)? $default, {
-    TResult Function(ReactiveFormStateLoading<Domain, Form> value)? loading,
-    TResult Function(ReactiveFormStateError<Domain, Form> value)? error,
+    TResult Function(
+            ReactiveFormStateLoaded<TFailure, TDomain, TFormGroup> value)?
+        $default, {
+    TResult Function(
+            ReactiveFormStateLoading<TFailure, TDomain, TFormGroup> value)?
+        loading,
+    TResult Function(
+            ReactiveFormStateError<TFailure, TDomain, TFormGroup> value)?
+        error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -294,66 +343,74 @@ class _$ReactiveFormStateLoaded<Domain, Form extends TypedFormGroup<Domain>>
   }
 }
 
-abstract class ReactiveFormStateLoaded<Domain,
-        Form extends TypedFormGroup<Domain>>
-    extends ReactiveFormState<Domain, Form> {
+abstract class ReactiveFormStateLoaded<TFailure, TDomain,
+        TFormGroup extends TypedFormGroup<TDomain>>
+    extends ReactiveFormState<TFailure, TDomain, TFormGroup> {
   const factory ReactiveFormStateLoaded(
-          {required final Form form,
+          {required final TFormGroup form,
           required final bool isSubmitting,
           required final bool isPristine,
           required final bool isDisabled,
-          required final Either<Failure, Domain>? submitFailureOrSuccess}) =
-      _$ReactiveFormStateLoaded<Domain, Form>;
+          required final Either<TFailure, TDomain>? submitFailureOrSuccess}) =
+      _$ReactiveFormStateLoadedImpl<TFailure, TDomain, TFormGroup>;
   const ReactiveFormStateLoaded._() : super._();
 
-  Form get form;
+  TFormGroup get form;
   bool get isSubmitting;
   bool get isPristine;
   bool get isDisabled;
-  Either<Failure, Domain>? get submitFailureOrSuccess;
+  Either<TFailure, TDomain>? get submitFailureOrSuccess;
   @JsonKey(ignore: true)
-  _$$ReactiveFormStateLoadedCopyWith<Domain, Form,
-          _$ReactiveFormStateLoaded<Domain, Form>>
+  _$$ReactiveFormStateLoadedImplCopyWith<TFailure, TDomain, TFormGroup,
+          _$ReactiveFormStateLoadedImpl<TFailure, TDomain, TFormGroup>>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ReactiveFormStateLoadingCopyWith<Domain,
-    Form extends TypedFormGroup<Domain>, $Res> {
-  factory _$$ReactiveFormStateLoadingCopyWith(
-          _$ReactiveFormStateLoading<Domain, Form> value,
-          $Res Function(_$ReactiveFormStateLoading<Domain, Form>) then) =
-      __$$ReactiveFormStateLoadingCopyWithImpl<Domain, Form, $Res>;
+abstract class _$$ReactiveFormStateLoadingImplCopyWith<TFailure, TDomain,
+    TFormGroup extends TypedFormGroup<TDomain>, $Res> {
+  factory _$$ReactiveFormStateLoadingImplCopyWith(
+      _$ReactiveFormStateLoadingImpl<TFailure, TDomain, TFormGroup> value,
+      $Res Function(
+              _$ReactiveFormStateLoadingImpl<TFailure, TDomain, TFormGroup>)
+          then) = __$$ReactiveFormStateLoadingImplCopyWithImpl<TFailure,
+      TDomain, TFormGroup, $Res>;
 }
 
 /// @nodoc
-class __$$ReactiveFormStateLoadingCopyWithImpl<Domain,
-        Form extends TypedFormGroup<Domain>, $Res>
-    extends _$ReactiveFormStateCopyWithImpl<Domain, Form, $Res,
-        _$ReactiveFormStateLoading<Domain, Form>>
-    implements _$$ReactiveFormStateLoadingCopyWith<Domain, Form, $Res> {
-  __$$ReactiveFormStateLoadingCopyWithImpl(
-      _$ReactiveFormStateLoading<Domain, Form> _value,
-      $Res Function(_$ReactiveFormStateLoading<Domain, Form>) _then)
+class __$$ReactiveFormStateLoadingImplCopyWithImpl<TFailure, TDomain,
+        TFormGroup extends TypedFormGroup<TDomain>, $Res>
+    extends _$ReactiveFormStateCopyWithImpl<TFailure, TDomain, TFormGroup, $Res,
+        _$ReactiveFormStateLoadingImpl<TFailure, TDomain, TFormGroup>>
+    implements
+        _$$ReactiveFormStateLoadingImplCopyWith<TFailure, TDomain, TFormGroup,
+            $Res> {
+  __$$ReactiveFormStateLoadingImplCopyWithImpl(
+      _$ReactiveFormStateLoadingImpl<TFailure, TDomain, TFormGroup> _value,
+      $Res Function(
+              _$ReactiveFormStateLoadingImpl<TFailure, TDomain, TFormGroup>)
+          _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ReactiveFormStateLoading<Domain, Form extends TypedFormGroup<Domain>>
-    extends ReactiveFormStateLoading<Domain, Form> {
-  const _$ReactiveFormStateLoading() : super._();
+class _$ReactiveFormStateLoadingImpl<TFailure, TDomain,
+        TFormGroup extends TypedFormGroup<TDomain>>
+    extends ReactiveFormStateLoading<TFailure, TDomain, TFormGroup> {
+  const _$ReactiveFormStateLoadingImpl() : super._();
 
   @override
   String toString() {
-    return 'ReactiveFormState<$Domain, $Form>.loading()';
+    return 'ReactiveFormState<$TFailure, $TDomain, $TFormGroup>.loading()';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ReactiveFormStateLoading<Domain, Form>);
+            other is _$ReactiveFormStateLoadingImpl<TFailure, TDomain,
+                TFormGroup>);
   }
 
   @override
@@ -362,11 +419,11 @@ class _$ReactiveFormStateLoading<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(Form form, bool isSubmitting, bool isPristine,
-            bool isDisabled, Either<Failure, Domain>? submitFailureOrSuccess)
+    TResult Function(TFormGroup form, bool isSubmitting, bool isPristine,
+            bool isDisabled, Either<TFailure, TDomain>? submitFailureOrSuccess)
         $default, {
     required TResult Function() loading,
-    required TResult Function(Failure failure) error,
+    required TResult Function(TFailure failure) error,
   }) {
     return loading();
   }
@@ -374,11 +431,11 @@ class _$ReactiveFormStateLoading<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(Form form, bool isSubmitting, bool isPristine,
-            bool isDisabled, Either<Failure, Domain>? submitFailureOrSuccess)?
+    TResult? Function(TFormGroup form, bool isSubmitting, bool isPristine,
+            bool isDisabled, Either<TFailure, TDomain>? submitFailureOrSuccess)?
         $default, {
     TResult? Function()? loading,
-    TResult? Function(Failure failure)? error,
+    TResult? Function(TFailure failure)? error,
   }) {
     return loading?.call();
   }
@@ -386,11 +443,11 @@ class _$ReactiveFormStateLoading<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(Form form, bool isSubmitting, bool isPristine,
-            bool isDisabled, Either<Failure, Domain>? submitFailureOrSuccess)?
+    TResult Function(TFormGroup form, bool isSubmitting, bool isPristine,
+            bool isDisabled, Either<TFailure, TDomain>? submitFailureOrSuccess)?
         $default, {
     TResult Function()? loading,
-    TResult Function(Failure failure)? error,
+    TResult Function(TFailure failure)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -402,10 +459,15 @@ class _$ReactiveFormStateLoading<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(ReactiveFormStateLoaded<Domain, Form> value) $default, {
-    required TResult Function(ReactiveFormStateLoading<Domain, Form> value)
+    TResult Function(
+            ReactiveFormStateLoaded<TFailure, TDomain, TFormGroup> value)
+        $default, {
+    required TResult Function(
+            ReactiveFormStateLoading<TFailure, TDomain, TFormGroup> value)
         loading,
-    required TResult Function(ReactiveFormStateError<Domain, Form> value) error,
+    required TResult Function(
+            ReactiveFormStateError<TFailure, TDomain, TFormGroup> value)
+        error,
   }) {
     return loading(this);
   }
@@ -413,9 +475,15 @@ class _$ReactiveFormStateLoading<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(ReactiveFormStateLoaded<Domain, Form> value)? $default, {
-    TResult? Function(ReactiveFormStateLoading<Domain, Form> value)? loading,
-    TResult? Function(ReactiveFormStateError<Domain, Form> value)? error,
+    TResult? Function(
+            ReactiveFormStateLoaded<TFailure, TDomain, TFormGroup> value)?
+        $default, {
+    TResult? Function(
+            ReactiveFormStateLoading<TFailure, TDomain, TFormGroup> value)?
+        loading,
+    TResult? Function(
+            ReactiveFormStateError<TFailure, TDomain, TFormGroup> value)?
+        error,
   }) {
     return loading?.call(this);
   }
@@ -423,9 +491,15 @@ class _$ReactiveFormStateLoading<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(ReactiveFormStateLoaded<Domain, Form> value)? $default, {
-    TResult Function(ReactiveFormStateLoading<Domain, Form> value)? loading,
-    TResult Function(ReactiveFormStateError<Domain, Form> value)? error,
+    TResult Function(
+            ReactiveFormStateLoaded<TFailure, TDomain, TFormGroup> value)?
+        $default, {
+    TResult Function(
+            ReactiveFormStateLoading<TFailure, TDomain, TFormGroup> value)?
+        loading,
+    TResult Function(
+            ReactiveFormStateError<TFailure, TDomain, TFormGroup> value)?
+        error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -435,91 +509,102 @@ class _$ReactiveFormStateLoading<Domain, Form extends TypedFormGroup<Domain>>
   }
 }
 
-abstract class ReactiveFormStateLoading<Domain,
-        Form extends TypedFormGroup<Domain>>
-    extends ReactiveFormState<Domain, Form> {
+abstract class ReactiveFormStateLoading<TFailure, TDomain,
+        TFormGroup extends TypedFormGroup<TDomain>>
+    extends ReactiveFormState<TFailure, TDomain, TFormGroup> {
   const factory ReactiveFormStateLoading() =
-      _$ReactiveFormStateLoading<Domain, Form>;
+      _$ReactiveFormStateLoadingImpl<TFailure, TDomain, TFormGroup>;
   const ReactiveFormStateLoading._() : super._();
 }
 
 /// @nodoc
-abstract class _$$ReactiveFormStateErrorCopyWith<Domain,
-    Form extends TypedFormGroup<Domain>, $Res> {
-  factory _$$ReactiveFormStateErrorCopyWith(
-          _$ReactiveFormStateError<Domain, Form> value,
-          $Res Function(_$ReactiveFormStateError<Domain, Form>) then) =
-      __$$ReactiveFormStateErrorCopyWithImpl<Domain, Form, $Res>;
+abstract class _$$ReactiveFormStateErrorImplCopyWith<TFailure, TDomain,
+    TFormGroup extends TypedFormGroup<TDomain>, $Res> {
+  factory _$$ReactiveFormStateErrorImplCopyWith(
+      _$ReactiveFormStateErrorImpl<TFailure, TDomain, TFormGroup> value,
+      $Res Function(_$ReactiveFormStateErrorImpl<TFailure, TDomain, TFormGroup>)
+          then) = __$$ReactiveFormStateErrorImplCopyWithImpl<TFailure, TDomain,
+      TFormGroup, $Res>;
   @useResult
-  $Res call({Failure failure});
+  $Res call({TFailure failure});
 }
 
 /// @nodoc
-class __$$ReactiveFormStateErrorCopyWithImpl<Domain,
-        Form extends TypedFormGroup<Domain>, $Res>
-    extends _$ReactiveFormStateCopyWithImpl<Domain, Form, $Res,
-        _$ReactiveFormStateError<Domain, Form>>
-    implements _$$ReactiveFormStateErrorCopyWith<Domain, Form, $Res> {
-  __$$ReactiveFormStateErrorCopyWithImpl(
-      _$ReactiveFormStateError<Domain, Form> _value,
-      $Res Function(_$ReactiveFormStateError<Domain, Form>) _then)
+class __$$ReactiveFormStateErrorImplCopyWithImpl<TFailure, TDomain,
+        TFormGroup extends TypedFormGroup<TDomain>, $Res>
+    extends _$ReactiveFormStateCopyWithImpl<TFailure, TDomain, TFormGroup, $Res,
+        _$ReactiveFormStateErrorImpl<TFailure, TDomain, TFormGroup>>
+    implements
+        _$$ReactiveFormStateErrorImplCopyWith<TFailure, TDomain, TFormGroup,
+            $Res> {
+  __$$ReactiveFormStateErrorImplCopyWithImpl(
+      _$ReactiveFormStateErrorImpl<TFailure, TDomain, TFormGroup> _value,
+      $Res Function(_$ReactiveFormStateErrorImpl<TFailure, TDomain, TFormGroup>)
+          _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? failure = null,
+    Object? failure = freezed,
   }) {
-    return _then(_$ReactiveFormStateError<Domain, Form>(
-      null == failure
+    return _then(_$ReactiveFormStateErrorImpl<TFailure, TDomain, TFormGroup>(
+      freezed == failure
           ? _value.failure
           : failure // ignore: cast_nullable_to_non_nullable
-              as Failure,
+              as TFailure,
     ));
   }
 }
 
 /// @nodoc
 
-class _$ReactiveFormStateError<Domain, Form extends TypedFormGroup<Domain>>
-    extends ReactiveFormStateError<Domain, Form> {
-  const _$ReactiveFormStateError(this.failure) : super._();
+class _$ReactiveFormStateErrorImpl<TFailure, TDomain,
+        TFormGroup extends TypedFormGroup<TDomain>>
+    extends ReactiveFormStateError<TFailure, TDomain, TFormGroup> {
+  const _$ReactiveFormStateErrorImpl(this.failure) : super._();
 
   @override
-  final Failure failure;
+  final TFailure failure;
 
   @override
   String toString() {
-    return 'ReactiveFormState<$Domain, $Form>.error(failure: $failure)';
+    return 'ReactiveFormState<$TFailure, $TDomain, $TFormGroup>.error(failure: $failure)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ReactiveFormStateError<Domain, Form> &&
-            (identical(other.failure, failure) || other.failure == failure));
+            other is _$ReactiveFormStateErrorImpl<TFailure, TDomain,
+                TFormGroup> &&
+            const DeepCollectionEquality().equals(other.failure, failure));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, failure);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(failure));
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ReactiveFormStateErrorCopyWith<Domain, Form,
-          _$ReactiveFormStateError<Domain, Form>>
-      get copyWith => __$$ReactiveFormStateErrorCopyWithImpl<Domain, Form,
-          _$ReactiveFormStateError<Domain, Form>>(this, _$identity);
+  _$$ReactiveFormStateErrorImplCopyWith<TFailure, TDomain, TFormGroup,
+          _$ReactiveFormStateErrorImpl<TFailure, TDomain, TFormGroup>>
+      get copyWith => __$$ReactiveFormStateErrorImplCopyWithImpl<
+              TFailure,
+              TDomain,
+              TFormGroup,
+              _$ReactiveFormStateErrorImpl<TFailure, TDomain, TFormGroup>>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(Form form, bool isSubmitting, bool isPristine,
-            bool isDisabled, Either<Failure, Domain>? submitFailureOrSuccess)
+    TResult Function(TFormGroup form, bool isSubmitting, bool isPristine,
+            bool isDisabled, Either<TFailure, TDomain>? submitFailureOrSuccess)
         $default, {
     required TResult Function() loading,
-    required TResult Function(Failure failure) error,
+    required TResult Function(TFailure failure) error,
   }) {
     return error(failure);
   }
@@ -527,11 +612,11 @@ class _$ReactiveFormStateError<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(Form form, bool isSubmitting, bool isPristine,
-            bool isDisabled, Either<Failure, Domain>? submitFailureOrSuccess)?
+    TResult? Function(TFormGroup form, bool isSubmitting, bool isPristine,
+            bool isDisabled, Either<TFailure, TDomain>? submitFailureOrSuccess)?
         $default, {
     TResult? Function()? loading,
-    TResult? Function(Failure failure)? error,
+    TResult? Function(TFailure failure)? error,
   }) {
     return error?.call(failure);
   }
@@ -539,11 +624,11 @@ class _$ReactiveFormStateError<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(Form form, bool isSubmitting, bool isPristine,
-            bool isDisabled, Either<Failure, Domain>? submitFailureOrSuccess)?
+    TResult Function(TFormGroup form, bool isSubmitting, bool isPristine,
+            bool isDisabled, Either<TFailure, TDomain>? submitFailureOrSuccess)?
         $default, {
     TResult Function()? loading,
-    TResult Function(Failure failure)? error,
+    TResult Function(TFailure failure)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -555,10 +640,15 @@ class _$ReactiveFormStateError<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(ReactiveFormStateLoaded<Domain, Form> value) $default, {
-    required TResult Function(ReactiveFormStateLoading<Domain, Form> value)
+    TResult Function(
+            ReactiveFormStateLoaded<TFailure, TDomain, TFormGroup> value)
+        $default, {
+    required TResult Function(
+            ReactiveFormStateLoading<TFailure, TDomain, TFormGroup> value)
         loading,
-    required TResult Function(ReactiveFormStateError<Domain, Form> value) error,
+    required TResult Function(
+            ReactiveFormStateError<TFailure, TDomain, TFormGroup> value)
+        error,
   }) {
     return error(this);
   }
@@ -566,9 +656,15 @@ class _$ReactiveFormStateError<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(ReactiveFormStateLoaded<Domain, Form> value)? $default, {
-    TResult? Function(ReactiveFormStateLoading<Domain, Form> value)? loading,
-    TResult? Function(ReactiveFormStateError<Domain, Form> value)? error,
+    TResult? Function(
+            ReactiveFormStateLoaded<TFailure, TDomain, TFormGroup> value)?
+        $default, {
+    TResult? Function(
+            ReactiveFormStateLoading<TFailure, TDomain, TFormGroup> value)?
+        loading,
+    TResult? Function(
+            ReactiveFormStateError<TFailure, TDomain, TFormGroup> value)?
+        error,
   }) {
     return error?.call(this);
   }
@@ -576,9 +672,15 @@ class _$ReactiveFormStateError<Domain, Form extends TypedFormGroup<Domain>>
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(ReactiveFormStateLoaded<Domain, Form> value)? $default, {
-    TResult Function(ReactiveFormStateLoading<Domain, Form> value)? loading,
-    TResult Function(ReactiveFormStateError<Domain, Form> value)? error,
+    TResult Function(
+            ReactiveFormStateLoaded<TFailure, TDomain, TFormGroup> value)?
+        $default, {
+    TResult Function(
+            ReactiveFormStateLoading<TFailure, TDomain, TFormGroup> value)?
+        loading,
+    TResult Function(
+            ReactiveFormStateError<TFailure, TDomain, TFormGroup> value)?
+        error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -588,16 +690,16 @@ class _$ReactiveFormStateError<Domain, Form extends TypedFormGroup<Domain>>
   }
 }
 
-abstract class ReactiveFormStateError<Domain,
-        Form extends TypedFormGroup<Domain>>
-    extends ReactiveFormState<Domain, Form> {
-  const factory ReactiveFormStateError(final Failure failure) =
-      _$ReactiveFormStateError<Domain, Form>;
+abstract class ReactiveFormStateError<TFailure, TDomain,
+        TFormGroup extends TypedFormGroup<TDomain>>
+    extends ReactiveFormState<TFailure, TDomain, TFormGroup> {
+  const factory ReactiveFormStateError(final TFailure failure) =
+      _$ReactiveFormStateErrorImpl<TFailure, TDomain, TFormGroup>;
   const ReactiveFormStateError._() : super._();
 
-  Failure get failure;
+  TFailure get failure;
   @JsonKey(ignore: true)
-  _$$ReactiveFormStateErrorCopyWith<Domain, Form,
-          _$ReactiveFormStateError<Domain, Form>>
+  _$$ReactiveFormStateErrorImplCopyWith<TFailure, TDomain, TFormGroup,
+          _$ReactiveFormStateErrorImpl<TFailure, TDomain, TFormGroup>>
       get copyWith => throw _privateConstructorUsedError;
 }

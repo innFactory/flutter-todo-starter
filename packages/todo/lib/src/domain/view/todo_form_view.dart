@@ -18,7 +18,7 @@ class TodoFormView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final todos = ref.watch(todoStreamProvider).valueOrNull ?? [];
 
-    return ReactiveFormView<Todo, TodoForm>(
+    return ReactiveFormView<Failure, Todo, TodoForm>(
       provider: todoFormControllerProvider(args),
       onSubmitSuccess: onSubmitSuccess,
       focusBuilder: (form) => [form.titleControl, form.descriptionControl],

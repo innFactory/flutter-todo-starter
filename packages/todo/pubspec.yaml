@@ -3,7 +3,7 @@ publish_to: none
 
 environment:
   sdk: ">=3.0.0"
-  flutter: ">=3.13.6"
+  flutter: ">=3.22.0"
 
 dependencies:
   flutter:
@@ -24,8 +24,8 @@ dependencies:
   freezed_annotation: ^2.2.0
   reactive_forms:
     git:
-      url: git@github.com:innFactory/reactive_forms.git
-      ref: 3fe9b4d1ada3169498f0244c9d4c251f01dcb325
+      url: https://github.com/innFactory/reactive_forms.git
+      ref: d927ca9ba10ca038c90562bfb386813fdab78ef9
 
 dev_dependencies:
   build_runner: ^2.3.3
