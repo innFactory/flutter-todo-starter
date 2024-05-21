@@ -1,12 +1,20 @@
 {
-  "cSpell.words": ["daos", "flavorizr", "isar", "melos"],
+  "cSpell.words": [
+    "daos",
+    "flavorizr",
+    "isar",
+    "melos"
+  ],
   "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.organizeImports": true
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
   },
   "editor.formatOnSave": true,
-  "i18n-ally.localesPaths": ["assets/i18n"],
+  "i18n-ally.localesPaths": [
+    "assets/i18n"
+  ],
   "files.watcherExclude": {
     "**/target": true
-  }
+  },
+  "dart.flutterSdkPath": ".fvm/versions/3.19.6"
 }

@@ -47,9 +47,11 @@ android/app/profile
 android/app/release
 
 # Fvm
-.fvm/flutter_sdk
 
 # Code coverage
 coverage/
 /coverage_report/
 **/test/full_coverage_test.dart
+
+# FVM Version Cache
+.fvm/
